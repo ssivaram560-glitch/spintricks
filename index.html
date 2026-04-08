@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>🎰 ஸ்லாட்ஸ் உதவி MASTER</title>
+
+  <style>
+    body {
+      background: black;
+      color: white;
+      text-align: center;
+      font-family: Arial;
+    }
+
+    h1 { color: gold; }
+
+    .card {
+      background: #111;
+      padding: 20px;
+      margin: 15px auto;
+      width: 330px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px gold;
+    }
+
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 8px;
+      border: none;
+      text-align: center;
+    }
+
+    button {
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .winBtn { background: lime; }
+    .lossBtn { background: red; }
+    .startBtn { background: gold; }
+
+  </style>
+</head>
+
+<body>
+
+<h1>🎰 ஸ்லாட்ஸ் உதவி MASTER</h1>
+
+<div class="card">
+  <input id="balanceInput" placeholder="₹ Balance (உதா: 200)">
+  <button class="startBtn" onclick="start()">START</button>
+
+  <p style="color:gray">
+  💡 ₹200 → ₹2 bet
+  </p>
+</div>
+
+<div class="card">
+  <h2 id="bet">₹0</h2>
+  <p>ஸ்பின்: <span id="spin">0</span>/10</p>
+  <p>Balance: ₹ <span id="bal">0</span></p>
+</div>
+
+<div class="card">
+  <button class="lossBtn" onclick="loss()">LOSS ❌</button><br>
+  <input id="winAmount" placeholder="Win ₹ (உதா: 20)">
+  <button class="winBtn" onclick="win()">WIN ✅</button>
+</div>
+
+<div class="card">
+  <h3 id="action">காத்திருக்கிறது...</h3>
+</div>
+
+<script>
+
+let balance = 0;
+let startBalance = 0;
+let bet = 0;
+let spinCount = 0;
+let lossCount = 0;
+let lastWinSpin = 0;
+let continuousLoss = 0;
+
+// 🎯 base bet
+function calcBet(bal){
+  return Math.max(1, Math.floor(bal / 100));
+}
+
+function start(){
+  balance = parseFloat(balanceInput.value);
+  startBalance = balance;
+
+  bet = calcBet(balance);
+
+  spinCount = 0;
+  lossCount = 0;
+  lastWinSpin = 0;
+  continuousLoss = 0;
+
+  action.innerText = "🎰 ஆரம்பம்";
+  update();
+}
+
+// ❌ LOSS
+function loss(){
+
+  if(spinCount >= 10){
+    action.innerText = "⛔ 10 ஸ்பின் முடிந்தது";
+    return;
+  }
+
+  spinCount++;
+  balance -= bet;
+
+  lossCount++;
+  continuousLoss++;
+
+  // 🔥 தொடர்ந்து loss → game change
+  if(continuousLoss >= 3){
+    action.innerText = "⚠️ தொடர்ந்து loss → வேற game போ";
+  }
+
+  // 🔻 4 loss → bet குறை
+  if(lossCount >= 4){
+    bet = Math.max(1, bet - 1);
+    action.innerText = "⚠️ 4 loss → bet குறை";
+    lossCount = 0;
+  }
+
+  checkProfit();
+
+  update();
+}
+
+// ✅ WIN
+function win(){
+
+  if(spinCount >= 10){
+    action.innerText = "⛔ 10 ஸ்பின் முடிந்தது";
+    return;
+  }
+
+  let w = parseFloat(winAmount.value);
+
+  spinCount++;
+  balance += w;
+
+  continuousLoss = 0;
+
+  let gap = spinCount - lastWinSpin;
+
+  if(gap >= 2){
+    bet = bet + 1;
+    action.innerText = "🔥 gap win → bet increase";
+  } else {
+    action.innerText = "✅ நல்ல ஜெயிப்பு";
+  }
+
+  lastWinSpin = spinCount;
+  lossCount = 0;
+
+  checkProfit();
+
+  update();
+}
+
+// 💰 profit check
+function checkProfit(){
+
+  if(balance >= startBalance * 2){
+    action.innerText = "💰 Double profit! Withdraw போடு!";
+    alert("🔥 Profit double ஆயிடுச்சு! வெளியே போ!");
+  }
+
+  if(balance > startBalance * 2){
+    action.innerText = "⚠️ இதுக்கு மேல விளையாடினா loss வரும்";
+  }
+}
+
+function update(){
+  document.getElementById("bet").innerText = "Bet: ₹ " + bet;
+  document.getElementById("spin").innerText = spinCount;
+  document.getElementById("bal").innerText = balance.toFixed(2);
+}
+
+</script>
+
+</body>
+</html>
