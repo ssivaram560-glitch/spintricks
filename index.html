@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>SIVA ULTRA AI V57 - PRO AUTO ENGINE</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght=700;900&family=Rajdhani:wght=600;700&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #07070f; --c1: #0f0f1e; --c2: #14142a;
@@ -507,6 +507,13 @@ function toggleWatchMode() {
   } else {
     inputRow.style.display = 'none';
     log("Watch Mode deactivated. Placing live bets immediately.", "info");
+    
+    // Force reset loading UI indicator back to active display if prediction exists
+    if(S.currentPrediction) {
+      const el = document.getElementById('predVal');
+      el.className = `pred-val ${S.currentPrediction}`;
+      el.textContent = S.currentPrediction;
+    }
   }
 }
 
@@ -780,10 +787,13 @@ function renderOutcomeBalls(list) {
 }
 
 // ═══════════════════════════════════════
-// BET TRANSACTION EXECUTION
+// BET TRANSACTION EXECUTION (FIXED VERSION)
 // ═══════════════════════════════════════
 async function placeBetAction() {
-  if (!S.active || !S.currentPrediction) return;
+  if (!S.active || !S.currentPrediction) {
+    log("Bet placement skipped: Engine not active or no prediction ready.", "info");
+    return;
+  }
   
   const betMultiplier = S.martingaleMultipliers[S.curLevel - 1];
   const calculatedStake = S.baseBet * betMultiplier;
@@ -800,11 +810,16 @@ async function placeBetAction() {
   log(`Deploying Auto Bet: ₹${calculatedStake} on ${S.currentPrediction}`, "info");
   
   const selectCode = S.currentPrediction === 'BIG' ? 1 : 2;
+  const randStr = Array.from({length:32}, () => '0123456789abcdef'[Math.floor(Math.random()*16)]).join('');
+  
+  // Correctly hashing using defined signature logic matching GetGameIssue (FIXED)
+  const signatureVal = md5(randStr).toUpperCase(); 
+  
   const payload = JSON.stringify({
     typeId: S.typeId,
     language: 5,
-    random: Array.from({length:32}, () => '0123456789abcdef'[Math.floor(Math.random()*16)]).join(''),
-    signature: md5(Date.now().toString()).toUpperCase(),
+    random: randStr,
+    signature: signatureVal,
     timestamp: Math.floor(Date.now() / 1000),
     amount: calculatedStake,
     selectType: selectCode,
@@ -815,8 +830,10 @@ async function placeBetAction() {
     const r = await fetch(`${BASE_URL}/GameBet`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${S.token}`
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Authorization': `Bearer ${S.token}`,
+        'X-Web-Platform': 'Android',
+        'Sec-Ch-Ua-Platform': '"Android"'
       },
       body: payload
     });
@@ -827,6 +844,9 @@ async function placeBetAction() {
         log(`🟢 Auto-Bet Successful! Period #${S.curPeriod} bet registered.`, "success");
         S.totalBets++;
         updateStatsUI();
+      } else if (res.code === 401) {
+        log("🔴 Auto-Bet Rejected: Token expired or permission error.", "error");
+        clearToken();
       } else {
         log(`🔴 Auto-Bet Rejected: ${res.msg || 'Insufficient balance/Error'}`, "error");
       }
