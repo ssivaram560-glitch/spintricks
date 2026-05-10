@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>SIVA ULTRA AI AUTO-BETTER V56</title>
+<title>SIVA ULTRA AI AUTO-BETTER V57</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -60,6 +60,12 @@ body {
   font-weight: 700;
   padding: 5px 12px;
   border-radius: 30px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: var(--neon-red);
+  transition: all 0.3s ease;
+}
+.live-badge.synced {
   background: rgba(16,185,129,0.1);
   border: 1px solid rgba(16,185,129,0.4);
   color: var(--neon-green);
@@ -68,20 +74,24 @@ body {
   width: 8px;
   height: 8px;
   border-radius: 50%;
+  background: var(--neon-red);
+  box-shadow: 0 0 8px var(--neon-red);
+  animation: pulse 1.2s infinite;
+}
+.live-badge.synced .live-dot {
   background: var(--neon-green);
   box-shadow: 0 0 8px var(--neon-green);
-  animation: pulse 1.2s infinite;
 }
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.3; }
 }
 
-/* CONFIGURATION CARD */
-.config-card {
+/* TOKEN & DOMAIN CONFIG (ALWAYS RE-EDITABLE!) */
+.token-section {
   margin: 12px;
   background: var(--panel-bg);
-  border: 1px solid var(--border-glow);
+  border: 1px solid rgba(139, 92, 246, 0.3);
   border-radius: 16px;
   padding: 16px;
 }
@@ -94,17 +104,6 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-}
-.config-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-.input-grp {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
 }
 .input-lbl {
   font-size: 10px;
@@ -127,7 +126,70 @@ body {
 .config-input:focus {
   border-color: var(--neon-purple);
 }
+.token-area {
+  width: 100%;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid var(--border-glow);
+  border-radius: 8px;
+  padding: 10px;
+  color: #fff;
+  font-size: 12px;
+  font-family: 'Share Tech Mono', monospace;
+  resize: none;
+  outline: none;
+  margin-top: 8px;
+}
+.save-token-btn {
+  width: 100%;
+  background: linear-gradient(90deg, var(--neon-purple), #6366f1);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 11px;
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+.reset-btn {
+  width: 100%;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  color: var(--neon-red);
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.3s;
+}
+.reset-btn:hover {
+  background: var(--neon-red);
+  color: #fff;
+}
 
+/* CONFIGURATION CARD */
+.config-card {
+  margin: 12px;
+  background: var(--panel-bg);
+  border: 1px solid var(--border-glow);
+  border-radius: 16px;
+  padding: 16px;
+}
+.config-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.input-grp {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
 .total-risk {
   font-size: 12px;
   color: var(--text-muted);
@@ -139,7 +201,7 @@ body {
 }
 .total-risk span { color: var(--neon-yellow); }
 
-/* WATCH LOSS-THEN-BET CONFIGURATION (KINGPIN FEATURE) */
+/* WATCH LOSS-THEN-BET CONFIGURATION */
 .watch-panel {
   margin-top: 12px;
   background: rgba(0,0,0,0.2);
@@ -169,41 +231,6 @@ body {
   left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%;
 }
 .toggle-switch input:checked + .slider:before { transform: translateX(20px); }
-
-/* TOKEN & DOMAIN CONFIG */
-.token-section {
-  margin: 12px;
-  background: var(--panel-bg);
-  border: 1px solid rgba(245, 158, 11, 0.2);
-  border-radius: 16px;
-  padding: 16px;
-}
-.token-area {
-  width: 100%;
-  background: rgba(0,0,0,0.4);
-  border: 1px solid var(--border-glow);
-  border-radius: 8px;
-  padding: 10px;
-  color: #fff;
-  font-size: 12px;
-  font-family: 'Share Tech Mono', monospace;
-  resize: none;
-  outline: none;
-  margin-top: 8px;
-}
-.save-token-btn {
-  width: 100%;
-  background: linear-gradient(90deg, var(--neon-purple), #6366f1);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 11px;
-  margin-top: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  letter-spacing: 1px;
-}
 
 /* TIMER & VALUE CARD */
 .control-panel {
@@ -473,18 +500,26 @@ body {
 </div>
 
 <div class="top-header">
-  <div class="logo-title">SIVA ULTRA AI V56</div>
-  <div class="live-badge"><div class="live-dot"></div><span id="stat-lbl">LIVE SYNC</span></div>
+  <div class="logo-title">SIVA ULTRA AI V57</div>
+  <div class="live-badge" id="syncStatusBadge">
+    <div class="live-dot"></div><span id="stat-lbl">API SYNC OFFLINE</span>
+  </div>
 </div>
 
-<div class="token-section" id="token-block">
+<div class="token-section">
   <div class="panel-hdr">🔑 API SYNC CONFIG</div>
-  <span class="input-lbl">API BASE DOMAIN (Editable)</span>
-  <input type="text" class="config-input" id="apiDomain" value="lotteryapi.rajaluckapi.com" style="width:100%; margin-bottom:10px;" placeholder="e.g. lotteryapi.rajaluckapi.com">
   
-  <span class="input-lbl">Bearer Token (without 'Bearer ' word)</span>
-  <textarea class="token-area" id="jwtToken" rows="3" placeholder="Paste your dynamic bearer token here..."></textarea>
-  <button class="save-token-btn" onclick="storeJWT()">🔌 Activate API Sync</button>
+  <div id="token-input-controls">
+    <span class="input-lbl">API BASE DOMAIN</span>
+    <input type="text" class="config-input" id="apiDomain" value="lotteryapi.rajaluckapi.com" style="width:100%; margin-bottom:10px;" placeholder="e.g. lotteryapi.rajaluckapi.com">
+    
+    <span class="input-lbl">Bearer Token (WITHOUT 'Bearer ' PREFIX)</span>
+    <textarea class="token-area" id="jwtToken" rows="3" placeholder="Paste your dynamic bearer token here..."></textarea>
+    
+    <button class="save-token-btn" onclick="storeJWT()">🔌 Activate API Sync</button>
+  </div>
+  
+  <button class="reset-btn" onclick="resetActiveToken()">🔄 Clear & Reset Active Token</button>
 </div>
 
 <div class="config-card">
@@ -576,7 +611,7 @@ body {
     <span style="color: var(--neon-purple); cursor:pointer;" onclick="clearLogs()">CLEAR LOGS</span>
   </div>
   <div class="log-items" id="logs-container">
-    <div class="log-line log-info">[info] SIVA ULTRA AI V56 initialized...</div>
+    <div class="log-line log-info">[info] SIVA ULTRA AI V57 engine initialized...</div>
   </div>
 </div>
 
@@ -627,15 +662,15 @@ function toggleWatchMode() {
   opts.style.display = STATE.isWatchModeActive ? 'flex' : 'none';
   
   if (STATE.isWatchModeActive) {
-    STATE.isRealBettingAllowed = false; // Start on virtual wait state
-    writeLog("👀 Watch Mode Active: Observing virtually until threshold...", "info");
+    STATE.isRealBettingAllowed = false;
+    writeLog("👀 Watch Mode Active: Awaiting virtual loss triggers...", "info");
   } else {
     STATE.isRealBettingAllowed = true;
-    writeLog("⚠️ Watch Mode Deactivated: Betting real on next signals.", "info");
+    writeLog("⚠️ Watch Mode Off: Direct real betting resumed.", "info");
   }
 }
 
-// UI LEVEL CALCULATOR
+// LEVEL RISK CALCULATOR
 function calculateRisk() {
   const base = parseFloat(document.getElementById('base_bet').value) || 1;
   STATE.baseBet = base;
@@ -658,13 +693,13 @@ function renderLevelGrid() {
   }).join('');
 }
 
-// STORAGE CONNECTIVITY
+// SECURE STORAGE HANDLERS & RESET
 function storeJWT() {
   const val = document.getElementById('jwtToken').value.trim();
   const domainInput = document.getElementById('apiDomain').value.trim();
   
-  if(!val) return alert("Paste a valid auth token!");
-  if(!domainInput) return alert("API Base Domain cannot be empty!");
+  if(!val) return alert("Please enter a valid Bearer Token!");
+  if(!domainInput) return alert("API Base Domain is required!");
   
   STATE.token = val.replace(/^Bearer\s+/i, '');
   STATE.apiDomain = domainInput;
@@ -672,13 +707,27 @@ function storeJWT() {
   localStorage.setItem('sv_jwt_tok', STATE.token);
   localStorage.setItem('sv_api_domain', STATE.apiDomain);
   
-  writeLog("API Domain & Bearer Token successfully activated.", "info");
-  document.getElementById('token-block').style.display = 'none';
+  writeLog("API Config saved. Testing connection...", "info");
+  
+  // Collapse input form to save screen space
+  document.getElementById('token-input-controls').style.display = 'none';
   fetchPeriod();
 }
 
+function resetActiveToken() {
+  localStorage.removeItem('sv_jwt_tok');
+  STATE.token = '';
+  document.getElementById('jwtToken').value = '';
+  document.getElementById('token-input-controls').style.display = 'block';
+  
+  updateSyncBadge(false, "TOKEN RESET - OFFLINE");
+  writeLog("Active configuration cleared. Please input a valid token.", "loss");
+  showToast("Token Reset!");
+}
+
+// INITIAL STATE CHECKS
 if(STATE.token) {
-  document.getElementById('token-block').style.display = 'none';
+  document.getElementById('token-input-controls').style.display = 'none';
   document.getElementById('jwtToken').value = STATE.token;
   document.getElementById('apiDomain').value = STATE.apiDomain;
 }
@@ -694,7 +743,7 @@ function toggleEngine() {
   if(STATE.isAutoRunning) {
     btn.textContent = "⏹ STOP AUTO BET ENGINE";
     btn.classList.add('running');
-    writeLog("Engine Initialized: Auto Bet Loop active.", "win");
+    writeLog("Engine Initialized: Auto Bet active.", "win");
     showToast("Engine Online!");
     fetchPeriod();
   } else {
@@ -705,9 +754,26 @@ function toggleEngine() {
   }
 }
 
+// REAL SYNC VISUAL BADGE UPDATER (Anti-Fake Sync Indicator)
+function updateSyncBadge(isSuccess, statusText) {
+  const badge = document.getElementById('syncStatusBadge');
+  const label = document.getElementById('stat-lbl');
+  
+  if(isSuccess) {
+    badge.classList.add('synced');
+    label.textContent = statusText || "LIVE SYNCED";
+  } else {
+    badge.classList.remove('synced');
+    label.textContent = statusText || "SYNC OFFLINE";
+  }
+}
+
 // NETWORK SYNC FETCH CORES
 async function fetchPeriod() {
-  if (!STATE.token) return;
+  if (!STATE.token) {
+    updateSyncBadge(false, "NO TOKEN");
+    return;
+  }
   const signatureData = {
     typeId: STATE.typeId,
     language: 5,
@@ -727,6 +793,7 @@ async function fetchPeriod() {
     });
     const json = await res.json();
     if (json.code === 0) {
+      updateSyncBadge(true, "LIVE SYNC"); // Actual true status verified
       const liveP = String(json.data.issueNumber);
       if (STATE.currentPeriodNum && liveP !== STATE.currentPeriodNum) {
         await verifyBetResult(STATE.currentPeriodNum);
@@ -738,10 +805,14 @@ async function fetchPeriod() {
       startTickTimer(secondsLeft || 60);
       fetchHistories();
     } else {
-      writeLog(`Authentication Warning: [${json.msg}]. Re-check Bearer Token!`, "loss");
+      updateSyncBadge(false, "AUTH PERMISSION ERROR");
+      writeLog(`Sync Warning: [${json.msg}]. Your token has EXPIRED. Please click Reset Token below and paste a new one.`, "loss");
+      document.getElementById('predBox').className = "prediction-box SKIP";
+      document.getElementById('predVal').textContent = "ERROR / RELOGIN";
     }
   } catch(e) {
-    writeLog("API connection offline or Domain blocked. Try updating Base Domain URL.", "loss");
+    updateSyncBadge(false, "DOMAIN OFFLINE");
+    writeLog("Connection Refused: API Domain unreachable. Double check your API Domain URL.", "loss");
   }
 }
 
@@ -781,7 +852,7 @@ function renderGameHistory(list) {
   }).join('');
 }
 
-// HIGH OPTIMIZED PREDICTION ENGINE (SURE-WIN 4 LEVEL PATTERN)
+// HIGH OPTIMIZED PREDICTION ENGINE
 function runPredictionAnalysis(historyList) {
   const trend = historyList.slice(0, 10).map(i => parseInt(i.number) >= 5 ? 'BIG' : 'SMALL');
   const lastFive = trend.slice(0, 5);
@@ -790,7 +861,7 @@ function runPredictionAnalysis(historyList) {
   
   let dynamicDecision = "SKIP";
   
-  // High-Accuracy Mathematical Filter Patterns
+  // Mathematical Anti-Overlapping Formula Filters
   if (bigCount >= 8) {
     dynamicDecision = 'SMALL'; 
   } else if (smallCount >= 8) {
@@ -806,7 +877,7 @@ function runPredictionAnalysis(historyList) {
   } else if (Math.abs(bigCount - smallCount) >= 4) {
     dynamicDecision = bigCount > smallCount ? 'SMALL' : 'BIG';
   } else {
-    dynamicDecision = "SKIP"; // Stop loss protective skip
+    dynamicDecision = "SKIP";
   }
 
   const box = document.getElementById('predBox');
@@ -835,14 +906,14 @@ async function triggerPlaceBetAction(prediction) {
   
   const currentBetAmount = MTG_FACTORS[STATE.currentLvlIdx] * STATE.baseBet;
   
-  // Watch mode virtual processing
+  // Watch mode simulation handler
   if (STATE.isWatchModeActive && !STATE.isRealBettingAllowed) {
-    writeLog(`👁️ [Watch Mode] Simulating virtual bet on ${prediction} for ₹${currentBetAmount}...`, "info");
+    writeLog(`👁️ [Watch Mode] Virtual Bet placed on ${prediction} [₹${currentBetAmount}]`, "info");
     lastBetPlacedPeriod = STATE.currentPeriodNum;
     return;
   }
 
-  writeLog(`System placing ${prediction} at L${STATE.currentLvlIdx + 1} with ₹${currentBetAmount}...`, "info");
+  writeLog(`Auto-Betting L${STATE.currentLvlIdx + 1} - ₹${currentBetAmount} on ${prediction}...`, "info");
   
   const betParams = {
     typeId: STATE.typeId,
@@ -866,15 +937,15 @@ async function triggerPlaceBetAction(prediction) {
     });
     const data = await res.json();
     if(data.code === 0) {
-      writeLog(`✅ Bet successful! target ${STATE.currentPeriodNum} placed ₹${currentBetAmount} on ${prediction}`, "win");
+      writeLog(`✅ Bet placed on ${STATE.currentPeriodNum} [₹${currentBetAmount}] successfully!`, "win");
       STATE.betsCount++;
       lastBetPlacedPeriod = STATE.currentPeriodNum;
       updateTrackers();
     } else {
-      writeLog(`❌ Betting API Error: [${data.msg}]`, "loss");
+      writeLog(`❌ Placing Bet Failed: [${data.msg}]`, "loss");
     }
   } catch(e) {
-    writeLog("⚠️ API Bet Request Transaction failed.", "loss");
+    writeLog("⚠️ Network Connection Error: Bet was not dispatched.", "loss");
   }
 }
 
@@ -909,45 +980,44 @@ async function verifyBetResult(checkedPeriod) {
         const actualResult = actualNum >= 5 ? 'BIG' : 'SMALL';
         const won = STATE.activePrediction === actualResult;
 
-        // Watch mode evaluation processing
+        // Watch mode logic evaluator
         if (STATE.isWatchModeActive) {
           const reqLosses = parseInt(document.getElementById('watchLossCount').value) || 1;
           
           if (!won) {
             STATE.virtualLossStreak++;
-            writeLog(`📉 Virtual Loss Streak: ${STATE.virtualLossStreak}/${reqLosses}`, "loss");
+            writeLog(`📉 Virtual loss count tracking: ${STATE.virtualLossStreak}/${reqLosses}`, "loss");
             
             if (!STATE.isRealBettingAllowed && STATE.virtualLossStreak >= reqLosses) {
               STATE.isRealBettingAllowed = true;
-              writeLog("🚨 Target losses reached! Activating real betting for next round.", "win");
+              writeLog("🚨 Target losses met! Enabling REAL bets for next round.", "win");
             }
           } else {
-            // If won virtually, reset streak
             STATE.virtualLossStreak = 0;
             if (STATE.isRealBettingAllowed) {
-              STATE.isRealBettingAllowed = false; // Reset to virtual mode
-              writeLog("🏆 Real Bet Finished. Returning to watch state.", "info");
+              STATE.isRealBettingAllowed = false;
+              writeLog("🏆 Real Bet Finished. Re-initializing Watch Mode.", "info");
             }
           }
         }
 
-        // Apply Real P&L calculations if was a real bet
+        // Apply real account outcomes
         if (!STATE.isWatchModeActive || (STATE.isWatchModeActive && STATE.isRealBettingAllowed)) {
           if (won) {
             const earned = (MTG_FACTORS[STATE.currentLvlIdx] * STATE.baseBet) * 0.98; 
             STATE.pnlTotal += earned;
             STATE.winsCount++;
-            writeLog(`🏆 WIN! Period ${checkedPeriod} result: ${actualResult}. Reset to L1.`, "win");
+            writeLog(`🏆 WIN! Period ${checkedPeriod} output: ${actualResult}. Level reset to L1.`, "win");
             STATE.currentLvlIdx = 0; 
           } else {
             const lostAmount = MTG_FACTORS[STATE.currentLvlIdx] * STATE.baseBet;
             STATE.pnlTotal -= lostAmount;
             STATE.lossesCount++;
-            writeLog(`💥 LOSS! Period ${checkedPeriod} result: ${actualResult}. Progressive Index scaled.`, "loss");
+            writeLog(`💥 LOSS! Period ${checkedPeriod} output: ${actualResult}. Progressive Index scaling...`, "loss");
             STATE.currentLvlIdx++;
             
             if(STATE.currentLvlIdx >= MTG_FACTORS.length) {
-              writeLog(`🚨 Cycle Complete! Resetting index to L1.`, "loss");
+              writeLog(`🚨 Complete cycle finished. Resetting back to L1.`, "loss");
               STATE.currentLvlIdx = 0;
             }
           }
@@ -959,7 +1029,7 @@ async function verifyBetResult(checkedPeriod) {
   } catch(e) {}
 }
 
-// DISPLAY METRICS TRACKERS
+// UPDATE INTERFACE STATS Display
 function updateTrackers() {
   document.getElementById('track-bets').textContent = STATE.betsCount;
   document.getElementById('track-wl').textContent = `${STATE.winsCount} / ${STATE.lossesCount}`;
@@ -993,7 +1063,7 @@ function startTickTimer(dur) {
   }, 1000);
 }
 
-// UTILITY LOGS DISPLAY FUNCTIONS
+// LOGGING UTILS
 function writeLog(text, flag) {
   const box = document.getElementById('logs-container');
   const d = new Date();
@@ -1007,7 +1077,7 @@ function writeLog(text, flag) {
 }
 
 function clearLogs() {
-  document.getElementById('logs-container').innerHTML = `<div class="log-line log-info">[info] System log history cleared.</div>`;
+  document.getElementById('logs-container').innerHTML = `<div class="log-line log-info">[info] Logs cleared. Ready...</div>`;
 }
 
 function showToast(msg) {
@@ -1017,7 +1087,7 @@ function showToast(msg) {
   setTimeout(() => { toast.classList.remove('show'); }, 2000);
 }
 
-// ON INITIALIZE
+// ON INIT
 calculateRisk();
 </script>
 </body>
