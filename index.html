@@ -689,49 +689,153 @@ function processBetResolution(actualOutcome, evaluatedPeriod) {
 // CORE PERIOD SCHEDULER & PIPELINE
 // ═══════════════════════════════════════
 async function doFetch() {
+
   if (!S.token || !S.active) return;
-  
-  const issueData = await fetchFromGameAPI('GetGameIssue');
-  const resultsData = await fetchFromGameAPI('GetLastFiveIssueNumberResult');
-  
+
+  const issueData =
+    await fetchFromGameAPI('GetGameIssue');
+
+  const resultsData =
+    await fetchFromGameAPI('GetLastFiveIssueNumberResult');
+
   if (!issueData || !resultsData) {
-    log("Engine sync warning: Retrying handshake...", "error");
+
+    log(
+      "Engine sync warning: Retrying handshake...",
+      "error"
+    );
+
     return;
   }
-  
-  const nextIssue = String(issueData.issueNumber);
-  document.getElementById('targetIssue').textContent = nextIssue;
-  
-  // Parse dynamic listing
+
+  const nextIssue =
+    String(issueData.issueNumber);
+
+  document.getElementById(
+    'targetIssue'
+  ).textContent = nextIssue;
+
+  // SAFE HISTORY LIST
   let list = [];
-  if (resultsData.list && resultsData.list.length > 0) {
+
+  // METHOD 1
+  if (
+    resultsData.list &&
+    resultsData.list.length > 0
+  ) {
+
     list = resultsData.list;
+
   }
-  
-  if (list.length > 0) {
-    renderOutcomeBalls(list.slice(0, 5));
-    
-    // Evaluate previous transaction
-    if (S.curPeriod && nextIssue !== S.curPeriod) {
-      const pastResult = list.find(x => String(x.issueNumber) === String(S.curPeriod));
-      if (pastResult) {
-        const actualOutcome = parseInt(pastResult.number) >= 5 ? 'BIG' : 'SMALL';
-        processBetResolution(actualOutcome, S.curPeriod);
-      }
+
+  // METHOD 2
+  else if (
+    resultsData.gameHistory &&
+    resultsData.gameHistory.length > 0
+  ) {
+
+    list = resultsData.gameHistory;
+
+  }
+
+  // METHOD 3
+  else if (
+    Array.isArray(resultsData)
+  ) {
+
+    list = resultsData;
+
+  }
+
+  // IF EMPTY
+  if (!list.length) {
+
+    log(
+      "No game history received from API.",
+      "error"
+    );
+
+    document.getElementById(
+      'predVal'
+    ).textContent = "NO DATA";
+
+    return;
+  }
+
+  // RENDER BALLS
+  renderOutcomeBalls(
+    list.slice(0, 5)
+  );
+
+  // PROCESS OLD RESULT
+  if (
+    S.curPeriod &&
+    nextIssue !== S.curPeriod
+  ) {
+
+    const pastResult =
+      list.find(
+        x =>
+          String(x.issueNumber) ===
+          String(S.curPeriod)
+      );
+
+    if (pastResult) {
+
+      const actualOutcome =
+
+        parseInt(
+          pastResult.number
+        ) >= 5
+
+        ? 'BIG'
+        : 'SMALL';
+
+      processBetResolution(
+        actualOutcome,
+        S.curPeriod
+      );
     }
-    
-    S.curPeriod = nextIssue;
-    
-    // Run AI analysis
-    const formattedHistory = list.slice(0, 10).map(x => parseInt(x.number) >= 5 ? 'BIG' : 'SMALL');
-    generatePrediction(formattedHistory);
   }
-  
-  // Establish Countdown Timer
-  if (issueData.endTime && issueData.serviceTime) {
-    const delta = Math.floor((new Date(issueData.endTime) - new Date(issueData.serviceTime)) / 1000);
+
+  // UPDATE PERIOD
+  S.curPeriod = nextIssue;
+
+  // FORMAT HISTORY
+  const formattedHistory =
+
+    list
+    .slice(0, 10)
+    .map(x =>
+
+      parseInt(x.number) >= 5
+      ? 'BIG'
+      : 'SMALL'
+    );
+
+  // GENERATE PREDICTION
+  generatePrediction(
+    formattedHistory
+  );
+
+  // TIMER
+  if (
+    issueData.endTime &&
+    issueData.serviceTime
+  ) {
+
+    const delta = Math.floor(
+
+      (
+        new Date(issueData.endTime) -
+        new Date(issueData.serviceTime)
+      ) / 1000
+    );
+
     startCountdown(delta);
+
   } else {
+
     startCountdown(60);
   }
 }
