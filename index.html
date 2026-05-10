@@ -594,6 +594,91 @@ async function fetchFromGameAPI(endpoint) {
 }
 
 // ═══════════════════════════════════════
+// COUNTDOWN TIMER CONTROLLER
+// ═══════════════════════════════════════
+function startCountdown(duration) {
+  clearInterval(S.timerID);
+  S.timerSec = duration;
+  
+  const timerElement = document.getElementById('timerVal');
+  
+  S.timerID = setInterval(() => {
+    if (S.timerSec <= 0) {
+      clearInterval(S.timerID);
+      // Period over, fetch new cycle
+      setTimeout(doFetch, 2000);
+      return;
+    }
+    
+    S.timerSec--;
+    const mins = Math.floor(S.timerSec / 60);
+    const secs = S.timerSec % 60;
+    
+    timerElement.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    
+    if (S.timerSec <= 10) {
+      timerElement.classList.add('critical');
+    } else {
+      timerElement.classList.remove('critical');
+    }
+  }, 1000);
+}
+
+// ═══════════════════════════════════════
+// SYSTEM STATS UPDATER
+// ═══════════════════════════════════════
+function updateStatsUI() {
+  document.getElementById('statBets').textContent = S.totalBets;
+  document.getElementById('statWinLoss').textContent = `${S.wins} / ${S.losses}`;
+  
+  const plEl = document.getElementById('statPL');
+  plEl.textContent = `₹${S.profitNLoss.toFixed(2)}`;
+  if (S.profitNLoss >= 0) {
+    plEl.className = "stat-val pnl-pos";
+  } else {
+    plEl.className = "stat-val pnl-neg";
+  }
+}
+
+// ═══════════════════════════════════════
+// HISTORY AND BET RESOLUTION
+// ═══════════════════════════════════════
+function processBetResolution(actualOutcome, evaluatedPeriod) {
+  if (S.lastProcessedPeriod === evaluatedPeriod) return;
+  S.lastProcessedPeriod = evaluatedPeriod;
+
+  const lastPrediction = S.currentPrediction;
+  if (!lastPrediction) return;
+
+  const currentBetAmt = S.baseBet * S.martingaleMultipliers[S.curLevel - 1];
+
+  if (actualOutcome === lastPrediction) {
+    // Win Case
+    log(`🎉 WIN! Period #${evaluatedPeriod} resulted in ${actualOutcome}.`, "success");
+    S.wins++;
+    S.profitNLoss += (currentBetAmt * 0.98); // Approx 1.98x payout ratio
+    S.curLevel = 1; // Reset Martingale
+    S.virtualLossStreak = 0;
+  } else {
+    // Loss Case
+    log(`❌ LOSS. Period #${evaluatedPeriod} resulted in ${actualOutcome}.`, "error");
+    S.losses++;
+    S.profitNLoss -= currentBetAmt;
+    S.virtualLossStreak++;
+
+    if (S.curLevel < S.maxLevels) {
+      S.curLevel++;
+    } else {
+      log(`⚠️ Martingale Max Level reached! Resetting to L1.`, "error");
+      S.curLevel = 1;
+    }
+  }
+
+  updateLevelHighlight();
+  updateStatsUI();
+}
+
+// ═══════════════════════════════════════
 // CORE PERIOD SCHEDULER & PIPELINE
 // ═══════════════════════════════════════
 async function doFetch() {
@@ -698,7 +783,7 @@ function renderOutcomeBalls(list) {
 // BET TRANSACTION EXECUTION
 // ═══════════════════════════════════════
 async function placeBetAction() {
-  if (!S.active || !S.currentPrediction || S.lastProcessedPeriod === S.curPeriod) return;
+  if (!S.active || !S.currentPrediction) return;
   
   const betMultiplier = S.martingaleMultipliers[S.curLevel - 1];
   const calculatedStake = S.baseBet * betMultiplier;
@@ -735,108 +820,35 @@ async function placeBetAction() {
       },
       body: payload
     });
-    
+
     if (r.ok) {
       const res = await r.json();
       if (res.code === 0) {
-        S.lastProcessedPeriod = S.curPeriod;
-        log(`Bet successfully synced with server for Period #${S.curPeriod}`, "success");
+        log(`🟢 Auto-Bet Successful! Period #${S.curPeriod} bet registered.`, "success");
         S.totalBets++;
-        document.getElementById('statBets').textContent = S.totalBets;
+        updateStatsUI();
       } else {
-        log(`Transaction rejected by server: ${res.msg || 'Balance error'}`, "error");
+        log(`🔴 Auto-Bet Rejected: ${res.msg || 'Insufficient balance/Error'}`, "error");
       }
+    } else {
+      log(`🔴 Auto-Bet execution failed. Server responded with status: ${r.status}`, "error");
     }
   } catch(e) {
-    log("Network Handshake Error during transaction placement", "error");
+    log(`🔴 Network Error: Unable to submit bet payload.`, "error");
   }
 }
 
 // ═══════════════════════════════════════
-// WIN-LOSS EVALUATION (MARTINGALE ENGINE)
+// PERSISTENCE HANDSHAKE RUNNER
 // ═══════════════════════════════════════
-function processBetResolution(actual, period) {
-  const isWin = S.currentPrediction === actual;
-  const multiplier = S.martingaleMultipliers[S.curLevel - 1];
-  const baseCost = S.baseBet * multiplier;
-  
-  if (isWin) {
-    S.wins++;
-    const winAmount = baseCost * 1.96; // Standard payout
-    S.profitNLoss += (winAmount - baseCost);
-    
-    log(`Period #${period} Result: WIN [Actual: ${actual}] [Profit: +₹${(winAmount - baseCost).toFixed(2)}]`, "success");
-    
-    S.curLevel = 1; // Reset Martingale sequence
-    S.virtualLossStreak = 0;
-  } else {
-    S.losses++;
-    S.profitNLoss -= baseCost;
-    
-    log(`Period #${period} Result: LOSS [Actual: ${actual}] [Loss: -₹${baseCost}]`, "error");
-    
-    S.virtualLossStreak++;
-    
-    if (S.curLevel < S.maxLevels) {
-      S.curLevel++;
-    } else {
-      log("MAX MARTINGALE LEVEL REACHED! Resetting back to L1 safety.", "error");
-      S.curLevel = 1;
-    }
-  }
-  
-  // UI rendering updates
-  document.getElementById('statWinLoss').textContent = `${S.wins} / ${S.losses}`;
-  
-  const plEl = document.getElementById('statPL');
-  plEl.textContent = `₹${S.profitNLoss.toFixed(2)}`;
-  if (S.profitNLoss >= 0) {
-    plEl.className = "stat-val pnl-pos";
-  } else {
-    plEl.className = "stat-val pnl-neg";
-  }
-  
-  updateLevelHighlight();
-}
-
-// ═══════════════════════════════════════
-// RUNNING CONTROLLER TIME-LOOPS
-// ═══════════════════════════════════════
-function startCountdown(sec) {
-  if (S.timerID) clearInterval(S.timerID);
-  S.timerSec = sec;
-  updateTimerUI();
-  S.timerID = setInterval(() => {
-    S.timerSec--;
-    if (S.timerSec <= 0) {
-      clearInterval(S.timerID);
-      doFetch();
-    } else {
-      updateTimerUI();
-    }
-  }, 1000);
-}
-
-function updateTimerUI() {
-  const m = String(Math.floor(S.timerSec / 60)).padStart(2, '0');
-  const s = String(S.timerSec % 60).padStart(2, '0');
-  const el = document.getElementById('timerVal');
-  el.textContent = `${m}:${s}`;
-  
-  if (S.timerSec <= 10) {
-    el.className = "timer-val critical";
-  } else {
-    el.className = "timer-val";
-  }
-}
-
-// On Launch
-window.onload = () => {
-  log("SIVA ULTRA AI initialization complete...", "info");
+window.addEventListener('DOMContentLoaded', () => {
   if (S.token) {
     setupInterface();
+    doFetch();
+  } else {
+    document.getElementById('tokenBox').style.display = 'block';
   }
-};
+});
 </script>
 </body>
 </html>
