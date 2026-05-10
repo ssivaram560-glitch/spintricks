@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>SIVA ULTRA AI AUTO-BETTER V55 - OPTIMIZED</title>
+<title>SIVA ULTRA AI AUTO-BETTER V56</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -139,7 +139,38 @@ body {
 }
 .total-risk span { color: var(--neon-yellow); }
 
-/* TOKEN MANAGEMENT */
+/* WATCH LOSS-THEN-BET CONFIGURATION (KINGPIN FEATURE) */
+.watch-panel {
+  margin-top: 12px;
+  background: rgba(0,0,0,0.2);
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.watch-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+  position: absolute; cursor: pointer; inset: 0;
+  background-color: #334155; transition: .3s; border-radius: 20px;
+}
+.toggle-switch input:checked + .slider { background-color: var(--neon-green); }
+.slider:before {
+  position: absolute; content: ""; height: 14px; width: 14px;
+  left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%;
+}
+.toggle-switch input:checked + .slider:before { transform: translateX(20px); }
+
+/* TOKEN & DOMAIN CONFIG */
 .token-section {
   margin: 12px;
   background: var(--panel-bg);
@@ -442,13 +473,17 @@ body {
 </div>
 
 <div class="top-header">
-  <div class="logo-title">SIVA ULTRA AI V55</div>
+  <div class="logo-title">SIVA ULTRA AI V56</div>
   <div class="live-badge"><div class="live-dot"></div><span id="stat-lbl">LIVE SYNC</span></div>
 </div>
 
 <div class="token-section" id="token-block">
-  <div class="panel-hdr">🔑 JWT AUTH SECURITY TOKEN</div>
-  <textarea class="token-area" id="jwtToken" rows="3" placeholder="Enter Bearer Token here (exclude 'Bearer ' word)..."></textarea>
+  <div class="panel-hdr">🔑 API SYNC CONFIG</div>
+  <span class="input-lbl">API BASE DOMAIN (Editable)</span>
+  <input type="text" class="config-input" id="apiDomain" value="lotteryapi.rajaluckapi.com" style="width:100%; margin-bottom:10px;" placeholder="e.g. lotteryapi.rajaluckapi.com">
+  
+  <span class="input-lbl">Bearer Token (without 'Bearer ' word)</span>
+  <textarea class="token-area" id="jwtToken" rows="3" placeholder="Paste your dynamic bearer token here..."></textarea>
   <button class="save-token-btn" onclick="storeJWT()">🔌 Activate API Sync</button>
 </div>
 
@@ -464,7 +499,24 @@ body {
       <input type="number" class="config-input" value="9" readonly>
     </div>
   </div>
-  <div class="total-risk">Total Session Risk: ₹<span id="risk-val">2132</span> (across 9 levels)</div>
+  <div class="total-risk">Total Session Risk: ₹<span id="risk-val">2132</span></div>
+
+  <div class="watch-panel">
+    <div class="watch-row">
+      <div>
+        <span class="input-lbl" style="display:block; color:var(--neon-yellow);">👀 Watch Mode (Loss, Then Bet)</span>
+        <span style="font-size:10px; color:var(--text-muted);">Starts real betting only after virtual losses.</span>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" id="watchToggle" onchange="toggleWatchMode()">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div id="watch-options" style="display:none; margin-top:10px; display:flex; align-items:center; gap:10px;">
+      <span class="input-lbl">Required Virtual Losses:</span>
+      <input type="number" id="watchLossCount" class="config-input" value="1" min="1" max="5" style="width:60px; padding:4px;">
+    </div>
+  </div>
 </div>
 
 <div class="engine-btn-row">
@@ -504,8 +556,7 @@ body {
 
 <div class="levels-card">
   <div class="panel-hdr">📊 9-LEVEL MULTIPLIER (MARTINGALE)</div>
-  <div class="levels-grid" id="levelsBox">
-  </div>
+  <div class="levels-grid" id="levelsBox"></div>
 </div>
 
 <div class="recent-balls-card">
@@ -525,7 +576,7 @@ body {
     <span style="color: var(--neon-purple); cursor:pointer;" onclick="clearLogs()">CLEAR LOGS</span>
   </div>
   <div class="log-items" id="logs-container">
-    <div class="log-line log-info">[info] SIVA ULTRA AI initialization complete...</div>
+    <div class="log-line log-info">[info] SIVA ULTRA AI V56 initialized...</div>
   </div>
 </div>
 
@@ -547,11 +598,12 @@ if (localStorage.getItem('sv_gate_key')) {
   document.getElementById('key-gate').style.display = 'none';
 }
 
-// STRATEGY LOGIC VALUES (NEW SEQUENCE INTEGRATED)
+// STRATEGY LOGIC VALUES
 const MTG_FACTORS = [1, 3, 8, 20, 50, 120, 230, 500, 1200];
 const STATE = {
   token: localStorage.getItem('sv_jwt_tok') || '',
-  typeId: 1, // 1 Minute WinGo
+  apiDomain: localStorage.getItem('sv_api_domain') || 'lotteryapi.rajaluckapi.com',
+  typeId: 1, 
   isAutoRunning: false,
   baseBet: 1,
   currentLvlIdx: 0,
@@ -561,8 +613,27 @@ const STATE = {
   betsCount: 0,
   winsCount: 0,
   lossesCount: 0,
-  pnlTotal: 0.00
+  pnlTotal: 0.00,
+  
+  // Watch State Variables
+  isWatchModeActive: false,
+  virtualLossStreak: 0,
+  isRealBettingAllowed: true
 };
+
+function toggleWatchMode() {
+  STATE.isWatchModeActive = document.getElementById('watchToggle').checked;
+  const opts = document.getElementById('watch-options');
+  opts.style.display = STATE.isWatchModeActive ? 'flex' : 'none';
+  
+  if (STATE.isWatchModeActive) {
+    STATE.isRealBettingAllowed = false; // Start on virtual wait state
+    writeLog("👀 Watch Mode Active: Observing virtually until threshold...", "info");
+  } else {
+    STATE.isRealBettingAllowed = true;
+    writeLog("⚠️ Watch Mode Deactivated: Betting real on next signals.", "info");
+  }
+}
 
 // UI LEVEL CALCULATOR
 function calculateRisk() {
@@ -590,16 +661,26 @@ function renderLevelGrid() {
 // STORAGE CONNECTIVITY
 function storeJWT() {
   const val = document.getElementById('jwtToken').value.trim();
+  const domainInput = document.getElementById('apiDomain').value.trim();
+  
   if(!val) return alert("Paste a valid auth token!");
+  if(!domainInput) return alert("API Base Domain cannot be empty!");
+  
   STATE.token = val.replace(/^Bearer\s+/i, '');
+  STATE.apiDomain = domainInput;
+  
   localStorage.setItem('sv_jwt_tok', STATE.token);
-  writeLog("API bearer token stored successfully.", "info");
+  localStorage.setItem('sv_api_domain', STATE.apiDomain);
+  
+  writeLog("API Domain & Bearer Token successfully activated.", "info");
   document.getElementById('token-block').style.display = 'none';
   fetchPeriod();
 }
+
 if(STATE.token) {
   document.getElementById('token-block').style.display = 'none';
   document.getElementById('jwtToken').value = STATE.token;
+  document.getElementById('apiDomain').value = STATE.apiDomain;
 }
 
 // CORE SYSTEM ENGINE CONTROL
@@ -613,13 +694,13 @@ function toggleEngine() {
   if(STATE.isAutoRunning) {
     btn.textContent = "⏹ STOP AUTO BET ENGINE";
     btn.classList.add('running');
-    writeLog("Engine Initialized: Auto Bet is ACTIVE.", "win");
+    writeLog("Engine Initialized: Auto Bet Loop active.", "win");
     showToast("Engine Online!");
     fetchPeriod();
   } else {
     btn.textContent = "▶ START ENGINE";
     btn.classList.remove('running');
-    writeLog("Engine Paused: Auto Bet is INACTIVE.", "loss");
+    writeLog("Engine Paused: Auto Bet stopped.", "loss");
     showToast("Engine Stopped.");
   }
 }
@@ -636,7 +717,7 @@ async function fetchPeriod() {
   };
   
   try {
-    const res = await fetch('https://lotteryapi.rajaluckapi.com/api/webapi/GetGameIssue', {
+    const res = await fetch(`https://${STATE.apiDomain}/api/webapi/GetGameIssue`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -648,7 +729,6 @@ async function fetchPeriod() {
     if (json.code === 0) {
       const liveP = String(json.data.issueNumber);
       if (STATE.currentPeriodNum && liveP !== STATE.currentPeriodNum) {
-        // Evaluate the outcome of the just finished period before setting new target
         await verifyBetResult(STATE.currentPeriodNum);
       }
       STATE.currentPeriodNum = liveP;
@@ -658,10 +738,10 @@ async function fetchPeriod() {
       startTickTimer(secondsLeft || 60);
       fetchHistories();
     } else {
-      writeLog(`Sync Warning: [${json.msg}]`, "loss");
+      writeLog(`Authentication Warning: [${json.msg}]. Re-check Bearer Token!`, "loss");
     }
   } catch(e) {
-    writeLog("API connection error. Retrying syncing...", "loss");
+    writeLog("API connection offline or Domain blocked. Try updating Base Domain URL.", "loss");
   }
 }
 
@@ -676,7 +756,7 @@ async function fetchHistories() {
     pageNo: 1
   };
   try {
-    const res = await fetch('https://lotteryapi.rajaluckapi.com/api/webapi/GetLastFiveIssueNumberResult', {
+    const res = await fetch(`https://${STATE.apiDomain}/api/webapi/GetLastFiveIssueNumberResult`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -701,9 +781,8 @@ function renderGameHistory(list) {
   }).join('');
 }
 
-// HIGH OPTIMIZED PREDICTION ENGINE (4-LEVEL SURE-WIN LOGIC)
+// HIGH OPTIMIZED PREDICTION ENGINE (SURE-WIN 4 LEVEL PATTERN)
 function runPredictionAnalysis(historyList) {
-  // Extract patterns
   const trend = historyList.slice(0, 10).map(i => parseInt(i.number) >= 5 ? 'BIG' : 'SMALL');
   const lastFive = trend.slice(0, 5);
   const bigCount = trend.filter(x => x === 'BIG').length;
@@ -711,14 +790,12 @@ function runPredictionAnalysis(historyList) {
   
   let dynamicDecision = "SKIP";
   
-  // 1. Extreme Imbalance Technique (Over-saturated trends)
+  // High-Accuracy Mathematical Filter Patterns
   if (bigCount >= 8) {
-    dynamicDecision = 'SMALL'; // High-accuracy reversal point
+    dynamicDecision = 'SMALL'; 
   } else if (smallCount >= 8) {
-    dynamicDecision = 'BIG'; // High-accuracy reversal point
-  } 
-  // 2. Repetitive Streaks and Alterations (Mirror patterns)
-  else if (lastFive.join(',') === "BIG,BIG,BIG,BIG,BIG") {
+    dynamicDecision = 'BIG'; 
+  } else if (lastFive.join(',') === "BIG,BIG,BIG,BIG,BIG") {
     dynamicDecision = "SMALL"; 
   } else if (lastFive.join(',') === "SMALL,SMALL,SMALL,SMALL,SMALL") {
     dynamicDecision = "BIG";
@@ -726,14 +803,10 @@ function runPredictionAnalysis(historyList) {
     dynamicDecision = "SMALL";
   } else if (lastFive.slice(0, 3).join(',') === "SMALL,BIG,SMALL") {
     dynamicDecision = "BIG";
-  } 
-  // 3. Mathematical Ratio Probability
-  else if (Math.abs(bigCount - smallCount) >= 4) {
+  } else if (Math.abs(bigCount - smallCount) >= 4) {
     dynamicDecision = bigCount > smallCount ? 'SMALL' : 'BIG';
   } else {
-    // If the trend is in a confusing/flat state (e.g. 5 BIG and 5 SMALL in 10 periods),
-    // it triggers a SKIP to avoid level breakups!
-    dynamicDecision = "SKIP";
+    dynamicDecision = "SKIP"; // Stop loss protective skip
   }
 
   const box = document.getElementById('predBox');
@@ -748,7 +821,6 @@ function runPredictionAnalysis(historyList) {
     valueDisp.textContent = dynamicDecision;
     STATE.activePrediction = dynamicDecision;
     
-    // Auto execute bet action trigger if active and timer is clear of freeze period
     if(STATE.isAutoRunning && STATE.timerCounter > 8) {
       triggerPlaceBetAction(dynamicDecision);
     }
@@ -759,9 +831,17 @@ function runPredictionAnalysis(historyList) {
 let lastBetPlacedPeriod = null;
 
 async function triggerPlaceBetAction(prediction) {
-  if (lastBetPlacedPeriod === STATE.currentPeriodNum) return; // Prevent double bets
+  if (lastBetPlacedPeriod === STATE.currentPeriodNum) return; 
   
   const currentBetAmount = MTG_FACTORS[STATE.currentLvlIdx] * STATE.baseBet;
+  
+  // Watch mode virtual processing
+  if (STATE.isWatchModeActive && !STATE.isRealBettingAllowed) {
+    writeLog(`👁️ [Watch Mode] Simulating virtual bet on ${prediction} for ₹${currentBetAmount}...`, "info");
+    lastBetPlacedPeriod = STATE.currentPeriodNum;
+    return;
+  }
+
   writeLog(`System placing ${prediction} at L${STATE.currentLvlIdx + 1} with ₹${currentBetAmount}...`, "info");
   
   const betParams = {
@@ -776,7 +856,7 @@ async function triggerPlaceBetAction(prediction) {
   };
 
   try {
-    const res = await fetch('https://lotteryapi.rajaluckapi.com/api/webapi/GameBet', {
+    const res = await fetch(`https://${STATE.apiDomain}/api/webapi/GameBet`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -786,21 +866,21 @@ async function triggerPlaceBetAction(prediction) {
     });
     const data = await res.json();
     if(data.code === 0) {
-      writeLog(`✅ Bet successful! Target: ${STATE.currentPeriodNum} placed ₹${currentBetAmount} on ${prediction}`, "win");
+      writeLog(`✅ Bet successful! target ${STATE.currentPeriodNum} placed ₹${currentBetAmount} on ${prediction}`, "win");
       STATE.betsCount++;
       lastBetPlacedPeriod = STATE.currentPeriodNum;
       updateTrackers();
     } else {
-      writeLog(`❌ Betting Error [${data.msg}]`, "loss");
+      writeLog(`❌ Betting API Error: [${data.msg}]`, "loss");
     }
   } catch(e) {
-    writeLog("⚠️ API Bet Request Exception failed.", "loss");
+    writeLog("⚠️ API Bet Request Transaction failed.", "loss");
   }
 }
 
 // RESULT MONITOR & MARTINGALE PROGRESSION
 async function verifyBetResult(checkedPeriod) {
-  if (lastBetPlacedPeriod !== checkedPeriod) return; // Process only if we placed bet
+  if (lastBetPlacedPeriod !== checkedPeriod) return; 
   
   const queryBody = {
     typeId: STATE.typeId,
@@ -813,7 +893,7 @@ async function verifyBetResult(checkedPeriod) {
   };
   
   try {
-    const res = await fetch('https://lotteryapi.rajaluckapi.com/api/webapi/GetLastFiveIssueNumberResult', {
+    const res = await fetch(`https://${STATE.apiDomain}/api/webapi/GetLastFiveIssueNumberResult`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -827,29 +907,53 @@ async function verifyBetResult(checkedPeriod) {
       if(matchObj) {
         const actualNum = parseInt(matchObj.number);
         const actualResult = actualNum >= 5 ? 'BIG' : 'SMALL';
-        
-        if(STATE.activePrediction === actualResult) {
-          // WIN!
-          const earned = (MTG_FACTORS[STATE.currentLvlIdx] * STATE.baseBet) * 0.98; 
-          STATE.pnlTotal += earned;
-          STATE.winsCount++;
-          writeLog(`🏆 WIN! Period ${checkedPeriod} result was ${actualResult}. Level reset to L1.`, "win");
-          STATE.currentLvlIdx = 0; // Reset Martingale Index to 0
-        } else {
-          // LOSS!
-          const lostAmount = MTG_FACTORS[STATE.currentLvlIdx] * STATE.baseBet;
-          STATE.pnlTotal -= lostAmount;
-          STATE.lossesCount++;
-          writeLog(`💥 LOSS! Period ${checkedPeriod} result was ${actualResult}. Moving to next level.`, "loss");
-          STATE.currentLvlIdx++;
+        const won = STATE.activePrediction === actualResult;
+
+        // Watch mode evaluation processing
+        if (STATE.isWatchModeActive) {
+          const reqLosses = parseInt(document.getElementById('watchLossCount').value) || 1;
           
-          if(STATE.currentLvlIdx >= MTG_FACTORS.length) {
-            writeLog(`🚨 Cycle Complete! Max Martingale depth. Resetting to L1.`, "loss");
-            STATE.currentLvlIdx = 0;
+          if (!won) {
+            STATE.virtualLossStreak++;
+            writeLog(`📉 Virtual Loss Streak: ${STATE.virtualLossStreak}/${reqLosses}`, "loss");
+            
+            if (!STATE.isRealBettingAllowed && STATE.virtualLossStreak >= reqLosses) {
+              STATE.isRealBettingAllowed = true;
+              writeLog("🚨 Target losses reached! Activating real betting for next round.", "win");
+            }
+          } else {
+            // If won virtually, reset streak
+            STATE.virtualLossStreak = 0;
+            if (STATE.isRealBettingAllowed) {
+              STATE.isRealBettingAllowed = false; // Reset to virtual mode
+              writeLog("🏆 Real Bet Finished. Returning to watch state.", "info");
+            }
           }
         }
-        updateTrackers();
-        renderLevelGrid();
+
+        // Apply Real P&L calculations if was a real bet
+        if (!STATE.isWatchModeActive || (STATE.isWatchModeActive && STATE.isRealBettingAllowed)) {
+          if (won) {
+            const earned = (MTG_FACTORS[STATE.currentLvlIdx] * STATE.baseBet) * 0.98; 
+            STATE.pnlTotal += earned;
+            STATE.winsCount++;
+            writeLog(`🏆 WIN! Period ${checkedPeriod} result: ${actualResult}. Reset to L1.`, "win");
+            STATE.currentLvlIdx = 0; 
+          } else {
+            const lostAmount = MTG_FACTORS[STATE.currentLvlIdx] * STATE.baseBet;
+            STATE.pnlTotal -= lostAmount;
+            STATE.lossesCount++;
+            writeLog(`💥 LOSS! Period ${checkedPeriod} result: ${actualResult}. Progressive Index scaled.`, "loss");
+            STATE.currentLvlIdx++;
+            
+            if(STATE.currentLvlIdx >= MTG_FACTORS.length) {
+              writeLog(`🚨 Cycle Complete! Resetting index to L1.`, "loss");
+              STATE.currentLvlIdx = 0;
+            }
+          }
+          updateTrackers();
+          renderLevelGrid();
+        }
       }
     }
   } catch(e) {}
@@ -882,7 +986,6 @@ function startTickTimer(dur) {
     const s = STATE.timerCounter % 60;
     document.getElementById('timerClock').textContent = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
     
-    // Auto re-fetching logic triggers at end of cycle
     if(STATE.timerCounter <= 0) {
       clearInterval(window.sysTimerID);
       fetchPeriod();
