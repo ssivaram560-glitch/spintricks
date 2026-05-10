@@ -3,147 +3,95 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>SIVA ULTRA AI V54 - AUTO BET</title>
+<title>SIVA ULTRA AI V57 - PRO AUTO ENGINE</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#07070f;--c1:#0f0f1e;--c2:#14142a;
-  --pu:#8b5cf6;--gr:#10b981;--gd:#f59e0b;
-  --rd:#ef4444;--mu:#475569;--tx:#e2e8f0;
-  --bo:rgba(139,92,246,0.22);
+:root {
+  --bg: #07070f; --c1: #0f0f1e; --c2: #14142a;
+  --pu: #8b5cf6; --gr: #10b981; --gd: #f59e0b;
+  --rd: #ef4444; --mu: #64748b; --tx: #e2e8f0;
+  --bo: rgba(139,92,246,0.22);
 }
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-body{background:var(--bg);color:var(--tx);font-family:'Rajdhani',sans-serif;
-  max-width:430px;margin:0 auto;min-height:100vh;overflow-x:hidden;}
-
-/* KEY OVERLAY */
-#key-overlay {
-  position: fixed; inset: 0; background: var(--bg); z-index: 1000;
-  display: flex; align-items: center; justify-content: center; padding: 20px;
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body {
+  background: var(--bg); color: var(--tx); font-family: 'Rajdhani', sans-serif;
+  max-width: 430px; margin: 0 auto; min-height: 100vh; overflow-x: hidden;
 }
-.key-card {
-  background: var(--c2); border: 1px solid var(--pu); border-radius: 20px;
-  padding: 30px 20px; width: 100%; text-align: center;
-  box-shadow: 0 0 30px rgba(139,92,246,0.2);
+
+/* TOP STATUS BAR */
+.top {
+  background: linear-gradient(135deg,#12052a,#091433);
+  padding: 12px 15px; display: flex; align-items: center;
+  justify-content: space-between; position: sticky; top: 0; z-index: 99;
+  border-bottom: 1px solid var(--bo);
 }
-.key-card h2 { font-family: 'Orbitron'; font-size: 18px; margin-bottom: 15px; color: var(--pu); }
-.key-card input {
-  width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--bo);
-  padding: 12px; border-radius: 10px; color: #fff; text-align: center;
-  font-family: 'Orbitron'; letter-spacing: 2px; margin-bottom: 15px;
+.logo {
+  font-family: 'Orbitron', monospace; font-size: 14px; font-weight: 900;
+  background: linear-gradient(90deg, #a78bfa, #10b981);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
-.key-btn {
-  width: 100%; background: var(--pu); color: #fff; border: none;
-  padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer;
+.badge {
+  display: flex; align-items: center; gap: 5px; padding: 4px 11px;
+  border-radius: 20px; border: 1px solid; font-size: 11px; font-weight: 700; transition: all .3s;
 }
-.key-link { margin-top: 15px; font-size: 12px; color: var(--mu); }
-.key-link a { color: var(--gd); text-decoration: none; font-weight: 700; }
+.badge.live { background: rgba(16,185,129,.1); border-color: rgba(16,185,129,.4); color: #10b981; }
+.badge.error { background: rgba(239,68,68,.1); border-color: rgba(239,68,68,.4); color: #ef4444; }
+.dot { width: 7px; height: 7px; border-radius: 50%; }
+.badge.live .dot { background: #10b981; box-shadow: 0 0 6px #10b981; animation: blink 1.2s infinite; }
+.badge.error .dot { background: #ef4444; }
+@keyframes blink { 0%,100% { opacity:1 } 50% { opacity:.3 } }
 
-/* TOP BAR */
-.top{background:linear-gradient(135deg,#12052a,#091433);
-  padding:12px 15px;display:flex;align-items:center;
-  justify-content:space-between;position:sticky;top:0;z-index:99;
-  border-bottom:1px solid var(--bo);}
-.logo{font-family:'Orbitron',monospace;font-size:13px;font-weight:900;
-  background:linear-gradient(90deg,#a78bfa,#10b981);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.badge{display:flex;align-items:center;gap:5px;padding:4px 11px;
-  border-radius:20px;border:1px solid;font-size:11px;font-weight:700;transition:all .3s;}
-.badge.live{background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.4);color:#10b981;}
-.badge.off{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.4);color:#ef4444;}
-.dot{width:7px;height:7px;border-radius:50%;}
-.badge.live .dot{background:#10b981;box-shadow:0 0 6px #10b981;animation:blink 1.2s infinite;}
-.badge.off .dot{background:#ef4444;}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+/* TOKEN SETUP BOX */
+.setup-box {
+  margin: 11px; background: var(--c2); border-radius: 14px;
+  padding: 14px; border: 1px solid rgba(139,92,246,0.3);
+}
+.setup-title { font-size: 11px; color: var(--pu); font-weight: 700; letter-spacing: 1px; margin-bottom: 8px; }
+.setup-in {
+  width: 100%; background: rgba(0,0,0,.4); border: 1px solid var(--bo);
+  border-radius: 8px; padding: 9px 11px; color: var(--tx); font-size: 11px;
+  font-family: 'Rajdhani', sans-serif; outline: none; resize: none;
+}
+.setup-btn {
+  width: 100%; margin-top: 8px; padding: 11px; border-radius: 9px;
+  background: var(--pu); border: none; color: #fff; font-family: 'Rajdhani', sans-serif;
+  font-size: 13px; font-weight: 700; cursor: pointer;
+}
 
-/* TABS */
-.tabs{display:flex;gap:6px;padding:8px 11px;background:var(--c1);
-  border-bottom:1px solid var(--bo);overflow-x:auto;scrollbar-width:none;}
-.tabs::-webkit-scrollbar{display:none;}
-.tb{flex-shrink:0;padding:6px 14px;border-radius:9px;border:1.5px solid var(--bo);
-  background:transparent;color:var(--mu);font-family:'Rajdhani',sans-serif;
-  font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;}
-.tb.on{background:var(--pu);border-color:var(--pu);color:#fff;
-  box-shadow:0 0 14px rgba(139,92,246,.5);}
-
-/* PAGES */
-.pg{display:none;padding-bottom:85px;}
-.pg.show{display:block;}
-
-/* TOKEN BOX */
-.tok-box{margin:11px;background:var(--c2);border-radius:14px;
-  padding:14px;border:1px solid rgba(245,158,11,.35);}
-.tok-title{font-size:10px;color:var(--gd);font-weight:700;letter-spacing:1px;margin-bottom:8px;}
-.tok-in{width:100%;background:rgba(0,0,0,.4);border:1px solid var(--bo);
-  border-radius:8px;padding:9px 11px;color:var(--tx);font-size:11px;
-  font-family:'Rajdhani',sans-serif;outline:none;resize:none;}
-.tok-in:focus{border-color:var(--pu);}
-.tok-btn{width:100%;margin-top:8px;padding:11px;border-radius:9px;
-  background:var(--pu);border:none;color:#fff;font-family:'Rajdhani',sans-serif;
-  font-size:13px;font-weight:700;cursor:pointer;}
-.tok-hint{font-size:10px;color:var(--mu);margin-top:7px;line-height:1.6;}
-
-/* PERIOD CARD */
-.pc{margin:11px;background:linear-gradient(135deg,#130827,#080f2a);
-  border-radius:15px;padding:15px;border:1px solid var(--bo);}
-.pc-row{display:flex;justify-content:space-between;align-items:flex-start;}
-.lbl{font-size:9px;color:var(--mu);letter-spacing:1.5px;text-transform:uppercase;}
-.pid{font-family:'Orbitron',monospace;font-size:14px;color:var(--pu);
-  letter-spacing:1px;margin-top:3px;}
-.tmr{font-family:'Orbitron',monospace;font-size:36px;font-weight:900;
-  color:var(--gd);text-shadow:0 0 18px rgba(245,158,11,.5);line-height:1;text-align:right;}
-.tmr.red{color:var(--rd);text-shadow:0 0 18px rgba(239,68,68,.6);}
-.brow{display:flex;gap:7px;margin-top:11px;}
-.bd{flex:1;padding:7px 9px;border-radius:9px;text-align:center;font-size:11px;font-weight:700;}
-.bd1{background:rgba(139,92,246,.2);border:1px solid rgba(139,92,246,.4);color:#c4b5fd;}
-.bd2{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);color:var(--gr);}
-
-/* LAST 5 */
-.l5{margin:0 11px 11px;background:var(--c2);border-radius:13px;padding:12px 13px;border:1px solid var(--bo);}
-.l5t{font-size:10px;color:var(--mu);font-weight:700;letter-spacing:1px;margin-bottom:10px;}
-.balls{display:flex;gap:7px;justify-content:center;}
-.ball{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;
-  justify-content:center;font-family:'Orbitron',monospace;font-size:15px;font-weight:900;flex-shrink:0;}
-.ball.big{background:rgba(139,92,246,.35);border:2px solid var(--pu);color:#c4b5fd;box-shadow:0 0 10px rgba(139,92,246,.4);}
-.ball.sml{background:rgba(16,185,129,.25);border:2px solid var(--gr);color:#6ee7b7;box-shadow:0 0 10px rgba(16,185,129,.3);}
-.ball.e{background:rgba(255,255,255,.04);border:2px solid rgba(255,255,255,.08);color:var(--mu);}
-
-/* MAIN PRED */
-.mp{margin:0 11px 11px;border-radius:15px;padding:22px 15px;
-  text-align:center;border:2px solid;transition:all .5s;}
-.mp.B{background:linear-gradient(135deg,#2e0d6e,#1a0745);border-color:var(--pu);
-  box-shadow:0 0 45px rgba(139,92,246,.45);}
-.mp.S{background:linear-gradient(135deg,#022c20,#011a13);border-color:var(--gr);
-  box-shadow:0 0 45px rgba(16,185,129,.45);}
-.mp.X{background:var(--c2);border-color:var(--bo);}
-.mpl{font-size:10px;color:var(--mu);letter-spacing:2px;text-transform:uppercase;margin-bottom:7px;}
-.mpv{font-family:'Orbitron',monospace;font-size:56px;font-weight:900;line-height:1;}
-.mp.B .mpv{color:var(--pu);text-shadow:0 0 35px rgba(139,92,246,.9);}
-.mp.S .mpv{color:var(--gr);text-shadow:0 0 35px rgba(16,185,129,.9);}
-.mp.X .mpv{color:var(--mu);font-size:20px;font-family:'Rajdhani',sans-serif;}
-.mpr{font-size:12px;color:var(--mu);margin-top:5px;}
-.mps{font-size:12px;font-weight:700;margin-top:8px;padding:5px 14px;
-  border-radius:20px;display:inline-block;}
-.mp.B .mps{background:rgba(139,92,246,.2);color:#c4b5fd;}
-.mp.S .mps{background:rgba(16,185,129,.2);color:#6ee7b7;}
-
-/* CONFIDENCE */
-.cb{margin:0 11px 11px;background:var(--c2);border-radius:13px;padding:13px 14px;border:1px solid var(--bo);}
-.cr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-.cl{font-size:11px;color:var(--mu);font-weight:700;letter-spacing:1px;}
-.cp{font-family:'Orbitron',monospace;font-size:20px;font-weight:700;color:var(--gd);}
-.bbg{height:9px;background:rgba(255,255,255,.06);border-radius:10px;overflow:hidden;}
-.bf{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--pu),var(--gr));transition:width 1s;}
-
-/* AUTO BET CONFIGURATION UI */
-.ab-box {
+/* API ACTIVE RESET CARD */
+.sync-card {
   margin: 11px; background: var(--c2); border-radius: 14px; padding: 14px;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  border: 1px solid rgba(239, 68, 68, 0.3); display: none;
 }
-.ab-header {
-  display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+.sync-card-title { font-size: 11px; color: var(--rd); font-weight: 700; letter-spacing: 1px; margin-bottom: 8px; }
+.sync-reset-btn {
+  width: 100%; padding: 10px; border-radius: 8px; background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.4); color: var(--rd); font-family: 'Rajdhani', sans-serif;
+  font-weight: 700; cursor: pointer; text-align: center; font-size: 12px;
 }
-.ab-title { font-size: 11px; color: var(--gr); font-weight: 700; letter-spacing: 1px; }
+
+/* ENGINE CONFIGURATION */
+.config-card {
+  margin: 11px; background: var(--c2); border-radius: 14px; padding: 15px;
+  border: 1px solid var(--bo);
+}
+.config-title { font-size: 11px; color: var(--gd); font-weight: 700; letter-spacing: 1px; margin-bottom: 12px; }
+.config-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.field-box { display: flex; flex-direction: column; }
+.field-lbl { font-size: 10px; color: var(--mu); margin-bottom: 4px; font-weight: 700; text-transform: uppercase; }
+.field-val {
+  background: rgba(0,0,0,.4); border: 1px solid var(--bo); border-radius: 8px;
+  padding: 8px; color: #fff; font-family: 'Orbitron', monospace; font-size: 13px; text-align: center;
+}
+.calc-lbl { font-size: 11px; color: var(--mu); text-align: center; margin-top: 5px; }
+
+/* WATCH MODE SWITCH */
+.watch-box {
+  background: rgba(255, 255, 255, 0.02); border-radius: 10px; padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05); margin-top: 10px;
+}
+.watch-header { display: flex; justify-content: space-between; align-items: center; }
+.watch-title { font-size: 11px; color: var(--gd); font-weight: 700; display: flex; align-items: center; gap: 6px; }
 .switch { position: relative; display: inline-block; width: 42px; height: 22px; }
 .switch input { opacity: 0; width: 0; height: 0; }
 .slider {
@@ -156,328 +104,268 @@ body{background:var(--bg);color:var(--tx);font-family:'Rajdhani',sans-serif;
 }
 input:checked + .slider { background-color: var(--gr); }
 input:checked + .slider:before { transform: translateX(20px); }
+.watch-input-row { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+.watch-desc { font-size: 10px; color: var(--mu); margin-top: 4px; line-height: 1.3; }
 
-.ab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px; }
-.ab-field { display: flex; flex-direction: column; }
-.ab-lbl { font-size: 9px; color: var(--mu); margin-bottom: 4px; font-weight: 700; }
-.ab-val {
-  background: rgba(0,0,0,.4); border: 1px solid var(--bo); border-radius: 8px;
-  padding: 8px; color: #fff; font-family: 'Orbitron', monospace; font-size: 12px; text-align: center;
+/* ENGINE MASTER TOGGLE */
+.engine-toggle-btn {
+  margin: 11px; width: calc(100% - 22px); padding: 14px; border-radius: 12px;
+  border: none; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 14px;
+  cursor: pointer; text-align: center; transition: all 0.3s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.engine-toggle-btn.start {
+  background: linear-gradient(90deg, #10b981, #059669); color: #fff;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+}
+.engine-toggle-btn.stop {
+  background: linear-gradient(90deg, #ef4444, #dc2626); color: #fff;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
 }
 
-/* 2-LEVEL RECOVERY */
-.rb{margin:0 11px 11px;background:var(--c2);border-radius:13px;
-  padding:13px 14px;border:1px solid rgba(239,68,68,.2);}
-.rbt{font-size:11px;color:var(--rd);font-weight:700;letter-spacing:1px;margin-bottom:3px;}
-.rbs{font-size:10px;color:var(--mu);margin-bottom:10px;}
-.rrow{display:flex;gap:7px;}
-.rl{flex:1;text-align:center;padding:12px 4px;border-radius:11px;
-  border:2px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02);transition:all .3s;}
-.rl .rn{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;display:block;}
-.rl .rm{font-size:10px;color:var(--gd);margin-top:3px;}
-.rl .rs{font-size:9px;color:var(--mu);margin-top:2px;}
-.rl.cur{background:rgba(245,158,11,.15);border-color:var(--gd);}
-.rl.cur .rn{color:var(--gd);}
-.rl.done{background:rgba(16,185,129,.15);border-color:var(--gr);}
-.rl.done .rn{color:var(--gr);}
-.rl.fail{background:rgba(239,68,68,.15);border-color:var(--rd);}
-.rl.fail .rn{color:var(--rd);}
+/* PREDICTION PANEL */
+.pred-card {
+  margin: 11px; background: var(--c2); border-radius: 14px; padding: 15px;
+  border: 1px solid var(--bo); display: flex; justify-content: space-between; gap: 10px;
+}
+.pred-display {
+  flex: 1.2; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 15px;
+  border: 1px solid rgba(255,255,255,0.05); text-align: center; display: flex;
+  flex-direction: column; justify-content: center;
+}
+.pred-lbl { font-size: 10px; color: var(--mu); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+.pred-val { font-family: 'Orbitron', monospace; font-size: 28px; font-weight: 900; }
+.pred-val.BIG { color: var(--pu); text-shadow: 0 0 15px rgba(139,92,246,0.6); }
+.pred-val.SMALL { color: var(--gr); text-shadow: 0 0 15px rgba(16,185,129,0.6); }
+.pred-val.LOAD { color: var(--gd); }
 
-/* HISTORY */
-.hh{background:linear-gradient(135deg,#0d2a1a,#061510);
-  padding:18px 14px 28px;position:relative;overflow:hidden;}
-.hh::before{content:'';position:absolute;inset:0;
-  background:radial-gradient(circle at 75% 50%,rgba(16,185,129,.12),transparent 55%);}
-.hh1{font-family:'Orbitron',monospace;font-size:17px;font-weight:900;color:#fff;position:relative;}
-.hs{font-size:11px;color:rgba(255,255,255,.5);margin-top:3px;position:relative;}
-.aring{position:absolute;right:14px;top:14px;width:70px;height:70px;}
-.aring svg{width:70px;height:70px;transform:rotate(-90deg);}
-.aring circle{fill:none;stroke:rgba(255,255,255,.1);stroke-width:6;}
-.aring .prg{stroke:var(--gr);stroke-linecap:round;transition:stroke-dashoffset .9s;}
-.acen{position:absolute;inset:0;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;font-family:'Orbitron',monospace;
-  font-size:13px;font-weight:700;color:var(--gr);line-height:1;}
-.acen span{font-size:8px;color:rgba(255,255,255,.35);}
-.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;
-  margin:-17px 11px 11px;position:relative;z-index:2;}
-.sc{background:#fff;border-radius:12px;padding:10px 4px;text-align:center;
-  box-shadow:0 4px 14px rgba(0,0,0,.25);}
-.sv{font-size:20px;font-weight:900;line-height:1;}
-.sv.t{color:#1a1a2e;}.sv.w{color:#10b981;}.sv.l{color:#ef4444;}.sv.a{color:#65a30d;font-size:13px;}
-.sl{font-size:7px;color:#64748b;font-weight:700;text-transform:uppercase;margin-top:2px;}
-.frow{display:flex;gap:7px;padding:0 11px 9px;}
-.fb{padding:6px 15px;border-radius:18px;border:1.5px solid rgba(255,255,255,.1);
-  background:transparent;color:var(--mu);font-family:'Rajdhani',sans-serif;
-  font-size:13px;font-weight:700;cursor:pointer;}
-.fb.on{background:#fff;color:#1a1a2e;border-color:#fff;}
-.hlb{font-size:9px;color:var(--mu);font-weight:700;letter-spacing:2px;
-  text-transform:uppercase;padding:0 11px 7px;}
-.hlist{padding:0 11px;display:flex;flex-direction:column;gap:7px;}
-.hi{background:#fff;border-radius:13px;padding:12px 13px;
-  display:flex;align-items:center;gap:10px;border-left:4px solid;}
-.hi.w{border-left-color:#10b981;}.hi.l{border-left-color:#ef4444;}
-.hbg{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;
-  justify-content:center;font-weight:900;font-size:14px;flex-shrink:0;}
-.hbw{background:rgba(16,185,129,.15);color:#10b981;}
-.hbl{background:rgba(239,68,68,.1);color:#ef4444;}
-.hif{flex:1;}
-.hpe{font-size:10px;color:#64748b;}
-.hpr{font-size:14px;font-weight:700;color:#1a1a2e;display:flex;align-items:center;gap:5px;margin-top:2px;}
-.hch{padding:2px 7px;border-radius:15px;font-size:10px;font-weight:700;}
-.hwc{background:rgba(16,185,129,.15);color:#10b981;}
-.hlc{background:rgba(239,68,68,.1);color:#ef4444;}
-.hrt{text-align:right;}
-.hou{font-weight:900;font-size:12px;}
-.hwt{color:#10b981;}.hlt{color:#ef4444;}
-.htm{font-size:9px;color:#94a3b8;margin-top:2px;}
-.empty{text-align:center;padding:35px;color:var(--mu);font-size:13px;}
+.timer-display {
+  flex: 0.8; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 15px;
+  border: 1px solid rgba(255,255,255,0.05); text-align: center; display: flex;
+  flex-direction: column; justify-content: center;
+}
+.timer-val { font-family: 'Orbitron', monospace; font-size: 28px; font-weight: 900; color: var(--gd); }
+.timer-val.critical { color: var(--rd); text-shadow: 0 0 15px rgba(239,68,68,0.5); }
+.target-period { font-size: 10px; color: var(--mu); margin-top: 4px; }
 
-/* BNAV */
-.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);
-  width:100%;max-width:430px;background:rgba(7,7,15,.97);
-  backdrop-filter:blur(20px);border-top:1px solid var(--bo);
-  display:flex;padding:7px 0 18px;z-index:100;}
-.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
-  padding:6px;cursor:pointer;border:none;background:transparent;
-  color:var(--mu);font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;transition:color .2s;}
-.nb.on{color:var(--pu);}
-.nb .ni{font-size:20px;line-height:1;}
+/* MINI STATS ROW */
+.stats-row {
+  margin: 0 11px 11px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+}
+.stat-box {
+  background: var(--c2); border-radius: 10px; padding: 10px 4px; text-align: center;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+.stat-lbl { font-size: 9px; color: var(--mu); text-transform: uppercase; margin-bottom: 2px; }
+.stat-val { font-family: 'Orbitron', monospace; font-size: 14px; font-weight: 700; }
+.stat-val.pnl-pos { color: var(--gr); }
+.stat-val.pnl-neg { color: var(--rd); }
+
+/* MARTINGALE GRID UI (9-LEVELS) */
+.mart-card { margin: 0 11px 11px; background: var(--c2); border-radius: 14px; padding: 14px; border: 1px solid var(--bo); }
+.mart-title { font-size: 11px; color: var(--gd); font-weight: 700; letter-spacing: 1.5px; margin-bottom: 12px; }
+.mart-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+.mart-item {
+  background: rgba(0,0,0,0.3); border: 1.5px solid rgba(255,255,255,0.08);
+  border-radius: 8px; padding: 10px 5px; text-align: center; transition: all 0.2s;
+}
+.mart-item.active {
+  background: rgba(16, 185, 129, 0.1); border-color: var(--gr);
+}
+.mart-item.active .mart-lvl { color: var(--gr); }
+.mart-lvl { font-size: 9px; color: var(--mu); font-weight: 700; display: block; margin-bottom: 3px; }
+.mart-amt { font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 700; color: #fff; }
+
+/* RECENT BALLS OUTCOME */
+.balls-card { margin: 0 11px 11px; background: var(--c2); border-radius: 14px; padding: 12px 14px; border: 1px solid var(--bo); }
+.balls-title { font-size: 10px; color: var(--mu); font-weight: 700; margin-bottom: 8px; }
+.balls-flex { display: flex; gap: 8px; justify-content: center; }
+.ball {
+  width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; font-family: 'Orbitron', monospace; font-size: 14px; font-weight: 900;
+}
+.ball.big { background: rgba(139,92,246,0.3); border: 2px solid var(--pu); color: #c4b5fd; }
+.ball.small { background: rgba(16,185,129,0.25); border: 2px solid var(--gr); color: #6ee7b7; }
+.ball.empty { background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); color: var(--mu); }
+
+/* SYSTEM MONITOR & LOGGER */
+.log-card { margin: 0 11px 11px; background: var(--c2); border-radius: 14px; padding: 14px; border: 1px solid var(--bo); }
+.log-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.log-title { font-size: 11px; color: var(--mu); font-weight: 700; letter-spacing: 1px; }
+.log-clear { font-size: 10px; color: var(--pu); font-weight: 700; cursor: pointer; text-transform: uppercase; }
+.log-area {
+  background: #000; border-radius: 8px; padding: 10px; height: 110px; overflow-y: auto;
+  font-family: 'Courier New', Courier, monospace; font-size: 10px; line-height: 1.4;
+}
+.log-line { margin-bottom: 4px; }
+.log-info { color: var(--gd); }
+.log-success { color: var(--gr); }
+.log-error { color: var(--rd); }
 
 /* TOAST */
-.toast{position:fixed;top:64px;left:50%;transform:translateX(-50%);
-  background:rgba(15,15,30,.95);backdrop-filter:blur(12px);border-radius:11px;
-  padding:9px 18px;font-size:13px;font-weight:700;z-index:999;
-  opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;border:1px solid;}
-.toast.show{opacity:1;}
-.toast.tw{border-color:var(--gr);color:var(--gr);}
-.toast.tl{border-color:var(--rd);color:var(--rd);}
-.toast.ti{border-color:var(--pu);color:var(--pu);}
-.toast.tg{border-color:var(--gd);color:var(--gd);}
+.toast {
+  position: fixed; top: 70px; left: 50%; transform: translateX(-50%);
+  background: rgba(15,15,30,0.95); border-radius: 8px; padding: 10px 18px;
+  font-size: 12px; font-weight: 700; z-index: 999; border: 1px solid;
+  opacity: 0; transition: opacity 0.3s; pointer-events: none;
+}
+.toast.show { opacity: 1; }
+.toast.success { border-color: var(--gr); color: var(--gr); }
+.toast.error { border-color: var(--rd); color: var(--rd); }
 </style>
 </head>
 <body>
 
-<div id="key-overlay">
-  <div class="key-card">
-    <h2>🔑 ACCESS CONTROL</h2>
-    <input type="text" id="accessKey" placeholder="SIVA-XXXX-XXXX">
-    <button class="key-btn" onclick="verifyAccess()">Login to AI</button>
-    <div class="key-link">
-      Need a key? Contact: <br>
-      <a href="https://t.me/OnlineEarningapp_bot" target="_blank">@OnlineEarningapp_bot</a>
-    </div>
-  </div>
-</div>
-
 <div class="top">
-  <div class="logo">⚡ SIVA ULTRA AI V54</div>
-  <div class="badge off" id="badge"><span class="dot"></span><span id="bTxt">CONNECTING</span></div>
-</div>
-
-<div class="tabs">
-  <button class="tb on" onclick="setMode(1,this)">WinGo 1Min</button>
-  <button class="tb" onclick="setMode(3,this)">WinGo 3Min</button>
-  <button class="tb" onclick="setMode(5,this)">WinGo 5Min</button>
-</div>
-
-<div class="pg show" id="pg-home">
-
-  <div class="tok-box" id="tokBox">
-    <div class="tok-title">🔑 BEARER TOKEN ENTER பண்ணு</div>
-    <textarea class="tok-in" id="tokIn" rows="3"
-      placeholder="Paste your token here... (Network tab → GetGameIssue → Headers → Authorization → Bearer xxxxxx)"></textarea>
-    <button class="tok-btn" onclick="saveToken()">✅ Connect & Predict</button>
-    <div class="tok-hint">
-      📌இந்த Token -ஐ பெறுவதற்கு Admin -ஐ தொடர்பு கொள்ளவும் 👇🏼. <br>
-      Contact: <a href="https://t.me/OnlineEarningapp_bot" style="color:var(--gd)">@OnlineEarningapp_bot</a>
-    </div>
+  <div class="logo">SIVA ULTRA AI V57</div>
+  <div class="badge error" id="syncStatus">
+    <span class="dot"></span><span id="syncText">AUTH PERMISSION ERROR</span>
   </div>
+</div>
 
-  <div id="mainCards" style="display:none">
-    
-    <div class="ab-box">
-      <div class="ab-header">
-        <div class="ab-title">🤖 SIVA AUTO BET ENGINE</div>
+<div class="setup-box" id="tokenBox">
+  <div class="setup-title">🔑 INPUT BEARER AUTH TOKEN</div>
+  <textarea class="setup-in" id="tokenInput" rows="2" placeholder="Authorization bearer token key here..."></textarea>
+  <button class="setup-btn" onclick="saveToken()">✅ Initialize Engine</button>
+</div>
+
+<div class="sync-card" id="syncConfigBox">
+  <div class="sync-card-title">🔑 API SYNC CONFIG</div>
+  <button class="sync-reset-btn" onclick="clearToken()">🔄 Clear & Reset Active Token</button>
+</div>
+
+<div id="engineDashboard" style="display: none;">
+
+  <div class="config-card">
+    <div class="config-title">⚙️ ENGINE CONFIGURATION</div>
+    <div class="config-grid">
+      <div class="field-box">
+        <span class="field-lbl">BASE BET (L1)</span>
+        <input type="number" id="baseBetAmt" class="field-val" value="1" min="1" onchange="recalculateMartingale()">
+      </div>
+      <div class="field-box">
+        <span class="field-lbl">MAX LEVELS</span>
+        <input type="number" id="maxLevels" class="field-val" value="9" min="1" max="9" onchange="recalculateMartingale()">
+      </div>
+    </div>
+    <div class="calc-lbl" id="riskLabel">Total Session Risk: ₹2132 (across 9 levels)</div>
+
+    <div class="watch-box">
+      <div class="watch-header">
+        <div class="watch-title">👀 WATCH MODE (LOSS, THEN BET)</div>
         <label class="switch">
-          <input type="checkbox" id="autoBetToggle" onchange="toggleAutoBet()">
+          <input type="checkbox" id="watchModeToggle" onchange="toggleWatchMode()">
           <span class="slider"></span>
         </label>
       </div>
-      <div class="ab-grid">
-        <div class="ab-field">
-          <span class="ab-lbl">BASE BET AMOUNT (₹)</span>
-          <input type="number" id="baseBetAmt" class="ab-val" value="10" min="1" onchange="saveBetSettings()">
-        </div>
-        <div class="ab-field">
-          <span class="ab-lbl">L2 MULTIPLIER</span>
-          <input type="number" id="betMultiplier" class="ab-val" value="3" min="1" onchange="saveBetSettings()">
-        </div>
+      <div class="watch-desc">Starts real betting only after virtual losses.</div>
+      <div class="watch-input-row" id="watchInputArea" style="display: none; margin-top: 10px;">
+        <span class="field-lbl">REQUIRED VIRTUAL LOSSES:</span>
+        <input type="number" id="virtualLossLimit" class="field-val" value="1" min="1" style="width: 80px; padding: 4px;">
       </div>
     </div>
+  </div>
 
-    <div class="pc">
-      <div class="pc-row">
-        <div>
-          <div class="lbl">NEXT PERIOD</div>
-          <div class="pid" id="pid">--</div>
-        </div>
-        <div>
-          <div class="tmr" id="tmr">--:--</div>
-          <div class="lbl" style="text-align:right;margin-top:2px;">TIME LEFT</div>
-        </div>
+  <button class="engine-toggle-btn stop" id="engineBtn" onclick="toggleEngineState()">
+    🛑 STOP AUTO BET ENGINE
+  </button>
+
+  <div class="pred-card">
+    <div class="pred-display">
+      <span class="pred-lbl">LIVE ANALYSIS PREDICTION</span>
+      <div class="pred-val LOAD" id="predVal">LOADING</div>
+    </div>
+    <div class="timer-display">
+      <div class="timer-val" id="timerVal">00:00</div>
+      <div class="target-period" id="targetPeriod">TARGET PERIOD<br><span id="targetIssue">--</span></div>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-lbl">BETS</div>
+      <div class="stat-val" id="statBets">0</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-lbl">W / L</div>
+      <div class="stat-val" id="statWinLoss">0 / 0</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-lbl">P & L</div>
+      <div class="stat-val pnl-pos" id="statPL">₹0.00</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-lbl">LEVEL</div>
+      <div class="stat-val" id="statLevel" style="color:var(--rd);">L1</div>
+    </div>
+  </div>
+
+  <div class="mart-card">
+    <div class="mart-title">📊 9-LEVEL MULTIPLIER (MARTINGALE)</div>
+    <div class="mart-grid" id="martGrid">
       </div>
-      <div class="brow">
-        <div class="bd bd1" id="bd1">● SIVHHH AI · Loading</div>
-        <div class="bd bd2" id="bd2">⚡ SIGNAL · --</div>
+  </div>
+
+  <div class="balls-card">
+    <div class="balls-title">LIVE RECENT GAME OUTCOMES</div>
+    <div class="balls-flex" id="ballsContainer">
+      <div class="ball empty">-</div>
+      <div class="ball empty">-</div>
+      <div class="ball empty">-</div>
+      <div class="ball empty">-</div>
+      <div class="ball empty">-</div>
+    </div>
+  </div>
+
+  <div class="log-card">
+    <div class="log-header">
+      <div class="log-title">SYSTEM ACTIVITY MONITOR</div>
+      <div class="log-clear" onclick="clearLogs()">CLEAR LOGS</div>
+    </div>
+    <div class="log-area" id="logArea">
       </div>
-    </div>
-
-    <div class="l5">
-      <div class="l5t">📊 LAST 5 RESULTS (LIVE)</div>
-      <div class="balls" id="balls">
-        <div class="ball e">-</div><div class="ball e">-</div>
-        <div class="ball e">-</div><div class="ball e">-</div>
-        <div class="ball e">-</div>
-      </div>
-    </div>
-
-    <div class="mp X" id="mp">
-      <div class="mpl">AI PREDICTION</div>
-      <div class="mpv" id="mpv">🔄 LOADING</div>
-      <div class="mpr" id="mpr">Fetching live data...</div>
-      <div class="mps" id="mps" style="display:none"></div>
-    </div>
-
-    <div class="cb">
-      <div class="cr"><div class="cl">CONFIDENCE</div><div class="cp" id="cpct">--%</div></div>
-      <div class="bbg"><div class="bf" id="bfill" style="width:0%"></div></div>
-    </div>
-
-    <div class="rb">
-      <div class="rbt">🔁 2-LEVEL RECOVERY SYSTEM</div>
-      <div class="rbs">Recovery system enabled</div>
-      <div class="rrow">
-        <div class="rl cur" id="rl1">
-          <span class="rn">L1</span>
-          <div class="rm">×1 Bet</div>
-          <div class="rs">Normal</div>
-        </div>
-        <div class="rl" id="rl2">
-          <span class="rn">L2</span>
-          <div class="rm">×2 Bet</div>
-          <div class="rs">Recovery</div>
-        </div>
-      </div>
-    </div>
   </div>
 
 </div>
 
-<div class="pg" id="pg-hist">
-  <div class="hh">
-    <div class="hh1">Prediction History</div>
-    <div class="hs">Live auto-tracked results</div>
-    <div class="aring">
-      <svg viewBox="0 0 70 70">
-        <circle cx="35" cy="35" r="29" stroke-width="6"/>
-        <circle class="prg" id="prg" cx="35" cy="35" r="29" stroke-width="6"
-          stroke-dasharray="182.2" stroke-dashoffset="182.2"/>
-      </svg>
-      <div class="acen" id="acen">0%<span>ACC</span></div>
-    </div>
-  </div>
-  <div class="sgrid">
-    <div class="sc"><div class="sv t" id="sT">0</div><div class="sl">Total</div></div>
-    <div class="sc"><div class="sv w" id="sW">0</div><div class="sl">Win</div></div>
-    <div class="sc"><div class="sv l" id="sL">0</div><div class="sl">Loss</div></div>
-    <div class="sc"><div class="sv a" id="sA">0%</div><div class="sl">Accuracy</div></div>
-  </div>
-  <div class="frow">
-    <button class="fb on" onclick="setF('all',this)">All</button>
-    <button class="fb" onclick="setF('win',this)">Win</button>
-    <button class="fb" onclick="setF('loss',this)">Loss</button>
-  </div>
-  <div class="hlb">RECENT PREDICTIONS</div>
-  <div class="hlist" id="hlist"><div class="empty">No predictions yet...</div></div>
-</div>
-
-<div class="pg" id="pg-profile">
-  <div style="padding:14px 11px;">
-    <div style="background:var(--c2);border-radius:14px;padding:18px;border:1px solid var(--bo);text-align:center;margin-bottom:11px;">
-      <div style="font-size:44px;margin-bottom:8px;">🤖</div>
-      <div style="font-family:'Orbitron',monospace;font-size:13px;color:var(--pu);">SIVA ULTRA AI V54</div>
-      <div style="font-size:11px;color:var(--gr);margin-top:4px;">● 2-Level Recovery · Rajaluck Live</div>
-    </div>
-    <div style="background:var(--c2);border-radius:14px;padding:14px;border:1px solid var(--bo);margin-bottom:11px;">
-      <div style="display:flex;flex-direction:column;gap:9px;font-size:13px;">
-        <div style="display:flex;justify-content:space-between;">
-          <span style="color:var(--mu);">Channel</span>
-          <span style="color:var(--pu);font-weight:700;">@toptamilearn</span></div>
-        <div style="display:flex;justify-content:space-between;">
-          <span style="color:var(--mu);">Bot</span>
-          <span style="color:var(--pu);font-weight:700;">@OnlineEarningapp_bot</span></div>
-        <div style="display:flex;justify-content:space-between;">
-          <span style="color:var(--mu);">Register</span>
-          <span style="color:var(--gr);font-weight:700;">Rajaluck.com</span></div>
-        <div style="display:flex;justify-content:space-between;">
-          <span style="color:var(--mu);">Token Status</span>
-          <span style="color:var(--gd);font-weight:700;" id="tokStatus">Not set</span></div>
-      </div>
-    </div>
-    <button onclick="resetToken()" style="width:100%;padding:11px;border-radius:11px;
-      border:1.5px solid rgba(245,158,11,.4);background:rgba(245,158,11,.08);
-      color:var(--gd);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:8px;">
-      🔑 Update Token
-    </button>
-    <button onclick="clearAll()" style="width:100%;padding:11px;border-radius:11px;
-      border:1.5px solid rgba(239,68,68,.4);background:rgba(239,68,68,.08);
-      color:var(--rd);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">
-      🗑 Clear History
-    </button>
-  </div>
-</div>
-
-<div class="bnav">
-  <button class="nb on" onclick="goPage('home',this)"><span class="ni">🏠</span>Home</button>
-  <button class="nb" onclick="goPage('hist',this)"><span class="ni">📋</span>History</button>
-  <button class="nb" onclick="goPage('profile',this)"><span class="ni">👤</span>Profile</button>
-</div>
 <div class="toast" id="toast"></div>
 
 <script>
 // ═══════════════════════════════════════
-// ACCESS & KEY SYSTEM (ONE DAY EXPIRY)
+// GLOBAL ENGINE OBJECT & DATA CONFIG
 // ═══════════════════════════════════════
-const VALID_KEYS = ["SIVA-FREE-2026", "TAMIL-EARN-99", "VIP-SIVA-77"]; 
-
-function verifyAccess() {
-  const input = document.getElementById('accessKey').value.trim();
-  if (VALID_KEYS.includes(input)) {
-    const expiry = Date.now() + (24 * 60 * 60 * 1000); 
-    localStorage.setItem('sv_access_key', input);
-    localStorage.setItem('sv_access_expiry', expiry);
-    document.getElementById('key-overlay').style.display = 'none';
-    showToast("✅ Access Granted! Valid for 24h", "tw");
-  } else {
-    alert("❌ Invalid Key! Contact @OnlineEarningapp_bot for a new key.");
-  }
-}
-
-function checkAccess() {
-  const savedKey = localStorage.getItem('sv_access_key');
-  const expiry = localStorage.getItem('sv_access_expiry');
+const S = {
+  token: localStorage.getItem('sv_tok_v57') || '',
+  active: true,
+  baseBet: 1,
+  maxLevels: 9,
+  watchMode: false,
+  requiredVirtualLosses: 1,
   
-  if (savedKey && expiry && Date.now() < parseInt(expiry)) {
-    document.getElementById('key-overlay').style.display = 'none';
-  } else {
-    localStorage.removeItem('sv_access_key');
-    localStorage.removeItem('sv_access_expiry');
-    document.getElementById('key-overlay').style.display = 'flex';
-  }
-}
+  // Running stats
+  totalBets: 0,
+  wins: 0,
+  losses: 0,
+  profitNLoss: 0,
+  curLevel: 1,
+  virtualLossStreak: 0,
+  
+  // Real-time processing
+  typeId: 1, // WinGo 1Min standard
+  curPeriod: null,
+  timerSec: 0,
+  timerID: null,
+  currentPrediction: null,
+  lastProcessedPeriod: null,
+  
+  // Multiplier mapping setup matching screenshot ratio calculations
+  martingaleMultipliers: [1, 3, 8, 20, 50, 120, 230, 500, 1200]
+};
+
+const BASE_URL = 'https://lotteryapi.rajaluckapi.com/api/webapi';
 
 // ═══════════════════════════════════════
-// MD5 ALGORITHM
+// CORE MD5 GENERATOR FOR SIGNATURES
 // ═══════════════════════════════════════
 function md5(s){function a(a,b){return a+b&4294967295}function b(a,b,c,d,e,f){return a=a+((b&c|~b&d)+e+f)&4294967295,((a<<7|a>>>25)+b&4294967295)}function c(a,b,c,d,e,f){return a=a+((b&d|c&~d)+e+f)&4294967295,((a<<12|a>>>20)+b&4294967295)}function d(a,b,c,d,e,f){return a=a+((b^c^d)+e+f)&4294967295,((a<<17|a>>>15)+b&4294967295)}function e(a,b,c,d,e,f){return a=a+((c^(b|~d))+e+f)&4294967295,((a<<22|a>>>10)+b&4294967295)}
 var g=function(a){for(var b=[],c=0;c<a.length;c++){var d=a.charCodeAt(c);d<128?b.push(d):d<2048?(b.push(192|d>>6),b.push(128|63&d)):d<65536?(b.push(224|d>>12),b.push(128|d>>6&63),b.push(128|63&d)):(b.push(240|d>>18),b.push(128|d>>12&63),b.push(128|d>>6&63),b.push(128|63&d))}return b}(s),h=g.length,i=new Array(Math.ceil((h+9)/64)*16).fill(0);for(var j=0;j<h;j++)i[j>>2]|=g[j]<<24-j%4*8;i[h>>2]|=128<<24-h%4*8;i[i.length-2]=8*h;
@@ -486,511 +374,469 @@ for(var o=0;o<i.length;o+=16){var p=k,q=l,r=m,t=n;k=b(k,l,m,n,i[o],3614090360);n
 return[k,l,m,n].map(a=>a>>>0).map(a=>a.toString(16).padStart(8,'0').match(/../g).reverse().join('')).join('')}
 
 // ═══════════════════════════════════════
-// ENGINE STATE CONTROL
+// LOGGING AND SYSTEM MONITORING
 // ═══════════════════════════════════════
-const S = {
-  token:      localStorage.getItem('sv_tok') || '',
-  typeId:     1,
-  lossStreak: parseInt(localStorage.getItem('sv_ls') || '0'),
-  winStreak:  parseInt(localStorage.getItem('sv_ws') || '0'),
-  hist:       JSON.parse(localStorage.getItem('sv_hist') || '[]'),
-  stats:      JSON.parse(localStorage.getItem('sv_st') || '{"w":0,"l":0,"t":0}'),
-  filter:     'all',
-  curPred:    null,
-  curPeriod:  null,
-  prevPred:   null,
-  timerSec:   0,
-  timerID:    null,
-  fetching:   false,
-  retries:    0,
-  lastList:   null,
-  
-  // Auto Bet variables
-  autoBetOn:   localStorage.getItem('sv_autobet_on') === 'true',
-  baseAmt:     parseInt(localStorage.getItem('sv_base_amt') || '10'),
-  multiplier:  parseInt(localStorage.getItem('sv_multiplier') || '3'),
-  lastBetPeriod: null
-};
+function log(msg, type = 'info') {
+  const area = document.getElementById('logArea');
+  const ts = new Date().toLocaleTimeString('en-US', { hour12: false });
+  const span = document.createElement('div');
+  span.className = `log-line log-${type}`;
+  span.textContent = `[${ts}] ${msg}`;
+  area.appendChild(span);
+  area.scrollTop = area.scrollHeight;
+}
 
-const BASE = 'https://lotteryapi.rajaluckapi.com/api/webapi';
+function clearLogs() {
+  document.getElementById('logArea').innerHTML = '';
+  log("SIVA ULTRA AI initialization complete...", "info");
+}
+
+function showToast(msg, cls = 'info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast show ${cls}`;
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.className = 'toast'; }, 3000);
+}
 
 // ═══════════════════════════════════════
-// SAVE / EXPORT TOKEN 
+// TOKEN AND VIEW INITIALIZATION
 // ═══════════════════════════════════════
 function saveToken() {
-  let raw = document.getElementById('tokIn').value.trim();
+  let raw = document.getElementById('tokenInput').value.trim();
   raw = raw.replace(/^Bearer\s+/i, '').trim();
-  if (!raw || raw.length < 20) { 
-    showToast('⚠️ Invalid token!','tl'); 
-    return; 
+  
+  if (raw.length < 15) {
+    showToast("⚠️ Invalid Token Format!", "error");
+    log("Initialization Failed: Token formatting error", "error");
+    return;
   }
+  
   S.token = raw;
-  localStorage.setItem('sv_tok', raw);
-  document.getElementById('tokBox').style.display = 'none';
-  document.getElementById('mainCards').style.display = 'block';
-  document.getElementById('tokStatus').textContent = '✅ Active';
-  showToast('✅ Token saved!','tw');
+  localStorage.setItem('sv_tok_v57', raw);
+  setupInterface();
+  showToast("✅ Token Configured Successfully", "success");
+  log("Engine Initialized: Auto Bet is ACTIVE.", "success");
   doFetch();
 }
 
-function resetToken() {
+function clearToken() {
   S.token = '';
-  localStorage.removeItem('sv_tok');
-  document.getElementById('tokBox').style.display = 'block';
-  document.getElementById('mainCards').style.display = 'none';
-  document.getElementById('tokStatus').textContent = 'Not set';
-  goPage('home', document.querySelector('.nb'));
+  localStorage.removeItem('sv_tok_v57');
+  document.getElementById('tokenBox').style.display = 'block';
+  document.getElementById('syncConfigBox').style.display = 'none';
+  document.getElementById('engineDashboard').style.display = 'none';
+  
+  const statusBadge = document.getElementById('syncStatus');
+  statusBadge.className = "badge error";
+  document.getElementById('syncText').textContent = "AUTH PERMISSION ERROR";
+  
+  log("Active token has been purged. Re-login required.", "error");
+}
+
+function setupInterface() {
+  document.getElementById('tokenBox').style.display = 'none';
+  document.getElementById('syncConfigBox').style.display = 'block';
+  document.getElementById('engineDashboard').style.display = 'block';
+  
+  const statusBadge = document.getElementById('syncStatus');
+  statusBadge.className = "badge live";
+  document.getElementById('syncText').textContent = "LIVE SYNC";
+  
+  recalculateMartingale();
 }
 
 // ═══════════════════════════════════════
-// API HANDSHAKE (PROXY TO BYPASS EXPIRED / REFUSED ERRORS)
+// MARTINGALE LEVEL AND RISK MATHS
 // ═══════════════════════════════════════
-function mkPayload(extra={}) {
-  const ts   = Math.floor(Date.now()/1000);
-  const rand = Array.from({length:32},()=>'0123456789abcdef'[Math.floor(Math.random()*16)]).join('');
-  const sig  = md5(rand).toUpperCase();
-  return { typeId: S.typeId, language: 5, random: rand, signature: sig, timestamp: ts, pageSize: 10, pageNo: 1, ...extra };
+function recalculateMartingale() {
+  const base = parseInt(document.getElementById('baseBetAmt').value) || 1;
+  const maxL = parseInt(document.getElementById('maxLevels').value) || 9;
+  
+  S.baseBet = base;
+  S.maxLevels = Math.min(9, Math.max(1, maxL));
+  
+  const grid = document.getElementById('martGrid');
+  grid.innerHTML = '';
+  
+  let totalSessionRisk = 0;
+  
+  for (let i = 1; i <= S.maxLevels; i++) {
+    const scale = S.martingaleMultipliers[i - 1];
+    const stepCost = base * scale;
+    totalSessionRisk += stepCost;
+    
+    const div = document.createElement('div');
+    div.className = `mart-item ${i === S.curLevel ? 'active' : ''}`;
+    div.id = `mart-lvl-${i}`;
+    div.innerHTML = `
+      <span class="mart-lvl">LVL ${i}</span>
+      <span class="mart-amt">₹${stepCost}</span>
+    `;
+    grid.appendChild(div);
+  }
+  
+  document.getElementById('riskLabel').textContent = `Total Session Risk: ₹${totalSessionRisk} (across ${S.maxLevels} levels)`;
+  document.getElementById('statLevel').textContent = `L${S.curLevel}`;
 }
 
-function getHeaders() {
+function updateLevelHighlight() {
+  for (let i = 1; i <= S.maxLevels; i++) {
+    const item = document.getElementById(`mart-lvl-${i}`);
+    if (item) {
+      if (i === S.curLevel) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+    }
+  }
+  document.getElementById('statLevel').textContent = `L${S.curLevel}`;
+}
+
+// ═══════════════════════════════════════
+// WATCH MODE & SWITCH LOGICS
+// ═══════════════════════════════════════
+function toggleWatchMode() {
+  S.watchMode = document.getElementById('watchModeToggle').checked;
+  const inputRow = document.getElementById('watchInputArea');
+  
+  if (S.watchMode) {
+    inputRow.style.display = 'flex';
+    log("Watch Mode activated. System waits for virtual losses before betting.", "info");
+  } else {
+    inputRow.style.display = 'none';
+    log("Watch Mode deactivated. Placing live bets immediately.", "info");
+  }
+}
+
+// ═══════════════════════════════════════
+// MASTER ENGINE SWITCH
+// ═══════════════════════════════════════
+function toggleEngineState() {
+  const btn = document.getElementById('engineBtn');
+  S.active = !S.active;
+  
+  if (S.active) {
+    btn.className = "engine-toggle-btn stop";
+    btn.textContent = "🛑 STOP AUTO BET ENGINE";
+    log("Auto Bet Engine was resumed by operator.", "success");
+    doFetch();
+  } else {
+    btn.className = "engine-toggle-btn start";
+    btn.textContent = "▶️ START AUTO BET ENGINE";
+    log("Auto Bet Engine has been manually STOPPED.", "error");
+  }
+}
+
+// ═══════════════════════════════════════
+// DATA TRANSMISSION & HANDSHAKE
+// ═══════════════════════════════════════
+function generatePayload() {
+  const ts = Math.floor(Date.now() / 1000);
+  const rand = Array.from({length:32}, () => '0123456789abcdef'[Math.floor(Math.random()*16)]).join('');
+  const signature = md5(rand).toUpperCase();
+  
   return {
-    'Content-Type': 'application/json;charset=UTF-8',
-    'Accept': 'application/json, text/plain, */*',
-    'Authorization': 'Bearer ' + S.token,
-    'X-Web-Platform': 'Android',
-    'Sec-Ch-Ua-Platform': '"Android"',
-    'User-Agent': navigator.userAgent
+    typeId: S.typeId,
+    language: 5,
+    random: rand,
+    signature: signature,
+    timestamp: ts,
+    pageSize: 10,
+    pageNo: 1
   };
 }
 
-async function callAPI(endpoint) {
-  const body = JSON.stringify(mkPayload());
-  const url  = `${BASE}/${endpoint}`;
+async function fetchFromGameAPI(endpoint) {
+  const payload = JSON.stringify(generatePayload());
+  const url = `${BASE_URL}/${endpoint}`;
   
-  try {
-    const r = await fetch(url, { 
-      method:'POST', 
-      headers: getHeaders(), 
-      body, 
-      signal: AbortSignal.timeout(6000) 
-    });
-    if (r.ok) { 
-        const j=await r.json(); 
-        if(j.code===0 && j.data) return j.data;
-        if(j.code===401) { 
-          showToast("❌ Token Expired! Please Relogin", "tl"); 
-          resetToken(); 
-          return null;
-        }
-    }
-  } catch(e) {}
-  
+  // Method 1: Direct Request 
   try {
     const r = await fetch(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + S.token
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Authorization': `Bearer ${S.token}`,
+        'X-Web-Platform': 'Android',
+        'Sec-Ch-Ua-Platform': '"Android"'
       },
-      body,
+      body: payload,
       signal: AbortSignal.timeout(5000)
     });
+    
     if (r.ok) {
-      const j = await r.json();
-      if (j.code === 0 && j.data) return j.data;
+      const res = await r.json();
+      if (res.code === 0 && res.data) return res.data;
+      if (res.code === 401) {
+        log("Sync Warning: [No operation permission] or Token Expired.", "error");
+        document.getElementById('predVal').className = "pred-val LOAD";
+        document.getElementById('predVal').textContent = "ERROR / RELOGIN";
+        return null;
+      }
     }
   } catch(e) {}
-
+  
+  // Method 2: Fallback Cross-Origin Proxy to bypass CORS failures
   try {
     const r = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`, {
-      signal: AbortSignal.timeout(8000)
+      signal: AbortSignal.timeout(7000)
     });
     if (r.ok) {
-      const outer = await r.json();
-      const j = JSON.parse(outer.contents);
-      if (j.code === 0 && j.data) return j.data;
+      const wrapper = await r.json();
+      const parsed = JSON.parse(wrapper.contents);
+      if (parsed.code === 0 && parsed.data) return parsed.data;
     }
   } catch(e) {}
   
   return null;
 }
 
-function parseList(data, basePeriod) {
-  if (!data) return [];
-  if (data.list && data.list.length > 0) return data.list;
-  if (data.number) {
-    const nums = data.number.split(',');
-    let base   = basePeriod || genFallbackPeriod();
-    return nums.map((num, idx) => ({
-      issueNumber: (BigInt(base) - BigInt(idx + 1)).toString(),
-      number: num.trim()
-    }));
-  }
-  return [];
-}
-
-function genFallbackPeriod() {
-  const now = new Date();
-  const y = now.getFullYear(), m = String(now.getMonth()+1).padStart(2,'0'), d = String(now.getDate()).padStart(2,'0');
-  const start = new Date(now.getFullYear(),now.getMonth(),now.getDate(),0,0,0);
-  const seq = String(Math.floor((now-start)/60000)).padStart(4,'0');
-  return `${y}${m}${d}10${seq}`;
-}
-
+// ═══════════════════════════════════════
+// CORE PERIOD SCHEDULER & PIPELINE
+// ═══════════════════════════════════════
 async function doFetch() {
-  if (!S.token || S.fetching) return;
-  checkAccess(); 
-  S.fetching = true;
-
-  const [issueData, last5Data] = await Promise.all([
-    callAPI('GetGameIssue'),
-    callAPI('GetLastFiveIssueNumberResult')
-  ]);
-
-  S.fetching = false;
-
-  if (!issueData && !last5Data) {
-    S.retries++;
-    setConn('off');
-    setTimeout(doFetch, Math.min(8000, 2000 * S.retries));
+  if (!S.token || !S.active) return;
+  
+  const issueData = await fetchFromGameAPI('GetGameIssue');
+  const resultsData = await fetchFromGameAPI('GetLastFiveIssueNumberResult');
+  
+  if (!issueData || !resultsData) {
+    log("Engine sync warning: Retrying handshake...", "error");
     return;
   }
-
-  S.retries = 0;
-  setConn('live');
-
-  let basePeriod = issueData?.issueNumber?.toString() || null;
-  let list = parseList(last5Data, basePeriod);
-
-  if (issueData) {
-    const newPeriod = String(issueData.issueNumber || '');
-
-    if (S.curPeriod && newPeriod !== S.curPeriod && S.prevPred && list.length > 0) {
-      const prevResult = list.find(x => String(x.issueNumber) === String(S.curPeriod));
-      if (prevResult) {
-        const actual = parseInt(prevResult.number) >= 5 ? 'BIG' : 'SMALL';
-        handleResult(actual, S.prevPred, S.curPeriod);
+  
+  const nextIssue = String(issueData.issueNumber);
+  document.getElementById('targetIssue').textContent = nextIssue;
+  
+  // Parse dynamic listing
+  let list = [];
+  if (resultsData.list && resultsData.list.length > 0) {
+    list = resultsData.list;
+  }
+  
+  if (list.length > 0) {
+    renderOutcomeBalls(list.slice(0, 5));
+    
+    // Evaluate previous transaction
+    if (S.curPeriod && nextIssue !== S.curPeriod) {
+      const pastResult = list.find(x => String(x.issueNumber) === String(S.curPeriod));
+      if (pastResult) {
+        const actualOutcome = parseInt(pastResult.number) >= 5 ? 'BIG' : 'SMALL';
+        processBetResolution(actualOutcome, S.curPeriod);
       }
     }
-
-    S.curPeriod = newPeriod;
-    document.getElementById('pid').textContent = newPeriod;
-
-    if (issueData.endTime && issueData.serviceTime) {
-      startTimer(Math.floor((new Date(issueData.endTime) - new Date(issueData.serviceTime)) / 1000));
-    } else {
-      startTimer(parseFloat(issueData.intervalM || 1) * 60);
-    }
+    
+    S.curPeriod = nextIssue;
+    
+    // Run AI analysis
+    const formattedHistory = list.slice(0, 10).map(x => parseInt(x.number) >= 5 ? 'BIG' : 'SMALL');
+    generatePrediction(formattedHistory);
   }
-
-  if (list.length > 0) {
-    S.lastList = list;
-    renderBalls(list.slice(0,5).map(i => parseInt(i.number)));
-    const result = predictBotLogic(list.slice(0,15).map(i => parseInt(i.number) >= 5 ? 'BIG' : 'SMALL'), S.lossStreak);
-    S.prevPred = result.pred;
-    renderPred(result.pred, result.confidence);
-  }
-}
-
-// ═══════════════════════════════════════
-// SIVA ULTRA AI MATHEMATICAL MODEL
-// ═══════════════════════════════════════
-function predictBotLogic(history, lossStreak) {
-  let score = { BIG: 0, SMALL: 0 };
-  let last10 = history.slice(0, 10);
-
-  let big = last10.filter(x => x === "BIG").length;
-  let small = last10.length - big;
-
-  score.BIG += big * 2;
-  score.SMALL += small * 2;
-
-  if (last10[0]) score[last10[0]] += 5;
-  if (last10[1]) score[last10[1]] += 3;
-
-  let streak = 1;
-  for (let i = 0; i < last10.length - 1; i++) {
-    if (last10[i] === last10[i + 1]) {
-      streak++;
-    } else {
-      break;
-    }
-  }
-
-  if (streak >= 4 && last10[0]) {
-    score[last10[0]] += 8;
-  }
-
-  if (streak >= 6 && last10[0]) {
-    score[last10[0]] -= 10;
-    score[last10[0] === "BIG" ? "SMALL" : "BIG"] += 10;
-  }
-
-  let alt = true;
-  for (let i = 0; i < 5; i++) {
-    if (last10[i] === last10[i + 1]) {
-      alt = false;
-      break;
-    }
-  }
-  if (alt && last10[0]) {
-    score[last10[0] === "BIG" ? "SMALL" : "BIG"] += 8;
-  }
-
-  if (lossStreak === 1) {
-    score[last10[0] === "BIG" ? "SMALL" : "BIG"] += 5;
-  }
-  if (lossStreak >= 2 && last10[0]) {
-    score[last10[0]] += 7;
-  }
-
-  let diff = Math.abs(score.BIG - score.SMALL);
-  let pred = score.BIG > score.SMALL ? "BIG" : "SMALL";
-  let confidence = Math.min(99, 55 + (diff * 4));
-
-  return { pred, confidence };
-}
-
-function renderBalls(nums){
-  const el = document.getElementById('balls');
-  el.innerHTML = nums.map(n => {
-    const cls = n >= 5 ? 'big' : 'sml';
-    return `<div class="ball ${cls}">${n}</div>`;
-  }).join('');
-}
-
-function renderPred(pred, confidence) {
-  const conf = confidence || 70;
-  const cls = pred === 'BIG' ? 'B' : 'S';
-
-  document.getElementById('mp').className = 'mp ' + cls;
-  document.getElementById('mpv').textContent = pred;
-  document.getElementById('mpr').textContent = 'Number: ' + (pred === 'BIG' ? '5-9' : '0-4');
-
-  const sub = document.getElementById('mps');
-  sub.style.display = 'inline-block';
-  sub.textContent = pred === 'BIG' ? '🔵 BIG bet போடு' : '🟢 SMALL bet போடு';
-
-  document.getElementById('bd1').textContent = '● SIVA AI · ' + pred;
-  document.getElementById('bd2').textContent = '⚡ CONFIDENCE · ' + conf + '%';
-  document.getElementById('cpct').textContent = conf + '%';
-  document.getElementById('bfill').style.width = conf + '%';
-
-  renderRec();
   
-  // 🤖 Trigger Auto-Bet Engine
-  executeAutoBet(pred);
-}
-
-function renderRec() {
-  const r1 = document.getElementById('rl1'), r2 = document.getElementById('rl2');
-  r1.className = 'rl'; r2.className = 'rl';
-  if (S.lossStreak === 0) r1.className = 'rl cur';
-  else if (S.lossStreak === 1) { r1.className = 'rl done'; r2.className = 'rl cur'; }
-  else { r1.className = 'rl fail'; r2.className = 'rl fail'; }
-}
-
-function startTimer(sec) {
-  if (S.timerID) clearInterval(S.timerID);
-  S.timerSec = Math.max(1, Math.floor(sec));
-  tick(); 
-  S.timerID = setInterval(tick, 1000);
-}
-
-function tick() {
-  const el = document.getElementById('tmr');
-  if (S.timerSec <= 0) { 
-    clearInterval(S.timerID); 
-    doFetch(); 
-    return; 
-  }
-  el.textContent = String(Math.floor(S.timerSec/60)).padStart(2,'0')+':'+String(S.timerSec%60).padStart(2,'0');
-  el.className = 'tmr' + (S.timerSec <= 10 ? ' red' : '');
-  S.timerSec--;
-}
-
-function handleResult(actual, predicted, period) {
-  const isWin = actual === predicted;
-  S.hist.unshift({
-    period,
-    pred: predicted,
-    actual,
-    outcome: isWin ? 'win' : 'loss',
-    lossStreak: S.lossStreak,
-    time: new Date().toLocaleTimeString()
-  });
-
-  if (S.hist.length > 500) {
-    S.hist = S.hist.slice(0, 500);
-  }
-
-  if (isWin) {
-    S.stats.w++;
-    S.lossStreak = 0;
-    showToast('✅ WIN! 🎉', 'tw');
+  // Establish Countdown Timer
+  if (issueData.endTime && issueData.serviceTime) {
+    const delta = Math.floor((new Date(issueData.endTime) - new Date(issueData.serviceTime)) / 1000);
+    startCountdown(delta);
   } else {
-    S.stats.l++;
-    S.lossStreak++;
-    showToast(S.lossStreak === 1 ? '❌ LOSS → L2!' : '⚠️ L2 Fail', 'tl');
-  }
-
-  S.stats.t++;
-  localStorage.setItem('sv_hist', JSON.stringify(S.hist));
-  localStorage.setItem('sv_st', JSON.stringify(S.stats));
-  localStorage.setItem('sv_ls', String(S.lossStreak));
-
-  updateHistUI();
-  renderRec();
-}
-
-function updateHistUI() {
-  const {w,l,t} = S.stats; const acc = t > 0 ? Math.round((w/t)*100) : 0;
-  document.getElementById('sT').textContent = t; document.getElementById('sW').textContent = w;
-  document.getElementById('sL').textContent = l; document.getElementById('sA').textContent = acc+'%';
-  document.getElementById('acen').innerHTML = acc+'%<span>ACC</span>';
-  document.getElementById('prg').style.strokeDashoffset = 182.2-(182.2*acc/100);
-  const items = S.filter==='all' ? S.hist : S.hist.filter(h=>h.outcome===S.filter);
-  const el = document.getElementById('hlist');
-  if (!items.length) { el.innerHTML='<div class="empty">No records.</div>'; return; }
-  el.innerHTML = items.slice(0,500).map(h=>`
-    <div class="hi ${h.outcome==='win'?'w':'l'}">
-      <div class="hbg ${h.outcome==='win'?'hbw':'hbl'}">${h.outcome==='win'?'W':'L'}</div>
-      <div class="hif">
-        <div class="hpe">#${h.period}</div>
-        <div class="hpr">${h.pred} <span style="color:#94a3b8">→</span> <span class="hch ${h.outcome==='win'?'hwc':'hlc'}">${h.actual}</span></div>
-      </div>
-      <div class="hrt"><div class="hou ${h.outcome==='win'?'hwt':'hlt'}">${h.outcome.toUpperCase()}</div></div>
-    </div>`).join('');
-}
-
-function setConn(s) { document.getElementById('badge').className = 'badge ' + s; document.getElementById('bTxt').textContent = s==='live' ? 'LIVE ●' : 'CONNECTING'; }
-
-function showToast(msg, cls) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.className = 'toast show '+(cls||'ti');
-  clearTimeout(t._t); t._t = setTimeout(()=>{ t.className='toast'; }, 3000);
-}
-
-function setMode(g, btn) { S.typeId = g; document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on')); btn.classList.add('on'); doFetch(); }
-function goPage(p, btn) { document.querySelectorAll('.pg').forEach(x=>x.classList.remove('show')); document.querySelectorAll('.nb').forEach(x=>x.classList.remove('on')); document.getElementById('pg-'+p).classList.add('show'); btn.classList.add('on'); if(p==='hist') updateHistUI(); }
-function setF(f, btn) { S.filter = f; document.querySelectorAll('.fb').forEach(b=>b.classList.remove('on')); btn.classList.add('on'); updateHistUI(); }
-
-function clearAll() {
-  if(confirm('Clear History?')) {
-    S.hist = [];
-    S.stats = {w:0,l:0,t:0};
-    localStorage.removeItem('sv_hist');
-    localStorage.removeItem('sv_st');
-    localStorage.removeItem('sv_ls');
-    updateHistUI();
-    showToast('🗑 History Cleared','tg');
+    startCountdown(60);
   }
 }
 
 // ═══════════════════════════════════════
-// SIVA AUTO BET CONTROLL ENGINE
+// MATH ENGINE: PREDICTIVE FORMULAS
 // ═══════════════════════════════════════
-function loadBetSettings() {
-  document.getElementById('autoBetToggle').checked = S.autoBetOn;
-  document.getElementById('baseBetAmt').value = S.baseAmt;
-  document.getElementById('betMultiplier').value = S.multiplier;
-}
-
-function toggleAutoBet() {
-  S.autoBetOn = document.getElementById('autoBetToggle').checked;
-  localStorage.setItem('sv_autobet_on', S.autoBetOn);
-  showToast(S.autoBetOn ? "🤖 Auto Bet: ACTIVE" : "⚠️ Auto Bet: STOPPED", S.autoBetOn ? "tw" : "tl");
-}
-
-function saveBetSettings() {
-  S.baseAmt = parseInt(document.getElementById('baseBetAmt').value) || 10;
-  S.multiplier = parseInt(document.getElementById('betMultiplier').value) || 3;
-  localStorage.setItem('sv_base_amt', S.baseAmt);
-  localStorage.setItem('sv_multiplier', S.multiplier);
-  showToast("⚙️ Auto Bet Settings Saved!", "tg");
-}
-
-async function executeAutoBet(pred) {
-  if (!S.autoBetOn || !S.token || !S.curPeriod) return;
-  if (S.lastBetPeriod === S.curPeriod) return; // Oru period-ku oru bet thaan podanum
-
-  // Calculation for Martingale Recovery Logic
-  let betValue = S.baseAmt;
-  if (S.lossStreak === 1) {
-    betValue = S.baseAmt * S.multiplier;
-  } else if (S.lossStreak >= 2) {
-    betValue = S.baseAmt * S.multiplier * S.multiplier;
+function generatePrediction(history) {
+  let score = { BIG: 0, SMALL: 0 };
+  
+  history.forEach((res, idx) => {
+    const weight = 10 - idx;
+    score[res] += weight;
+  });
+  
+  // Pattern detection: Alternating sequences
+  let alternating = true;
+  for(let i = 0; i < 4; i++) {
+    if(history[i] === history[i+1]) alternating = false;
   }
+  
+  let finalDecision = score.BIG >= score.SMALL ? "BIG" : "SMALL";
+  
+  if (alternating) {
+    // Reverse decision to ride trend break
+    finalDecision = history[0] === "BIG" ? "SMALL" : "BIG";
+  }
+  
+  S.currentPrediction = finalDecision;
+  
+  const el = document.getElementById('predVal');
+  el.className = `pred-val ${finalDecision}`;
+  el.textContent = finalDecision;
+  
+  log(`Prediction Generated: ${finalDecision} for Period #${S.curPeriod}`, "info");
+  
+  // Submit betting action immediately
+  placeBetAction();
+}
 
-  // Rajaluck BIG / SMALL select codes (Usually: BIG = 1, SMALL = 2 in API values)
-  const selectValue = pred === 'BIG' ? 1 : 2;
+function renderOutcomeBalls(list) {
+  const container = document.getElementById('ballsContainer');
+  container.innerHTML = '';
+  
+  list.forEach(item => {
+    const val = parseInt(item.number);
+    const mode = val >= 5 ? 'big' : 'small';
+    const div = document.createElement('div');
+    div.className = `ball ${mode}`;
+    div.textContent = val;
+    container.appendChild(div);
+  });
+}
 
-  showToast(`🤖 Placing Auto Bet ₹${betValue} on ${pred}...`, "ti");
-
-  // Endpoint configuration matching standard Rajaluck schemas
-  const extraPayload = {
-    amount: betValue,
-    selectType: selectValue,
-    issueNumber: S.curPeriod
-  };
-
-  const ts = Math.floor(Date.now()/1000);
-  const rand = Array.from({length:32},()=>'0123456789abcdef'[Math.floor(Math.random()*16)]).join('');
-  const sig = md5(rand).toUpperCase();
-
-  const finalBody = JSON.stringify({
+// ═══════════════════════════════════════
+// BET TRANSACTION EXECUTION
+// ═══════════════════════════════════════
+async function placeBetAction() {
+  if (!S.active || !S.currentPrediction || S.lastProcessedPeriod === S.curPeriod) return;
+  
+  const betMultiplier = S.martingaleMultipliers[S.curLevel - 1];
+  const calculatedStake = S.baseBet * betMultiplier;
+  
+  // Watch mode screening logic
+  if (S.watchMode) {
+    const limit = parseInt(document.getElementById('virtualLossLimit').value) || 1;
+    if (S.virtualLossStreak < limit) {
+      log(`[WATCH MODE] Virtual screening running. Streak: ${S.virtualLossStreak}/${limit}. Skipping live bet.`, "info");
+      return;
+    }
+  }
+  
+  log(`Deploying Auto Bet: ₹${calculatedStake} on ${S.currentPrediction}`, "info");
+  
+  const selectCode = S.currentPrediction === 'BIG' ? 1 : 2;
+  const payload = JSON.stringify({
     typeId: S.typeId,
     language: 5,
-    random: rand,
-    signature: sig,
-    timestamp: ts,
-    ...extraPayload
+    random: Array.from({length:32}, () => '0123456789abcdef'[Math.floor(Math.random()*16)]).join(''),
+    signature: md5(Date.now().toString()).toUpperCase(),
+    timestamp: Math.floor(Date.now() / 1000),
+    amount: calculatedStake,
+    selectType: selectCode,
+    issueNumber: S.curPeriod
   });
-
-  const url = `${BASE}/GameBet`;
-
-  // Proxy tunnel execution to defeat CORS issues
+  
   try {
-    const r = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`, {
+    const r = await fetch(`${BASE_URL}/GameBet`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + S.token
+        'Authorization': `Bearer ${S.token}`
       },
-      body: finalBody,
-      signal: AbortSignal.timeout(8000)
+      body: payload
     });
-
+    
     if (r.ok) {
-      const outer = await r.json();
-      const res = JSON.parse(outer.contents);
+      const res = await r.json();
       if (res.code === 0) {
-        S.lastBetPeriod = S.curPeriod;
-        showToast(`✅ Auto Bet Success! (₹${betValue})`, "tw");
+        S.lastProcessedPeriod = S.curPeriod;
+        log(`Bet successfully synced with server for Period #${S.curPeriod}`, "success");
+        S.totalBets++;
+        document.getElementById('statBets').textContent = S.totalBets;
       } else {
-        showToast(`❌ Bet Failed: ${res.msg || 'Balance error'}`, "tl");
+        log(`Transaction rejected by server: ${res.msg || 'Balance error'}`, "error");
       }
-    } else {
-      showToast("⚠️ Bet Network Response Error", "tl");
     }
   } catch(e) {
-    showToast("⚠️ Network Handshake Failed", "tl");
+    log("Network Handshake Error during transaction placement", "error");
   }
 }
 
 // ═══════════════════════════════════════
-// INITIALIZATION ON BOOT
+// WIN-LOSS EVALUATION (MARTINGALE ENGINE)
 // ═══════════════════════════════════════
-checkAccess();
-loadBetSettings();
-updateHistUI();
-if (S.token) {
-  document.getElementById('tokBox').style.display = 'none';
-  document.getElementById('mainCards').style.display = 'block';
-  document.getElementById('tokStatus').textContent = '✅ Active';
-  doFetch();
+function processBetResolution(actual, period) {
+  const isWin = S.currentPrediction === actual;
+  const multiplier = S.martingaleMultipliers[S.curLevel - 1];
+  const baseCost = S.baseBet * multiplier;
+  
+  if (isWin) {
+    S.wins++;
+    const winAmount = baseCost * 1.96; // Standard payout
+    S.profitNLoss += (winAmount - baseCost);
+    
+    log(`Period #${period} Result: WIN [Actual: ${actual}] [Profit: +₹${(winAmount - baseCost).toFixed(2)}]`, "success");
+    
+    S.curLevel = 1; // Reset Martingale sequence
+    S.virtualLossStreak = 0;
+  } else {
+    S.losses++;
+    S.profitNLoss -= baseCost;
+    
+    log(`Period #${period} Result: LOSS [Actual: ${actual}] [Loss: -₹${baseCost}]`, "error");
+    
+    S.virtualLossStreak++;
+    
+    if (S.curLevel < S.maxLevels) {
+      S.curLevel++;
+    } else {
+      log("MAX MARTINGALE LEVEL REACHED! Resetting back to L1 safety.", "error");
+      S.curLevel = 1;
+    }
+  }
+  
+  // UI rendering updates
+  document.getElementById('statWinLoss').textContent = `${S.wins} / ${S.losses}`;
+  
+  const plEl = document.getElementById('statPL');
+  plEl.textContent = `₹${S.profitNLoss.toFixed(2)}`;
+  if (S.profitNLoss >= 0) {
+    plEl.className = "stat-val pnl-pos";
+  } else {
+    plEl.className = "stat-val pnl-neg";
+  }
+  
+  updateLevelHighlight();
 }
-setInterval(()=>{ if(S.timerSec>5||S.fetching||!S.token) return; doFetch(); }, 15000);
+
+// ═══════════════════════════════════════
+// RUNNING CONTROLLER TIME-LOOPS
+// ═══════════════════════════════════════
+function startCountdown(sec) {
+  if (S.timerID) clearInterval(S.timerID);
+  S.timerSec = sec;
+  updateTimerUI();
+  S.timerID = setInterval(() => {
+    S.timerSec--;
+    if (S.timerSec <= 0) {
+      clearInterval(S.timerID);
+      doFetch();
+    } else {
+      updateTimerUI();
+    }
+  }, 1000);
+}
+
+function updateTimerUI() {
+  const m = String(Math.floor(S.timerSec / 60)).padStart(2, '0');
+  const s = String(S.timerSec % 60).padStart(2, '0');
+  const el = document.getElementById('timerVal');
+  el.textContent = `${m}:${s}`;
+  
+  if (S.timerSec <= 10) {
+    el.className = "timer-val critical";
+  } else {
+    el.className = "timer-val";
+  }
+}
+
+// On Launch
+window.onload = () => {
+  log("SIVA ULTRA AI initialization complete...", "info");
+  if (S.token) {
+    setupInterface();
+  }
+};
 </script>
 </body>
 </html>
