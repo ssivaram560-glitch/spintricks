@@ -161,7 +161,7 @@ input:checked + .slider:before { transform: translateX(20px); }
 .stat-val.pnl-pos { color: var(--gr); }
 .stat-val.pnl-neg { color: var(--rd); }
 
-/* MARTINGALE GRID UI (9-LEVELS) */
+/* MARTINGALE GRID UI */
 .mart-card { margin: 0 11px 11px; background: var(--c2); border-radius: 14px; padding: 14px; border: 1px solid var(--bo); }
 .mart-title { font-size: 11px; color: var(--gd); font-weight: 700; letter-spacing: 1.5px; margin-bottom: 12px; }
 .mart-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
@@ -245,23 +245,23 @@ input:checked + .slider:before { transform: translateX(20px); }
       </div>
       <div class="field-box">
         <span class="field-lbl">MAX LEVELS</span>
-        <input type="number" id="maxLevels" class="field-val" value="9" min="1" max="9" onchange="recalculateMartingale()">
+        <input type="number" id="maxLevels" class="field-val" value="5" min="1" max="9" onchange="recalculateMartingale()">
       </div>
     </div>
-    <div class="calc-lbl" id="riskLabel">Total Session Risk: ₹2132 (across 9 levels)</div>
+    <div class="calc-lbl" id="riskLabel">Total Session Risk: --</div>
 
     <div class="watch-box">
       <div class="watch-header">
-        <div class="watch-title">👀 WATCH MODE (LOSS, THEN BET)</div>
+        <div class="watch-title">👀 WATCH MODE (3-LOSS GAP BET)</div>
         <label class="switch">
-          <input type="checkbox" id="watchModeToggle" onchange="toggleWatchMode()">
+          <input type="checkbox" id="watchModeToggle" checked onchange="toggleWatchMode()">
           <span class="slider"></span>
         </label>
       </div>
-      <div class="watch-desc">Starts real betting only after virtual losses.</div>
-      <div class="watch-input-row" id="watchInputArea" style="display: none; margin-top: 10px;">
+      <div class="watch-desc">Automatically bets ONLY when 3 virtual losses occur back-to-back. (Saves your levels!)</div>
+      <div class="watch-input-row" id="watchInputArea" style="display: flex; margin-top: 10px;">
         <span class="field-lbl">REQUIRED VIRTUAL LOSSES:</span>
-        <input type="number" id="virtualLossLimit" class="field-val" value="1" min="1" style="width: 80px; padding: 4px;">
+        <input type="number" id="virtualLossLimit" class="field-val" value="3" min="1" style="width: 80px; padding: 4px;" onchange="updateVirtualLossLimit()">
       </div>
     </div>
   </div>
@@ -301,7 +301,7 @@ input:checked + .slider:before { transform: translateX(20px); }
   </div>
 
   <div class="mart-card">
-    <div class="mart-title">📊 9-LEVEL MULTIPLIER (MARTINGALE)</div>
+    <div class="mart-title">📊 5-LEVEL MULTIPLIER (MARTINGALE)</div>
     <div class="mart-grid" id="martGrid">
     </div>
   </div>
@@ -338,9 +338,9 @@ const S = {
   token: localStorage.getItem('sv_tok_v57') || '',
   active: true,
   baseBet: 1,
-  maxLevels: 9,
-  watchMode: false,
-  requiredVirtualLosses: 1,
+  maxLevels: 5,
+  watchMode: true, // Default to true for your 3-loss strategy
+  requiredVirtualLosses: 3, // Handled precisely
   
   // Running stats
   totalBets: 0,
@@ -348,7 +348,7 @@ const S = {
   losses: 0,
   profitNLoss: 0,
   curLevel: 1,
-  virtualLossStreak: 0,
+  virtualLossStreak: 0, // Records continuous paper/virtual losses
   
   // Real-time processing
   typeId: 1, // WinGo 1Min standard
@@ -358,7 +358,7 @@ const S = {
   currentPrediction: null,
   lastProcessedPeriod: null,
   
-  martingaleMultipliers: [1, 3, 8, 20, 50, 120, 230, 500, 1200]
+  martingaleMultipliers: [1, 3, 8, 24, 72, 216, 648, 1944, 5832] // Adjusted 3x scale
 };
 
 const BASE_URL = 'https://lotteryapi.rajaluckapi.com/api/webapi';
@@ -451,7 +451,7 @@ function setupInterface() {
 // ═══════════════════════════════════════
 function recalculateMartingale() {
   const base = parseInt(document.getElementById('baseBetAmt').value) || 1;
-  const maxL = parseInt(document.getElementById('maxLevels').value) || 9;
+  const maxL = parseInt(document.getElementById('maxLevels').value) || 5;
   
   S.baseBet = base;
   S.maxLevels = Math.min(9, Math.max(1, maxL));
@@ -503,17 +503,17 @@ function toggleWatchMode() {
   
   if (S.watchMode) {
     inputRow.style.display = 'flex';
-    log("Watch Mode activated. System waits for virtual losses before betting.", "info");
+    log(`Watch Mode activated. Waits for ${S.requiredVirtualLosses} virtual losses.`, "info");
   } else {
     inputRow.style.display = 'none';
     log("Watch Mode deactivated. Placing live bets immediately.", "info");
-    
-    if(S.currentPrediction) {
-      const el = document.getElementById('predVal');
-      el.className = `pred-val ${S.currentPrediction}`;
-      el.textContent = S.currentPrediction;
-    }
   }
+}
+
+function updateVirtualLossLimit() {
+  const limit = parseInt(document.getElementById('virtualLossLimit').value) || 1;
+  S.requiredVirtualLosses = limit;
+  log(`Virtual Loss Trigger updated to: ${limit} rounds.`, "info");
 }
 
 // ═══════════════════════════════════════
@@ -644,7 +644,7 @@ function updateStatsUI() {
 }
 
 // ═══════════════════════════════════════
-// HISTORY AND BET RESOLUTION
+// HISTORY & RESOLUTION (SMART DYNAMIC ENGINE)
 // ═══════════════════════════════════════
 function processBetResolution(actualOutcome, evaluatedPeriod) {
   if (S.lastProcessedPeriod === evaluatedPeriod) return;
@@ -654,24 +654,42 @@ function processBetResolution(actualOutcome, evaluatedPeriod) {
   if (!lastPrediction) return;
 
   const currentBetAmt = S.baseBet * S.martingaleMultipliers[S.curLevel - 1];
+  
+  // Track status check
+  const isRealBetPlaced = S.watchMode ? (S.virtualLossStreak >= S.requiredVirtualLosses) : true;
 
   if (actualOutcome === lastPrediction) {
-    log(`🎉 WIN! Period #${evaluatedPeriod} resulted in ${actualOutcome}.`, "success");
-    S.wins++;
-    S.profitNLoss += (currentBetAmt * 0.98); 
-    S.curLevel = 1; 
+    if (isRealBetPlaced) {
+      // WIN state for active real cash session
+      log(`🎉 WIN! Real Bet Period #${evaluatedPeriod} hit ${actualOutcome}.`, "success");
+      S.wins++;
+      S.profitNLoss += (currentBetAmt * 0.98);
+      S.totalBets++;
+    } else {
+      log(`📝 Virtual WIN! Period #${evaluatedPeriod} hit ${actualOutcome}. Reseting Virtual Streak.`, "info");
+    }
+    // RESET all counters to safe start state
+    S.curLevel = 1;
     S.virtualLossStreak = 0;
   } else {
-    log(`❌ LOSS. Period #${evaluatedPeriod} resulted in ${actualOutcome}.`, "error");
-    S.losses++;
-    S.profitNLoss -= currentBetAmt;
-    S.virtualLossStreak++;
-
-    if (S.curLevel < S.maxLevels) {
-      S.curLevel++;
+    // LOSS occurred
+    if (isRealBetPlaced) {
+      log(`❌ LOSS! Real Bet Period #${evaluatedPeriod} missed.`, "error");
+      S.losses++;
+      S.profitNLoss -= currentBetAmt;
+      S.totalBets++;
+      
+      if (S.curLevel < S.maxLevels) {
+        S.curLevel++;
+      } else {
+        log(`⚠️ Max Levels (${S.maxLevels}) hit! Resetting back to L1 safety zone.`, "error");
+        S.curLevel = 1;
+        S.virtualLossStreak = 0; // Reset safe gap monitor
+      }
     } else {
-      log(`⚠️ Martingale Max Level reached! Resetting to L1.`, "error");
-      S.curLevel = 1;
+      // Watch mode track progress
+      S.virtualLossStreak++;
+      log(`📉 Virtual Loss [${S.virtualLossStreak}/${S.requiredVirtualLosses}]. System watching safely...`, "info");
     }
   }
 
@@ -680,7 +698,7 @@ function processBetResolution(actualOutcome, evaluatedPeriod) {
 }
 
 // ═══════════════════════════════════════
-// CORE PERIOD SCHEDULER & PIPELINE (FIXED SINGLE INTEGRATION)
+// PERIOD PIPELINE HANDSHAKE RUNNER
 // ═══════════════════════════════════════
 async function doFetch() {
   if (!S.token || !S.active) {
@@ -739,7 +757,7 @@ async function doFetch() {
   }
 
   if (!list || list.length === 0) {
-    log("API History empty. Injecting virtual fallback pattern to prevent freezing...", "info");
+    log("API History empty. Injecting virtual fallback pattern...", "info");
     list = [];
     let tempIssue = Number(nextIssue);
     for (let i = 0; i < 10; i++) {
@@ -815,7 +833,7 @@ function generatePrediction(history) {
   el.className = `pred-val ${finalDecision}`;
   el.textContent = finalDecision;
   
-  log(`Prediction Generated: ${finalDecision} for Period #${S.curPeriod}`, "info");
+  log(`Prediction: ${finalDecision} for Period #${S.curPeriod}`, "info");
   
   placeBetAction();
 }
@@ -838,28 +856,27 @@ function renderOutcomeBalls(list) {
 // BET TRANSACTION EXECUTION
 // ═══════════════════════════════════════
 async function placeBetAction() {
-  if (!S.active || !S.currentPrediction) {
-    log("Bet placement skipped: Engine not active or no prediction ready.", "info");
-    return;
+  if (!S.active || !S.currentPrediction) return;
+  
+  // Real Bet validation under WATCH MODE rules
+  if (S.watchMode) {
+    if (S.virtualLossStreak < S.requiredVirtualLosses) {
+      log(`[WATCH MODE ACTIVE] Virtual Streak: ${S.virtualLossStreak}/${S.requiredVirtualLosses}. Real bet skipped.`, "info");
+      return;
+    }
   }
   
   const betMultiplier = S.martingaleMultipliers[S.curLevel - 1];
   const calculatedStake = S.baseBet * betMultiplier;
   
-  if (S.watchMode) {
-    const limit = parseInt(document.getElementById('virtualLossLimit').value) || 1;
-    if (S.virtualLossStreak < limit) {
-      log(`[WATCH MODE] Virtual screening running. Streak: ${S.virtualLossStreak}/${limit}. Skipping live bet.`, "info");
-      return;
-    }
-  }
+  log(`🚀 DEPLOYING AUTO BET: ₹${calculatedStake} on ${S.currentPrediction} (Level ${S.curLevel})`, "info");
   
-  log(`Deploying Auto Bet: ₹${calculatedStake} on ${S.currentPrediction}`, "info");
-  
+  // API FIXED CODES: BIG = 1, SMALL = 2 (Mapped exactly as per game-engine spec)
   const selectCode = S.currentPrediction === 'BIG' ? 1 : 2;
   const randStr = Array.from({length:32}, () => '0123456789abcdef'[Math.floor(Math.random()*16)]).join('');
   const signatureVal = md5(randStr).toUpperCase(); 
   
+  // Structured specifically to matches current API schema
   const payload = JSON.stringify({
     typeId: S.typeId,
     language: 5,
@@ -886,20 +903,18 @@ async function placeBetAction() {
     if (r.ok) {
       const res = await r.json();
       if (res.code === 0) {
-        log(`🟢 Auto-Bet Successful! Period #${S.curPeriod} bet registered.`, "success");
-        S.totalBets++;
-        updateStatsUI();
+        log(`🟢 Real Bet REGISTERED! Period #${S.curPeriod} placed successfully.`, "success");
       } else if (res.code === 401) {
-        log("🔴 Auto-Bet Rejected: Token expired or permission error.", "error");
+        log("🔴 Bet Failed: Token rejected. Please refresh authentication.", "error");
         clearToken();
       } else {
-        log(`🔴 Auto-Bet Rejected: ${res.msg || 'Insufficient balance/Error'}`, "error");
+        log(`🔴 Bet Failed: ${res.msg || 'Low balance / API error'}`, "error");
       }
     } else {
-      log(`🔴 Auto-Bet execution failed. Server responded with status: ${r.status}`, "error");
+      log(`🔴 Error: API status ${r.status}. Check API limits.`, "error");
     }
   } catch(e) {
-    log(`🔴 Network Error: Unable to submit bet payload.`, "error");
+    log(`🔴 Network Failure: Failed to push bet payload.`, "error");
   }
 }
 
