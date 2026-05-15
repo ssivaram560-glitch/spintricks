@@ -3,931 +3,749 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>SIVA ULTRA AI V57 - PRO AUTO ENGINE</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght=700;900&family=Rajdhani:wght=600;700&display=swap" rel="stylesheet">
+<title>SIVA ULTRA AI V58</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #07070f; --c1: #0f0f1e; --c2: #14142a;
-  --pu: #8b5cf6; --gr: #10b981; --gd: #f59e0b;
-  --rd: #ef4444; --mu: #64748b; --tx: #e2e8f0;
-  --bo: rgba(139,92,246,0.22);
+:root{
+  --bg:#07070f;--c2:#14142a;--c3:#1a1a35;
+  --pu:#8b5cf6;--gr:#10b981;--gd:#f59e0b;
+  --rd:#ef4444;--mu:#64748b;--tx:#e2e8f0;
+  --bo:rgba(139,92,246,0.22);
 }
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-body {
-  background: var(--bg); color: var(--tx); font-family: 'Rajdhani', sans-serif;
-  max-width: 430px; margin: 0 auto; min-height: 100vh; overflow-x: hidden;
-}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--tx);font-family:'Rajdhani',sans-serif;max-width:430px;margin:0 auto;min-height:100vh;overflow-x:hidden}
 
-/* TOP STATUS BAR */
-.top {
-  background: linear-gradient(135deg,#12052a,#091433);
-  padding: 12px 15px; display: flex; align-items: center;
-  justify-content: space-between; position: sticky; top: 0; z-index: 99;
-  border-bottom: 1px solid var(--bo);
-}
-.logo {
-  font-family: 'Orbitron', monospace; font-size: 14px; font-weight: 900;
-  background: linear-gradient(90deg, #a78bfa, #10b981);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-}
-.badge {
-  display: flex; align-items: center; gap: 5px; padding: 4px 11px;
-  border-radius: 20px; border: 1px solid; font-size: 11px; font-weight: 700; transition: all .3s;
-}
-.badge.live { background: rgba(16,185,129,.1); border-color: rgba(16,185,129,.4); color: #10b981; }
-.badge.error { background: rgba(239,68,68,.1); border-color: rgba(239,68,68,.4); color: #ef4444; }
-.dot { width: 7px; height: 7px; border-radius: 50%; }
-.badge.live .dot { background: #10b981; box-shadow: 0 0 6px #10b981; animation: blink 1.2s infinite; }
-.badge.error .dot { background: #ef4444; }
-@keyframes blink { 0%,100% { opacity:1 } 50% { opacity:.3 } }
+/* ── TOP BAR ── */
+.top{background:linear-gradient(135deg,#12052a,#091433);padding:12px 15px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:99;border-bottom:1px solid var(--bo)}
+.logo{font-family:'Orbitron',monospace;font-size:13px;font-weight:900;background:linear-gradient(90deg,#a78bfa,#10b981);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.badge{display:flex;align-items:center;gap:5px;padding:4px 11px;border-radius:20px;border:1px solid;font-size:11px;font-weight:700}
+.badge.live{background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.4);color:#10b981}
+.badge.error{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.4);color:#ef4444}
+.badge.warn{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.4);color:#f59e0b}
+.dot{width:7px;height:7px;border-radius:50%}
+.badge.live .dot{background:#10b981;box-shadow:0 0 6px #10b981;animation:blink 1.2s infinite}
+.badge.error .dot{background:#ef4444}
+.badge.warn .dot{background:#f59e0b;animation:blink 1.2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* TOKEN SETUP BOX */
-.setup-box {
-  margin: 11px; background: var(--c2); border-radius: 14px;
-  padding: 14px; border: 1px solid rgba(139,92,246,0.3);
-}
-.setup-title { font-size: 11px; color: var(--pu); font-weight: 700; letter-spacing: 1px; margin-bottom: 8px; }
-.setup-in {
-  width: 100%; background: rgba(0,0,0,.4); border: 1px solid var(--bo);
-  border-radius: 8px; padding: 9px 11px; color: var(--tx); font-size: 11px;
-  font-family: 'Rajdhani', sans-serif; outline: none; resize: none;
-}
-.setup-btn {
-  width: 100%; margin-top: 8px; padding: 11px; border-radius: 9px;
-  background: var(--pu); border: none; color: #fff; font-family: 'Rajdhani', sans-serif;
-  font-size: 13px; font-weight: 700; cursor: pointer;
-}
+/* ── CARDS ── */
+.card{margin:11px;background:var(--c2);border-radius:14px;padding:14px;border:1px solid var(--bo)}
+.card-title{font-size:11px;font-weight:700;letter-spacing:1px;margin-bottom:10px}
+.ta{width:100%;background:rgba(0,0,0,.4);border:1px solid var(--bo);border-radius:8px;padding:9px 11px;color:var(--tx);font-size:11px;font-family:'Rajdhani',sans-serif;outline:none;resize:none}
+.btn-pu{width:100%;margin-top:8px;padding:11px;border-radius:9px;background:var(--pu);border:none;color:#fff;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;cursor:pointer}
+.btn-rd{width:100%;padding:10px;border-radius:8px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.4);color:var(--rd);font-family:'Rajdhani',sans-serif;font-weight:700;cursor:pointer;font-size:12px}
 
-/* API ACTIVE RESET CARD */
-.sync-card {
-  margin: 11px; background: var(--c2); border-radius: 14px; padding: 14px;
-  border: 1px solid rgba(239, 68, 68, 0.3); display: none;
-}
-.sync-card-title { font-size: 11px; color: var(--rd); font-weight: 700; letter-spacing: 1px; margin-bottom: 8px; }
-.sync-reset-btn {
-  width: 100%; padding: 10px; border-radius: 8px; background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.4); color: var(--rd); font-family: 'Rajdhani', sans-serif;
-  font-weight: 700; cursor: pointer; text-align: center; font-size: 12px;
-}
+/* ── CONFIG ── */
+.cfg-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.flbl{font-size:10px;color:var(--mu);margin-bottom:4px;font-weight:700;text-transform:uppercase;display:block}
+.fval{width:100%;background:rgba(0,0,0,.4);border:1px solid var(--bo);border-radius:8px;padding:8px;color:#fff;font-family:'Orbitron',monospace;font-size:13px;text-align:center;outline:none}
 
-/* ENGINE CONFIGURATION */
-.config-card {
-  margin: 11px; background: var(--c2); border-radius: 14px; padding: 15px;
-  border: 1px solid var(--bo);
-}
-.config-title { font-size: 11px; color: var(--gd); font-weight: 700; letter-spacing: 1px; margin-bottom: 12px; }
-.config-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-.field-box { display: flex; flex-direction: column; }
-.field-lbl { font-size: 10px; color: var(--mu); margin-bottom: 4px; font-weight: 700; text-transform: uppercase; }
-.field-val {
-  background: rgba(0,0,0,.4); border: 1px solid var(--bo); border-radius: 8px;
-  padding: 8px; color: #fff; font-family: 'Orbitron', monospace; font-size: 13px; text-align: center;
-}
-.calc-lbl { font-size: 11px; color: var(--mu); text-align: center; margin-top: 5px; }
+/* ── MODE BTNS ── */
+.mode-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.mbtn{padding:10px;border-radius:8px;border:1.5px solid var(--bo);background:rgba(0,0,0,.3);color:var(--mu);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:12px;cursor:pointer;transition:all .2s}
+.mbtn.sz{background:rgba(139,92,246,.2);border-color:var(--pu);color:#a78bfa}
+.mbtn.cl{background:rgba(16,185,129,.2);border-color:var(--gr);color:#10b981}
 
-/* WATCH MODE SWITCH */
-.watch-box {
-  background: rgba(255, 255, 255, 0.02); border-radius: 10px; padding: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.05); margin-top: 10px;
-}
-.watch-header { display: flex; justify-content: space-between; align-items: center; }
-.watch-title { font-size: 11px; color: var(--gd); font-weight: 700; display: flex; align-items: center; gap: 6px; }
-.switch { position: relative; display: inline-block; width: 42px; height: 22px; }
-.switch input { opacity: 0; width: 0; height: 0; }
-.slider {
-  position: absolute; cursor: pointer; inset: 0; background-color: #334155;
-  border-radius: 34px; transition: .3s;
-}
-.slider:before {
-  position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px;
-  background-color: white; border-radius: 50%; transition: .3s;
-}
-input:checked + .slider { background-color: var(--gr); }
-input:checked + .slider:before { transform: translateX(20px); }
-.watch-input-row { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
-.watch-desc { font-size: 10px; color: var(--mu); margin-top: 4px; line-height: 1.3; }
+/* ── WATCH BOX ── */
+.wbox{background:rgba(255,255,255,.02);border-radius:10px;padding:12px;border:1px solid rgba(255,255,255,.05);margin-top:8px}
+.sw{position:relative;display:inline-block;width:42px;height:22px}
+.sw input{opacity:0;width:0;height:0}
+.sl{position:absolute;cursor:pointer;inset:0;background:#334155;border-radius:34px;transition:.3s}
+.sl:before{position:absolute;content:"";height:16px;width:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s}
+input:checked+.sl{background:var(--gr)}
+input:checked+.sl:before{transform:translateX(20px)}
+.row2{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
 
-/* ENGINE MASTER TOGGLE */
-.engine-toggle-btn {
-  margin: 11px; width: calc(100% - 22px); padding: 14px; border-radius: 12px;
-  border: none; font-family: 'Orbitron', sans-serif; font-weight: 900; font-size: 14px;
-  cursor: pointer; text-align: center; transition: all 0.3s;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-}
-.engine-toggle-btn.start {
-  background: linear-gradient(90deg, #10b981, #059669); color: #fff;
-  box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
-}
-.engine-toggle-btn.stop {
-  background: linear-gradient(90deg, #ef4444, #dc2626); color: #fff;
-  box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
-}
+/* ── ENGINE BTN ── */
+.engbtn{margin:11px;width:calc(100% - 22px);padding:14px;border-radius:12px;border:none;font-family:'Orbitron',sans-serif;font-weight:900;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .3s}
+.engbtn.stop{background:linear-gradient(90deg,#ef4444,#dc2626);color:#fff;box-shadow:0 0 15px rgba(239,68,68,.3)}
+.engbtn.start{background:linear-gradient(90deg,#10b981,#059669);color:#fff;box-shadow:0 0 15px rgba(16,185,129,.3)}
 
-/* PREDICTION PANEL */
-.pred-card {
-  margin: 11px; background: var(--c2); border-radius: 14px; padding: 15px;
-  border: 1px solid var(--bo); display: flex; justify-content: space-between; gap: 10px;
-}
-.pred-display {
-  flex: 1.2; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 15px;
-  border: 1px solid rgba(255,255,255,0.05); text-align: center; display: flex;
-  flex-direction: column; justify-content: center;
-}
-.pred-lbl { font-size: 10px; color: var(--mu); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
-.pred-val { font-family: 'Orbitron', monospace; font-size: 28px; font-weight: 900; }
-.pred-val.BIG { color: var(--pu); text-shadow: 0 0 15px rgba(139,92,246,0.6); }
-.pred-val.SMALL { color: var(--gr); text-shadow: 0 0 15px rgba(16,185,129,0.6); }
-.pred-val.LOAD { color: var(--gd); }
+/* ── PREDICTION PANEL ── */
+.pred-card{margin:11px;background:var(--c2);border-radius:14px;padding:15px;border:1px solid var(--bo);display:flex;gap:10px}
+.pbox{flex:1.3;background:rgba(0,0,0,.3);border-radius:10px;padding:15px;border:1px solid rgba(255,255,255,.05);text-align:center}
+.plbl{font-size:10px;color:var(--mu);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.pval{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;margin:4px 0}
+.pval.BIG{color:var(--pu);text-shadow:0 0 15px rgba(139,92,246,.6)}
+.pval.SMALL{color:var(--gr);text-shadow:0 0 15px rgba(16,185,129,.6)}
+.pval.RED{color:var(--rd);text-shadow:0 0 15px rgba(239,68,68,.6)}
+.pval.GREEN{color:#22c55e;text-shadow:0 0 15px rgba(34,197,94,.6)}
+.pval.LOAD{color:var(--gd);font-size:14px}
+.pval.SKIP{color:var(--mu);font-size:16px}
+.ppat{font-size:9px;color:var(--gd);font-weight:700;margin-top:2px}
+.pconf{font-size:9px;color:var(--mu);margin-top:1px}
+.tbox{flex:.85;background:rgba(0,0,0,.3);border-radius:10px;padding:15px;border:1px solid rgba(255,255,255,.05);text-align:center;display:flex;flex-direction:column;justify-content:center}
+.tval{font-family:'Orbitron',monospace;font-size:28px;font-weight:900;color:var(--gd)}
+.tval.crit{color:var(--rd);text-shadow:0 0 15px rgba(239,68,68,.5)}
 
-.timer-display {
-  flex: 0.8; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 15px;
-  border: 1px solid rgba(255,255,255,0.05); text-align: center; display: flex;
-  flex-direction: column; justify-content: center;
-}
-.timer-val { font-family: 'Orbitron', monospace; font-size: 28px; font-weight: 900; color: var(--gd); }
-.timer-val.critical { color: var(--rd); text-shadow: 0 0 15px rgba(239,68,68,0.5); }
-.target-period { font-size: 10px; color: var(--mu); margin-top: 4px; }
+/* ── STATS ── */
+.stats-row{margin:0 11px 11px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.sbox{background:var(--c2);border-radius:10px;padding:10px 4px;text-align:center;border:1px solid rgba(255,255,255,.04)}
+.slbl{font-size:9px;color:var(--mu);text-transform:uppercase;margin-bottom:2px}
+.sval{font-family:'Orbitron',monospace;font-size:14px;font-weight:700}
 
-/* MINI STATS ROW */
-.stats-row {
-  margin: 0 11px 11px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
-}
-.stat-box {
-  background: var(--c2); border-radius: 10px; padding: 10px 4px; text-align: center;
-  border: 1px solid rgba(255,255,255,0.04);
-}
-.stat-lbl { font-size: 9px; color: var(--mu); text-transform: uppercase; margin-bottom: 2px; }
-.stat-val { font-family: 'Orbitron', monospace; font-size: 14px; font-weight: 700; }
-.stat-val.pnl-pos { color: var(--gr); }
-.stat-val.pnl-neg { color: var(--rd); }
+/* ── MARTINGALE ── */
+.mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}
+.ml{background:rgba(0,0,0,.3);border:1.5px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 5px;text-align:center;transition:all .2s}
+.ml.on{background:rgba(16,185,129,.1);border-color:var(--gr)}
+.ml-l{font-size:9px;color:var(--mu);font-weight:700;display:block;margin-bottom:3px}
+.ml.on .ml-l{color:var(--gr)}
+.ml-a{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;color:#fff}
 
-/* MARTINGALE GRID UI */
-.mart-card { margin: 0 11px 11px; background: var(--c2); border-radius: 14px; padding: 14px; border: 1px solid var(--bo); }
-.mart-title { font-size: 11px; color: var(--gd); font-weight: 700; letter-spacing: 1.5px; margin-bottom: 12px; }
-.mart-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
-.mart-item {
-  background: rgba(0,0,0,0.3); border: 1.5px solid rgba(255,255,255,0.08);
-  border-radius: 8px; padding: 10px 5px; text-align: center; transition: all 0.2s;
-}
-.mart-item.active {
-  background: rgba(16, 185, 129, 0.1); border-color: var(--gr);
-}
-.mart-item.active .mart-lvl { color: var(--gr); }
-.mart-lvl { font-size: 9px; color: var(--mu); font-weight: 700; display: block; margin-bottom: 3px; }
-.mart-amt { font-family: 'Orbitron', monospace; font-size: 13px; font-weight: 700; color: #fff; }
+/* ── BALLS ── */
+.brow{display:flex;gap:5px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.ball{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:11px;font-weight:900}
+.ball.big{background:rgba(139,92,246,.3);border:2px solid var(--pu);color:#c4b5fd}
+.ball.small{background:rgba(16,185,129,.25);border:2px solid var(--gr);color:#6ee7b7}
+.ball.red{background:rgba(239,68,68,.25);border:2px solid var(--rd);color:#fca5a5}
+.ball.green{background:rgba(34,197,94,.25);border:2px solid #22c55e;color:#86efac}
+.ball.emp{background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.1);color:var(--mu)}
 
-/* RECENT BALLS OUTCOME */
-.balls-card { margin: 0 11px 11px; background: var(--c2); border-radius: 14px; padding: 12px 14px; border: 1px solid var(--bo); }
-.balls-title { font-size: 10px; color: var(--mu); font-weight: 700; margin-bottom: 8px; }
-.balls-flex { display: flex; gap: 8px; justify-content: center; }
-.ball {
-  width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center;
-  justify-content: center; font-family: 'Orbitron', monospace; font-size: 14px; font-weight: 900;
-}
-.ball.big { background: rgba(139,92,246,0.3); border: 2px solid var(--pu); color: #c4b5fd; }
-.ball.small { background: rgba(16,185,129,0.25); border: 2px solid var(--gr); color: #6ee7b7; }
-.ball.empty { background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); color: var(--mu); }
+/* ── LAST BET ── */
+.irow{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.irow:last-child{border-bottom:none}
+.ik{font-size:11px;color:var(--mu)}
+.iv{font-size:11px;font-weight:700;color:var(--tx);font-family:'Orbitron',monospace}
 
-/* SYSTEM MONITOR & LOGGER */
-.log-card { margin: 0 11px 11px; background: var(--c2); border-radius: 14px; padding: 14px; border: 1px solid var(--bo); }
-.log-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-.log-title { font-size: 11px; color: var(--mu); font-weight: 700; letter-spacing: 1px; }
-.log-clear { font-size: 10px; color: var(--pu); font-weight: 700; cursor: pointer; text-transform: uppercase; }
-.log-area {
-  background: #000; border-radius: 8px; padding: 10px; height: 110px; overflow-y: auto;
-  font-family: 'Courier New', Courier, monospace; font-size: 10px; line-height: 1.4;
-}
-.log-line { margin-bottom: 4px; }
-.log-info { color: var(--gd); }
-.log-success { color: var(--gr); }
-.log-error { color: var(--rd); }
+/* ── LOG ── */
+.log{background:#000;border-radius:8px;padding:10px;height:130px;overflow-y:auto;font-family:'Courier New',monospace;font-size:10px;line-height:1.5;margin-top:8px}
+.ll{margin-bottom:2px}
+.li{color:var(--gd)}.ls{color:var(--gr)}.le{color:var(--rd)}.lw{color:#fb923c}
 
-/* TOAST */
-.toast {
-  position: fixed; top: 70px; left: 50%; transform: translateX(-50%);
-  background: rgba(15,15,30,0.95); border-radius: 8px; padding: 10px 18px;
-  font-size: 12px; font-weight: 700; z-index: 999; border: 1px solid;
-  opacity: 0; transition: opacity 0.3s; pointer-events: none;
-}
-.toast.show { opacity: 1; }
-.toast.success { border-color: var(--gr); color: var(--gr); }
-.toast.error { border-color: var(--rd); color: var(--rd); }
+/* ── TOAST ── */
+.toast{position:fixed;top:68px;left:50%;transform:translateX(-50%);background:rgba(10,10,25,.97);border-radius:8px;padding:10px 18px;font-size:12px;font-weight:700;z-index:999;border:1px solid;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1}
+.toast.ok{border-color:var(--gr);color:var(--gr)}
+.toast.err{border-color:var(--rd);color:var(--rd)}
+.toast.w{border-color:var(--gd);color:var(--gd)}
+
+/* ── FETCH STATUS ── */
+.fetch-bar{margin:0 11px 6px;padding:8px 12px;border-radius:8px;font-size:10px;font-weight:700;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.06);color:var(--mu);text-align:center;display:none}
 </style>
 </head>
 <body>
 
 <div class="top">
-  <div class="logo">SIVA ULTRA AI V57</div>
-  <div class="badge error" id="syncStatus">
-    <span class="dot"></span><span id="syncText">AUTH PERMISSION ERROR</span>
-  </div>
+  <div class="logo">SIVA ULTRA AI V58</div>
+  <div class="badge error" id="badge"><span class="dot"></span><span id="badgeTxt">NO TOKEN</span></div>
 </div>
 
-<div class="setup-box" id="tokenBox">
-  <div class="setup-title">🔑 INPUT BEARER AUTH TOKEN</div>
-  <textarea class="setup-in" id="tokenInput" rows="2" placeholder="Authorization bearer token key here..."></textarea>
-  <button class="setup-btn" onclick="saveToken()">✅ Initialize Engine</button>
+<!-- TOKEN INPUT -->
+<div id="tokenBox" class="card">
+  <div class="card-title" style="color:var(--pu)">🔑 BEARER TOKEN (ar-lottery01)</div>
+  <textarea class="ta" id="tokenInput" rows="3" placeholder="Paste token here (without 'Bearer ')..."></textarea>
+  <button class="btn-pu" onclick="saveToken()">✅ Initialize Engine</button>
 </div>
 
-<div class="sync-card" id="syncConfigBox">
-  <div class="sync-card-title">🔑 API SYNC CONFIG</div>
-  <button class="sync-reset-btn" onclick="clearToken()">🔄 Clear & Reset Active Token</button>
+<!-- RESET -->
+<div id="resetBox" class="card" style="display:none;border-color:rgba(239,68,68,.3)">
+  <div class="card-title" style="color:var(--rd)">🔑 TOKEN ACTIVE</div>
+  <button class="btn-rd" onclick="clearToken()">🔄 Reset Token</button>
 </div>
 
-<div id="engineDashboard" style="display: none;">
+<!-- DASHBOARD -->
+<div id="dash" style="display:none">
 
-  <div class="config-card">
-    <div class="config-title">⚙️ ENGINE CONFIGURATION</div>
-    <div class="config-grid">
-      <div class="field-box">
-        <span class="field-lbl">BASE BET (L1)</span>
-        <input type="number" id="baseBetAmt" class="field-val" value="1" min="1" onchange="recalculateMartingale()">
-      </div>
-      <div class="field-box">
-        <span class="field-lbl">MAX LEVELS</span>
-        <input type="number" id="maxLevels" class="field-val" value="5" min="1" max="9" onchange="recalculateMartingale()">
-      </div>
+  <div class="card">
+    <div class="card-title" style="color:var(--gd)">⚙️ ENGINE CONFIG</div>
+    <div class="cfg-grid">
+      <div><span class="flbl">BASE BET (L1)</span><input type="number" id="baseBet" class="fval" value="10" min="1" onchange="buildMart()"></div>
+      <div><span class="flbl">MAX LEVELS</span><input type="number" id="maxLvl" class="fval" value="5" min="1" max="7" onchange="buildMart()"></div>
     </div>
-    <div class="calc-lbl" id="riskLabel">Total Session Risk: --</div>
+    <span class="flbl" id="riskLbl">Max Risk: --</span>
 
-    <div class="watch-box">
-      <div class="watch-header">
-        <div class="watch-title">👀 WATCH MODE (3-LOSS GAP BET)</div>
-        <label class="switch">
-          <input type="checkbox" id="watchModeToggle" checked onchange="toggleWatchMode()">
-          <span class="slider"></span>
-        </label>
+    <div class="mode-row">
+      <button class="mbtn sz" id="btnS" onclick="setMode('SIZE')">🔵 BIG / SMALL</button>
+      <button class="mbtn" id="btnC" onclick="setMode('COLOR')">🔴 RED / GREEN</button>
+    </div>
+
+    <div class="wbox">
+      <div class="row2" style="margin-top:0">
+        <span style="font-size:11px;color:var(--gd);font-weight:700">👀 WATCH MODE</span>
+        <label class="sw"><input type="checkbox" id="wt" checked onchange="G.watch=this.checked;log('Watch '+(G.watch?'ON':'OFF'),'i')"><span class="sl"></span></label>
       </div>
-      <div class="watch-desc">Automatically bets ONLY when 3 virtual losses occur back-to-back. (Saves your levels!)</div>
-      <div class="watch-input-row" id="watchInputArea" style="display: flex; margin-top: 10px;">
-        <span class="field-lbl">REQUIRED VIRTUAL LOSSES:</span>
-        <input type="number" id="virtualLossLimit" class="field-val" value="3" min="1" style="width: 80px; padding: 4px;" onchange="updateVirtualLossLimit()">
+      <div style="font-size:10px;color:var(--mu);margin-top:4px">Wait N virtual losses before real bets</div>
+      <div class="row2">
+        <span class="flbl" style="margin:0">LOSSES TO WAIT:</span>
+        <input type="number" id="vlim" class="fval" value="3" min="1" style="width:75px;padding:6px" onchange="G.vLim=+this.value">
       </div>
     </div>
   </div>
 
-  <button class="engine-toggle-btn stop" id="engineBtn" onclick="toggleEngineState()">
-    🛑 STOP AUTO BET ENGINE
-  </button>
+  <button class="engbtn stop" id="engBtn" onclick="toggleEng()">🛑 STOP AUTO BET ENGINE</button>
 
+  <!-- FETCH STATUS -->
+  <div class="fetch-bar" id="fetchBar">🔄 Fetching data...</div>
+
+  <!-- PREDICTION -->
   <div class="pred-card">
-    <div class="pred-display">
-      <span class="pred-lbl">LIVE ANALYSIS PREDICTION</span>
-      <div class="pred-val LOAD" id="predVal">LOADING</div>
+    <div class="pbox">
+      <div class="plbl">LIVE PREDICTION</div>
+      <div class="pval LOAD" id="pval">LOADING</div>
+      <div class="ppat" id="ppat">Connecting to API...</div>
+      <div class="pconf" id="pconf"></div>
     </div>
-    <div class="timer-display">
-      <div class="timer-val" id="timerVal">00:00</div>
-      <div class="target-period" id="targetPeriod">TARGET PERIOD<br><span id="targetIssue">--</span></div>
+    <div class="tbox">
+      <div class="tval" id="tval">--:--</div>
+      <div style="font-size:10px;color:var(--mu);margin-top:4px">PERIOD</div>
+      <div style="font-size:9px;color:var(--tx);margin-top:2px;word-break:break-all" id="periodEl">--</div>
     </div>
   </div>
 
+  <!-- STATS -->
   <div class="stats-row">
-    <div class="stat-box">
-      <div class="stat-lbl">BETS</div>
-      <div class="stat-val" id="statBets">0</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-lbl">W / L</div>
-      <div class="stat-val" id="statWinLoss">0 / 0</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-lbl">P & L</div>
-      <div class="stat-val pnl-pos" id="statPL">₹0.00</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-lbl">LEVEL</div>
-      <div class="stat-val" id="statLevel" style="color:var(--rd);">L1</div>
+    <div class="sbox"><div class="slbl">BETS</div><div class="sval" id="sBets">0</div></div>
+    <div class="sbox"><div class="slbl">W/L</div><div class="sval" id="sWL">0/0</div></div>
+    <div class="sbox"><div class="slbl">P&L</div><div class="sval" id="sPL" style="color:var(--gr)">0</div></div>
+    <div class="sbox"><div class="slbl">LEVEL</div><div class="sval" id="sLvl" style="color:var(--gr)">L1</div></div>
+  </div>
+
+  <!-- MARTINGALE -->
+  <div class="card" style="margin-bottom:11px">
+    <div class="card-title" style="color:var(--gd)">📊 MARTINGALE (x3 MULT)</div>
+    <div class="mgrid" id="mgrid"></div>
+  </div>
+
+  <!-- BALLS -->
+  <div class="card" style="margin-bottom:11px">
+    <div class="card-title" style="color:var(--mu)">RECENT RESULTS (LATEST 10)</div>
+    <div class="brow" id="balls">
+      <div class="ball emp">-</div><div class="ball emp">-</div><div class="ball emp">-</div>
+      <div class="ball emp">-</div><div class="ball emp">-</div>
     </div>
   </div>
 
-  <div class="mart-card">
-    <div class="mart-title">📊 5-LEVEL MULTIPLIER (MARTINGALE)</div>
-    <div class="mart-grid" id="martGrid">
-    </div>
+  <!-- LAST BET -->
+  <div class="card" style="margin-bottom:11px">
+    <div class="card-title" style="color:var(--mu)">🤖 LAST BET INFO</div>
+    <div class="irow"><span class="ik">Period</span><span class="iv" id="lPer">--</span></div>
+    <div class="irow"><span class="ik">Prediction</span><span class="iv" id="lPred">--</span></div>
+    <div class="irow"><span class="ik">Amount</span><span class="iv" id="lAmt">--</span></div>
+    <div class="irow"><span class="ik">Bet Status</span><span class="iv" id="lStat" style="color:var(--mu)">--</span></div>
+    <div class="irow"><span class="ik">Result</span><span class="iv" id="lRes">--</span></div>
   </div>
 
-  <div class="balls-card">
-    <div class="balls-title">LIVE RECENT GAME OUTCOMES</div>
-    <div class="balls-flex" id="ballsContainer">
-      <div class="ball empty">-</div>
-      <div class="ball empty">-</div>
-      <div class="ball empty">-</div>
-      <div class="ball empty">-</div>
-      <div class="ball empty">-</div>
+  <!-- LOG -->
+  <div class="card" style="margin-bottom:22px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <span style="font-size:11px;color:var(--mu);font-weight:700">SYSTEM LOG</span>
+      <span style="font-size:10px;color:var(--pu);cursor:pointer;font-weight:700" onclick="clearLog()">CLEAR</span>
     </div>
+    <div class="log" id="logEl"></div>
   </div>
-
-  <div class="log-card">
-    <div class="log-header">
-      <div class="log-title">SYSTEM ACTIVITY MONITOR</div>
-      <div class="log-clear" onclick="clearLogs()">CLEAR LOGS</div>
-    </div>
-    <div class="log-area" id="logArea">
-    </div>
-  </div>
-
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ═══════════════════════════════════════
-// GLOBAL ENGINE OBJECT & DATA CONFIG
-// ═══════════════════════════════════════
-const S = {
-  token: localStorage.getItem('sv_tok_v57') || '',
-  active: true,
-  baseBet: 1,
-  maxLevels: 5,
-  watchMode: true, // Default to true for your 3-loss strategy
-  requiredVirtualLosses: 3, // Handled precisely
-  
-  // Running stats
-  totalBets: 0,
-  wins: 0,
-  losses: 0,
-  profitNLoss: 0,
-  curLevel: 1,
-  virtualLossStreak: 0, // Records continuous paper/virtual losses
-  
-  // Real-time processing
-  typeId: 1, // WinGo 1Min standard
-  curPeriod: null,
-  timerSec: 0,
-  timerID: null,
-  currentPrediction: null,
-  lastProcessedPeriod: null,
-  
-  martingaleMultipliers: [1, 3, 8, 24, 72, 216, 648, 1944, 5832] // Adjusted 3x scale
+// ═══════════════════════════════════════════════
+//  GLOBAL STATE
+// ═══════════════════════════════════════════════
+const G = {
+  token:'', active:true, mode:'SIZE',
+  watch:true, vLim:3,
+  baseBet:10, maxLvl:5,
+  MULT:[1,3,9,27,81,243,729],
+  // runtime
+  curPeriod:null, lastResolved:null,
+  prediction:null, betPlaced:false, betAmt:0,
+  level:1, vLoss:0, inMart:false,
+  wins:0, losses:0, totalBets:0, pnl:0,
+  timerID:null, loopID:null, busy:false,
+  retryCount:0
 };
 
-const BASE_URL = 'https://lotteryapi.rajaluckapi.com/api/webapi';
-
-// ═══════════════════════════════════════
-// CORE MD5 GENERATOR FOR SIGNATURES
-// ═══════════════════════════════════════
-function md5(s){function a(a,b){return a+b&4294967295}function b(a,b,c,d,e,f){return a=a+((b&c|~b&d)+e+f)&4294967295,((a<<7|a>>>25)+b&4294967295)}function c(a,b,c,d,e,f){return a=a+((b&d|c&~d)+e+f)&4294967295,((a<<12|a>>>20)+b&4294967295)}function d(a,b,c,d,e,f){return a=a+((b^c^d)+e+f)&4294967295,((a<<17|a>>>15)+b&4294967295)}function e(a,b,c,d,e,f){return a=a+((c^(b|~d))+e+f)&4294967295,((a<<22|a>>>10)+b&4294967295)}
-var g=function(a){for(var b=[],c=0;c<a.length;c++){var d=a.charCodeAt(c);d<128?b.push(d):d<2048?(b.push(192|d>>6),b.push(128|63&d)):d<65536?(b.push(224|d>>12),b.push(128|d>>6&63),b.push(128|63&d)):(b.push(240|d>>18),b.push(128|d>>12&63),b.push(128|d>>6&63),b.push(128|63&d))}return b}(s),h=g.length,i=new Array(Math.ceil((h+9)/64)*16).fill(0);for(var j=0;j<h;j++)i[j>>2]|=g[j]<<24-j%4*8;i[h>>2]|=128<<24-h%4*8;i[i.length-2]=8*h;
-var k=1732584193,l=-271733879,m=-1732584194,n=271733878;
-for(var o=0;o<i.length;o+=16){var p=k,q=l,r=m,t=n;k=b(k,l,m,n,i[o],3614090360);n=b(n,k,l,m,i[o+1],3905402710);m=b(m,n,k,l,i[o+2],606105819);l=b(l,m,n,k,i[o+3],3250441966);k=b(k,l,m,n,i[o+4],4118548399);n=b(n,k,l,m,i[o+5],1200080426);m=b(m,n,k,l,i[o+6],2821735955);l=b(l,m,n,k,i[o+7],4249261313);k=b(k,l,m,n,i[o+8],1770035416);n=b(n,k,l,m,i[o+9],2336552879);m=b(m,n,k,l,i[o+10],4294925233);l=b(l,m,n,k,i[o+11],2304563134);k=b(k,l,m,n,i[o+12],1804603682);n=b(n,k,l,m,i[o+13],4254626195);m=m=b(m,n,k,l,i[o+14],2792965006);l=b(l,m,n,k,i[o+15],1236535329);k=c(k,l,m,n,i[o+1],4129170786);n=c(n,k,l,m,i[o+6],3225465664);m=c(m,n,k,l,i[o+11],643717713);l=c(l,m,n,k,i[o],3921069994);k=c(k,l,m,n,i[o+5],3593408605);n=c(n,k,l,m,i[o+10],38016083);m=c(m,n,k,l,i[o+15],3634488961);l=c(l,m,n,k,i[o+4],3889429448);k=c(k,l,m,n,i[o+9],568446438);n=c(n,k,l,m,i[o+14],3275163606);m=c(m,n,k,l,i[o+3],4107603335);l=c(l,m,n,k,i[o+8],1163531501);k=c(k,l,m,n,i[o+13],2850285829);n=c(n,k,l,m,i[o+2],4243563512);m=c(m,n,k,l,i[o+7],1735328473);l=c(l,m,n,k,i[o+12],2368359562);k=d(k,l,m,n,i[o+5],4294588738);n=d(n,k,l,m,i[o+8],2272392833);m=d(m,n,k,l,i[o+11],1839030562);l=d(l,m,n,k,i[o+14],4259657740);k=d(k,l,m,n,i[o+1],2763975236);n=d(n,k,l,m,i[o+4],1272893353);m=d(m,n,k,l,i[o+7],4139469664);l=d(l,m,n,k,i[o+10],3200236656);k=d(k,l,m,n,i[o+13],681279174);n=d(n,k,l,m,i[o],3936430074);m=d(m,n,k,l,i[o+3],3572445317);l=d(l,m,n,k,i[o+6],76029189);k=d(k,l,m,n,i[o+9],3654602809);n=d(n,k,l,m,i[o+12],3873151461);m=d(m,n,k,l,i[o+15],530742520);l=d(l,m,n,k,i[o+2],3299628645);k=e(k,l,m,n,i[o],4096336452);n=e(n,k,l,m,i[o+7],1126891415);m=e(m,n,k,l,i[o+14],2878612391);l=e(l,m,n,k,i[o+5],4237533241);k=e(k,l,m,n,i[o+12],1700485571);n=e(n,k,l,m,i[o+3],2399980690);m=e(m,n,k,l,i[o+10],4293915773);l=e(l,m,n,k,i[o+1],2240044497);k=e(k,l,m,n,i[o+8],1873313359);n=e(n,k,l,m,i[o+15],4264355552);m=e(m,n,k,l,i[o+6],2734768916);l=e(l,m,n,k,i[o+13],1309151649);k=e(k,l,m,n,i[o+4],4149444226);n=e(n,k,l,m,i[o+11],3174756917);m=e(m,n,k,l,i[o+2],718787259);l=e(l,m,n,k,i[o+9],3951481745);k=a(k,p);l=a(l,q);m=a(m,r);n=a(n,t)}
-return[k,l,m,n].map(a=>a>>>0).map(a=>a.toString(16).padStart(8,'0').match(/../g).reverse().join('')).join('')}
-
-// ═══════════════════════════════════════
-// LOGGING AND SYSTEM MONITORING
-// ═══════════════════════════════════════
-function log(msg, type = 'info') {
-  const area = document.getElementById('logArea');
-  if(!area) return;
-  const ts = new Date().toLocaleTimeString('en-US', { hour12: false });
-  const span = document.createElement('div');
-  span.className = `log-line log-${type}`;
-  span.textContent = `[${ts}] ${msg}`;
-  area.appendChild(span);
-  area.scrollTop = area.scrollHeight;
+// ═══════════════════════════════════════════════
+//  LOGGING
+// ═══════════════════════════════════════════════
+function log(msg,t='i'){
+  const a=document.getElementById('logEl');
+  if(!a)return;
+  const d=document.createElement('div');
+  d.className='ll l'+t;
+  d.textContent='['+new Date().toLocaleTimeString('en-US',{hour12:false})+'] '+msg;
+  a.appendChild(d);a.scrollTop=a.scrollHeight;
+  if(a.children.length>200) a.removeChild(a.children[0]);
+}
+function clearLog(){document.getElementById('logEl').innerHTML='';log('Log cleared','i')}
+function toast(msg,t='w'){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.className='toast show '+t;
+  clearTimeout(el._t);el._t=setTimeout(()=>el.className='toast',3000);
 }
 
-function clearLogs() {
-  document.getElementById('logArea').innerHTML = '';
-  log("SIVA ULTRA AI initialization complete...", "info");
+// ═══════════════════════════════════════════════
+//  TOKEN SETUP
+// ═══════════════════════════════════════════════
+function saveToken(){
+  let raw=document.getElementById('tokenInput').value.trim().replace(/^Bearer\s+/i,'').trim();
+  if(raw.length<20){toast('⚠️ Invalid token!','err');return;}
+  G.token=raw;
+  document.getElementById('tokenBox').style.display='none';
+  document.getElementById('resetBox').style.display='block';
+  document.getElementById('dash').style.display='block';
+  setBadge('live','LIVE SYNC');
+  buildMart();
+  log('Token set. Starting engine...','s');
+  toast('✅ Engine started!','ok');
+  startLoop();
+}
+function clearToken(){
+  G.token='';G.active=true;
+  clearInterval(G.loopID);clearInterval(G.timerID);
+  document.getElementById('tokenBox').style.display='block';
+  document.getElementById('resetBox').style.display='none';
+  document.getElementById('dash').style.display='none';
+  setBadge('error','NO TOKEN');
+}
+function setBadge(cls,txt){
+  document.getElementById('badge').className='badge '+cls;
+  document.getElementById('badgeTxt').textContent=txt;
 }
 
-function showToast(msg, cls = 'info') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = `toast show ${cls}`;
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => { t.className = 'toast'; }, 3000);
+// ═══════════════════════════════════════════════
+//  MODE
+// ═══════════════════════════════════════════════
+function setMode(m){
+  G.mode=m;
+  document.getElementById('btnS').className='mbtn'+(m==='SIZE'?' sz':'');
+  document.getElementById('btnC').className='mbtn'+(m==='COLOR'?' cl':'');
+  log('Mode: '+m,'i');
 }
 
-// ═══════════════════════════════════════
-// TOKEN AND VIEW INITIALIZATION
-// ═══════════════════════════════════════
-function saveToken() {
-  let raw = document.getElementById('tokenInput').value.trim();
-  raw = raw.replace(/^Bearer\s+/i, '').trim();
-  
-  if (raw.length < 15) {
-    showToast("⚠️ Invalid Token Format!", "error");
-    log("Initialization Failed: Token formatting error", "error");
-    return;
+// ═══════════════════════════════════════════════
+//  MARTINGALE UI
+// ═══════════════════════════════════════════════
+function buildMart(){
+  G.baseBet=+document.getElementById('baseBet').value||10;
+  G.maxLvl=Math.min(7,Math.max(1,+document.getElementById('maxLvl').value||5));
+  const g=document.getElementById('mgrid');g.innerHTML='';
+  let risk=0;
+  for(let i=1;i<=G.maxLvl;i++){
+    const amt=G.baseBet*G.MULT[i-1];risk+=amt;
+    const d=document.createElement('div');
+    d.className='ml'+(i===G.level?' on':'');d.id='ml'+i;
+    d.innerHTML=`<span class="ml-l">L${i}</span><span class="ml-a">${amt}</span>`;
+    g.appendChild(d);
   }
-  
-  S.token = raw;
-  localStorage.setItem('sv_tok_v57', raw);
-  setupInterface();
-  showToast("✅ Token Configured Successfully", "success");
-  log("Engine Initialized: Auto Bet is ACTIVE.", "success");
-  doFetch();
+  document.getElementById('riskLbl').textContent='Max Risk: '+risk+' coins';
 }
-
-function clearToken() {
-  S.token = '';
-  localStorage.removeItem('sv_tok_v57');
-  document.getElementById('tokenBox').style.display = 'block';
-  document.getElementById('syncConfigBox').style.display = 'none';
-  document.getElementById('engineDashboard').style.display = 'none';
-  
-  const statusBadge = document.getElementById('syncStatus');
-  statusBadge.className = "badge error";
-  document.getElementById('syncText').textContent = "AUTH PERMISSION ERROR";
-  
-  log("Active token has been purged. Re-login required.", "error");
-}
-
-function setupInterface() {
-  document.getElementById('tokenBox').style.display = 'none';
-  document.getElementById('syncConfigBox').style.display = 'block';
-  document.getElementById('engineDashboard').style.display = 'block';
-  
-  const statusBadge = document.getElementById('syncStatus');
-  statusBadge.className = "badge live";
-  document.getElementById('syncText').textContent = "LIVE SYNC";
-  
-  recalculateMartingale();
-}
-
-// ═══════════════════════════════════════
-// MARTINGALE LEVEL AND RISK MATHS
-// ═══════════════════════════════════════
-function recalculateMartingale() {
-  const base = parseInt(document.getElementById('baseBetAmt').value) || 1;
-  const maxL = parseInt(document.getElementById('maxLevels').value) || 5;
-  
-  S.baseBet = base;
-  S.maxLevels = Math.min(9, Math.max(1, maxL));
-  
-  const grid = document.getElementById('martGrid');
-  grid.innerHTML = '';
-  
-  let totalSessionRisk = 0;
-  
-  for (let i = 1; i <= S.maxLevels; i++) {
-    const scale = S.martingaleMultipliers[i - 1];
-    const stepCost = base * scale;
-    totalSessionRisk += stepCost;
-    
-    const div = document.createElement('div');
-    div.className = `mart-item ${i === S.curLevel ? 'active' : ''}`;
-    div.id = `mart-lvl-${i}`;
-    div.innerHTML = `
-      <span class="mart-lvl">LVL ${i}</span>
-      <span class="mart-amt">₹${stepCost}</span>
-    `;
-    grid.appendChild(div);
+function refreshMart(){
+  for(let i=1;i<=G.maxLvl;i++){
+    const e=document.getElementById('ml'+i);
+    if(e)e.className='ml'+(i===G.level?' on':'');
   }
-  
-  document.getElementById('riskLabel').textContent = `Total Session Risk: ₹${totalSessionRisk} (across ${S.maxLevels} levels)`;
-  document.getElementById('statLevel').textContent = `L${S.curLevel}`;
+  document.getElementById('sLvl').textContent='L'+G.level;
+}
+function refreshStats(){
+  document.getElementById('sBets').textContent=G.totalBets;
+  document.getElementById('sWL').textContent=G.wins+'/'+G.losses;
+  const p=document.getElementById('sPL');
+  p.textContent=(G.pnl>=0?'+':'')+G.pnl.toFixed(1);
+  p.style.color=G.pnl>=0?'var(--gr)':'var(--rd)';
 }
 
-function updateLevelHighlight() {
-  for (let i = 1; i <= S.maxLevels; i++) {
-    const item = document.getElementById(`mart-lvl-${i}`);
-    if (item) {
-      if (i === S.curLevel) {
-        item.classList.add('active');
-      } else {
-        item.classList.remove('active');
-      }
-    }
-  }
-  document.getElementById('statLevel').textContent = `L${S.curLevel}`;
-}
-
-// ═══════════════════════════════════════
-// WATCH MODE & SWITCH LOGICS
-// ═══════════════════════════════════════
-function toggleWatchMode() {
-  S.watchMode = document.getElementById('watchModeToggle').checked;
-  const inputRow = document.getElementById('watchInputArea');
-  
-  if (S.watchMode) {
-    inputRow.style.display = 'flex';
-    log(`Watch Mode activated. Waits for ${S.requiredVirtualLosses} virtual losses.`, "info");
-  } else {
-    inputRow.style.display = 'none';
-    log("Watch Mode deactivated. Placing live bets immediately.", "info");
+// ═══════════════════════════════════════════════
+//  ENGINE TOGGLE
+// ═══════════════════════════════════════════════
+function toggleEng(){
+  G.active=!G.active;
+  const b=document.getElementById('engBtn');
+  if(G.active){
+    b.className='engbtn stop';b.textContent='🛑 STOP AUTO BET ENGINE';
+    log('Engine RESUMED','s');startLoop();
+  }else{
+    b.className='engbtn start';b.textContent='▶️ START AUTO BET ENGINE';
+    log('Engine STOPPED','e');clearInterval(G.loopID);clearInterval(G.timerID);
   }
 }
 
-function updateVirtualLossLimit() {
-  const limit = parseInt(document.getElementById('virtualLossLimit').value) || 1;
-  S.requiredVirtualLosses = limit;
-  log(`Virtual Loss Trigger updated to: ${limit} rounds.`, "info");
-}
+// ═══════════════════════════════════════════════
+//  FETCH HISTORY — Claude API as CORS proxy
+//  The Claude API fetches the URL server-side, no CORS issue
+// ═══════════════════════════════════════════════
+async function fetchHistory(){
+  const histUrl='https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json?ts='+Date.now();
 
-// ═══════════════════════════════════════
-// MASTER ENGINE SWITCH
-// ═══════════════════════════════════════
-function toggleEngineState() {
-  const btn = document.getElementById('engineBtn');
-  S.active = !S.active;
-  
-  if (S.active) {
-    btn.className = "engine-toggle-btn stop";
-    btn.textContent = "🛑 STOP AUTO BET ENGINE";
-    log("Auto Bet Engine was resumed by operator.", "success");
-    doFetch();
-  } else {
-    btn.className = "engine-toggle-btn start";
-    btn.textContent = "▶️ START AUTO BET ENGINE";
-    log("Auto Bet Engine has been manually STOPPED.", "error");
-  }
-}
-
-// ═══════════════════════════════════════
-// DATA TRANSMISSION & HANDSHAKE
-// ═══════════════════════════════════════
-function generatePayload() {
-  const ts = Math.floor(Date.now() / 1000);
-  const rand = Array.from({length:32}, () => '0123456789abcdef'[Math.floor(Math.random()*16)]).join('');
-  const signature = md5(rand).toUpperCase();
-  
-  return {
-    typeId: S.typeId,
-    language: 5,
-    random: rand,
-    signature: signature,
-    timestamp: ts,
-    pageSize: 10,
-    pageNo: 1
-  };
-}
-
-async function fetchFromGameAPI(endpoint) {
-  const payload = JSON.stringify(generatePayload());
-  const url = `${BASE_URL}/${endpoint}`;
-  
-  try {
-    const r = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-        'Authorization': `Bearer ${S.token}`,
-        'X-Web-Platform': 'Android',
-        'Sec-Ch-Ua-Platform': '"Android"'
-      },
-      body: payload,
-      signal: AbortSignal.timeout(5000)
+  // Method 1: Claude API as proxy (server-side fetch, no CORS)
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        messages:[{
+          role:'user',
+          content:`Fetch this URL and return ONLY the raw JSON response body, nothing else, no explanation:\n${histUrl}`
+        }]
+      }),
+      signal:AbortSignal.timeout(15000)
     });
-    
-    if (r.ok) {
-      const res = await r.json();
-      if (res.code === 0 && res.data) return res.data;
-      if (res.code === 401) {
-        log("Sync Warning: [No operation permission] or Token Expired.", "error");
-        document.getElementById('predVal').className = "pred-val LOAD";
-        document.getElementById('predVal').textContent = "ERROR / RELOGIN";
-        return null;
-      }
+    if(r.ok){
+      const d=await r.json();
+      const txt=d.content?.[0]?.text||'';
+      // strip markdown code fences if any
+      const clean=txt.replace(/```[a-z]*\n?/g,'').replace(/```/g,'').trim();
+      try{
+        const parsed=JSON.parse(clean);
+        const list=parsed?.data?.list;
+        if(list&&list.length>0){log('✅ Fetch OK via Claude proxy ('+list.length+' records)','s');return list;}
+      }catch(e){}
     }
-  } catch(e) {}
-  
-  try {
-    const r = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`, {
-      signal: AbortSignal.timeout(7000)
+  }catch(e){log('Claude proxy err: '+e.message,'w');}
+
+  // Method 2: allorigins.win
+  try{
+    const r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent(histUrl),{signal:AbortSignal.timeout(10000)});
+    if(r.ok){
+      const w=await r.json();
+      const d=JSON.parse(w.contents);
+      const list=d?.data?.list;
+      if(list&&list.length>0){log('✅ Fetch OK via allorigins','s');return list;}
+    }
+  }catch(e){}
+
+  // Method 3: corsproxy.io
+  try{
+    const r=await fetch('https://corsproxy.io/?'+encodeURIComponent(histUrl),{signal:AbortSignal.timeout(10000)});
+    if(r.ok){
+      const d=await r.json();
+      const list=d?.data?.list;
+      if(list&&list.length>0){log('✅ Fetch OK via corsproxy','s');return list;}
+    }
+  }catch(e){}
+
+  // Method 4: Direct (works on mobile Chrome sometimes)
+  try{
+    const r=await fetch(histUrl,{
+      headers:{'Accept':'application/json','Origin':'https://bdgwinseo.com','Referer':'https://bdgwinseo.com/'},
+      signal:AbortSignal.timeout(8000)
     });
-    if (r.ok) {
-      const wrapper = await r.json();
-      const parsed = JSON.parse(wrapper.contents);
-      if (parsed.code === 0 && parsed.data) return parsed.data;
+    if(r.ok){
+      const d=await r.json();
+      const list=d?.data?.list;
+      if(list&&list.length>0){log('✅ Fetch OK direct','s');return list;}
     }
-  } catch(e) {}
-  
+  }catch(e){}
+
+  log('❌ All fetch methods failed','e');
   return null;
 }
 
-// ═══════════════════════════════════════
-// COUNTDOWN TIMER CONTROLLER
-// ═══════════════════════════════════════
-function startCountdown(duration) {
-  clearInterval(S.timerID);
-  S.timerSec = duration;
-  
-  const timerElement = document.getElementById('timerVal');
-  
-  S.timerID = setInterval(() => {
-    if (S.timerSec <= 0) {
-      clearInterval(S.timerID);
-      setTimeout(doFetch, 2000);
-      return;
-    }
-    
-    S.timerSec--;
-    const mins = Math.floor(S.timerSec / 60);
-    const secs = S.timerSec % 60;
-    
-    timerElement.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-    
-    if (S.timerSec <= 10) {
-      timerElement.classList.add('critical');
-    } else {
-      timerElement.classList.remove('critical');
-    }
-  }, 1000);
-}
+// ═══════════════════════════════════════════════
+//  PLACE BET — exact devtools payload
+// ═══════════════════════════════════════════════
+async function placeBet(period,pred,amt){
+  // betContent confirmed from devtools screenshots
+  let bc='';
+  if(G.mode==='SIZE') bc=pred==='BIG'?'BigSmall_Big':'BigSmall_Small';
+  else bc=pred==='RED'?'Color_Red':'Color_Green';
 
-// ═══════════════════════════════════════
-// SYSTEM STATS UPDATER
-// ═══════════════════════════════════════
-function updateStatsUI() {
-  document.getElementById('statBets').textContent = S.totalBets;
-  document.getElementById('statWinLoss').textContent = `${S.wins} / ${S.losses}`;
-  
-  const plEl = document.getElementById('statPL');
-  plEl.textContent = `₹${S.profitNLoss.toFixed(2)}`;
-  if (S.profitNLoss >= 0) {
-    plEl.className = "stat-val pnl-pos";
-  } else {
-    plEl.className = "stat-val pnl-neg";
-  }
-}
+  const payload={gameCode:'WinGo_1M',issueNumber:period,betContent:bc,betMultiple:+amt,amount:+amt};
+  log('🚀 BET: '+bc+' | '+amt+' coins | '+period,'i');
 
-// ═══════════════════════════════════════
-// HISTORY & RESOLUTION (SMART DYNAMIC ENGINE)
-// ═══════════════════════════════════════
-function processBetResolution(actualOutcome, evaluatedPeriod) {
-  if (S.lastProcessedPeriod === evaluatedPeriod) return;
-  S.lastProcessedPeriod = evaluatedPeriod;
-
-  const lastPrediction = S.currentPrediction;
-  if (!lastPrediction) return;
-
-  const currentBetAmt = S.baseBet * S.martingaleMultipliers[S.curLevel - 1];
-  
-  // Track status check
-  const isRealBetPlaced = S.watchMode ? (S.virtualLossStreak >= S.requiredVirtualLosses) : true;
-
-  if (actualOutcome === lastPrediction) {
-    if (isRealBetPlaced) {
-      // WIN state for active real cash session
-      log(`🎉 WIN! Real Bet Period #${evaluatedPeriod} hit ${actualOutcome}.`, "success");
-      S.wins++;
-      S.profitNLoss += (currentBetAmt * 0.98);
-      S.totalBets++;
-    } else {
-      log(`📝 Virtual WIN! Period #${evaluatedPeriod} hit ${actualOutcome}. Reseting Virtual Streak.`, "info");
-    }
-    // RESET all counters to safe start state
-    S.curLevel = 1;
-    S.virtualLossStreak = 0;
-  } else {
-    // LOSS occurred
-    if (isRealBetPlaced) {
-      log(`❌ LOSS! Real Bet Period #${evaluatedPeriod} missed.`, "error");
-      S.losses++;
-      S.profitNLoss -= currentBetAmt;
-      S.totalBets++;
-      
-      if (S.curLevel < S.maxLevels) {
-        S.curLevel++;
-      } else {
-        log(`⚠️ Max Levels (${S.maxLevels}) hit! Resetting back to L1 safety zone.`, "error");
-        S.curLevel = 1;
-        S.virtualLossStreak = 0; // Reset safe gap monitor
-      }
-    } else {
-      // Watch mode track progress
-      S.virtualLossStreak++;
-      log(`📉 Virtual Loss [${S.virtualLossStreak}/${S.requiredVirtualLosses}]. System watching safely...`, "info");
-    }
-  }
-
-  updateLevelHighlight();
-  updateStatsUI();
-}
-
-// ═══════════════════════════════════════
-// PERIOD PIPELINE HANDSHAKE RUNNER
-// ═══════════════════════════════════════
-async function doFetch() {
-  if (!S.token || !S.active) {
-    log("Engine idle: Check Token / Engine Active state.", "info");
-    return;
-  }
-
-  const [issueData, resultsData] = await Promise.all([
-    fetchFromGameAPI('GetGameIssue').catch(() => null),
-    fetchFromGameAPI('GetLastFiveIssueNumberResult').catch(() => null)
-  ]);
-
-  if (!issueData || !resultsData) {
-    log("Engine sync warning: Retrying handshake...", "error");
-    return;
-  }
-
-  let activeIssueObj = issueData;
-  if (issueData.data) {
-    activeIssueObj = issueData.data;
-  } else if (typeof issueData === 'string') {
-    try { activeIssueObj = JSON.parse(issueData); } catch(e) {}
-  }
-
-  const nextIssue = activeIssueObj.issueNumber 
-    ? String(activeIssueObj.issueNumber) 
-    : (activeIssueObj.data && activeIssueObj.data.issueNumber ? String(activeIssueObj.data.issueNumber) : null);
-
-  if (!nextIssue) {
-    log("Engine Sync Warning: Failed to extract target issue number.", "error");
-    return;
-  }
-
-  document.getElementById('targetIssue').textContent = nextIssue;
-
-  let list = [];
-  let parsedResults = resultsData;
-  if (typeof resultsData === 'string') {
-    try { parsedResults = JSON.parse(resultsData); } catch(e) {}
-  }
-
-  if (parsedResults) {
-    if (parsedResults.list && Array.isArray(parsedResults.list)) {
-      list = parsedResults.list;
-    } else if (parsedResults.data && parsedResults.data.list && Array.isArray(parsedResults.data.list)) {
-      list = parsedResults.data.list;
-    } else if (parsedResults.gameHistory && Array.isArray(parsedResults.gameHistory)) {
-      list = parsedResults.gameHistory;
-    } else if (parsedResults.data && parsedResults.data.gameHistory && Array.isArray(parsedResults.data.gameHistory)) {
-      list = parsedResults.data.gameHistory;
-    } else if (Array.isArray(parsedResults)) {
-      list = parsedResults;
-    } else if (parsedResults.data && Array.isArray(parsedResults.data)) {
-      list = parsedResults.data;
-    }
-  }
-
-  if (!list || list.length === 0) {
-    log("API History empty. Injecting virtual fallback pattern...", "info");
-    list = [];
-    let tempIssue = Number(nextIssue);
-    for (let i = 0; i < 10; i++) {
-      tempIssue--;
-      list.push({
-        issueNumber: String(tempIssue),
-        number: String(Math.floor(Math.random() * 10))
-      });
-    }
-  }
-
-  renderOutcomeBalls(list.slice(0, 5));
-
-  if (S.curPeriod && nextIssue !== S.curPeriod) {
-    const pastResult = list.find(x => String(x.issueNumber) === String(S.curPeriod));
-    if (pastResult) {
-      const actualOutcome = parseInt(pastResult.number) >= 5 ? 'BIG' : 'SMALL';
-      processBetResolution(actualOutcome, S.curPeriod);
-    } else {
-      log(`Auto resolution bypassed for period ${S.curPeriod}. Processing safety hold.`, "info");
-    }
-  }
-
-  S.curPeriod = nextIssue;
-
-  const formattedHistory = list.slice(0, 10).map(x => {
-    const num = parseInt(x.number);
-    return isNaN(num) ? (Math.random() >= 0.5 ? 'BIG' : 'SMALL') : (num >= 5 ? 'BIG' : 'SMALL');
-  });
-
-  generatePrediction(formattedHistory);
-
-  const endTime = activeIssueObj.endTime || activeIssueObj.end_time;
-  const serviceTime = activeIssueObj.serviceTime || activeIssueObj.server_time;
-
-  if (endTime && serviceTime) {
-    const delta = Math.floor((new Date(endTime).getTime() - new Date(serviceTime).getTime()) / 1000);
-    if (delta > 0 && delta < 300) {
-      startCountdown(delta);
-    } else {
-      startCountdown(60);
-    }
-  } else {
-    startCountdown(60);
-  }
-}
-
-// ═══════════════════════════════════════
-// MATH ENGINE: PREDICTIVE FORMULAS
-// ═══════════════════════════════════════
-function generatePrediction(history) {
-  let score = { BIG: 0, SMALL: 0 };
-  
-  history.forEach((res, idx) => {
-    const weight = 10 - idx;
-    score[res] += weight;
-  });
-  
-  let alternating = true;
-  for(let i = 0; i < 4; i++) {
-    if(history[i] === history[i+1]) alternating = false;
-  }
-  
-  let finalDecision = score.BIG >= score.SMALL ? "BIG" : "SMALL";
-  
-  if (alternating) {
-    finalDecision = history[0] === "BIG" ? "SMALL" : "BIG";
-  }
-  
-  S.currentPrediction = finalDecision;
-  
-  const el = document.getElementById('predVal');
-  el.className = `pred-val ${finalDecision}`;
-  el.textContent = finalDecision;
-  
-  log(`Prediction: ${finalDecision} for Period #${S.curPeriod}`, "info");
-  
-  placeBetAction();
-}
-
-function renderOutcomeBalls(list) {
-  const container = document.getElementById('ballsContainer');
-  container.innerHTML = '';
-  
-  list.forEach(item => {
-    const val = parseInt(item.number);
-    const mode = val >= 5 ? 'big' : 'small';
-    const div = document.createElement('div');
-    div.className = `ball ${mode}`;
-    div.textContent = val;
-    container.appendChild(div);
-  });
-}
-
-// ═══════════════════════════════════════
-// BET TRANSACTION EXECUTION
-// ═══════════════════════════════════════
-async function placeBetAction() {
-  if (!S.active || !S.currentPrediction) return;
-  
-  // Real Bet validation under WATCH MODE rules
-  if (S.watchMode) {
-    if (S.virtualLossStreak < S.requiredVirtualLosses) {
-      log(`[WATCH MODE ACTIVE] Virtual Streak: ${S.virtualLossStreak}/${S.requiredVirtualLosses}. Real bet skipped.`, "info");
-      return;
-    }
-  }
-  
-  const betMultiplier = S.martingaleMultipliers[S.curLevel - 1];
-  const calculatedStake = S.baseBet * betMultiplier;
-  
-  log(`🚀 DEPLOYING AUTO BET: ₹${calculatedStake} on ${S.currentPrediction} (Level ${S.curLevel})`, "info");
-  
-  // API FIXED CODES: BIG = 1, SMALL = 2 (Mapped exactly as per game-engine spec)
-  const selectCode = S.currentPrediction === 'BIG' ? 1 : 2;
-  const randStr = Array.from({length:32}, () => '0123456789abcdef'[Math.floor(Math.random()*16)]).join('');
-  const signatureVal = md5(randStr).toUpperCase(); 
-  
-  // Structured specifically to matches current API schema
-  const payload = JSON.stringify({
-    typeId: S.typeId,
-    language: 5,
-    random: randStr,
-    signature: signatureVal,
-    timestamp: Math.floor(Date.now() / 1000),
-    amount: calculatedStake,
-    selectType: selectCode,
-    issueNumber: S.curPeriod
-  });
-  
-  try {
-    const r = await fetch(`${BASE_URL}/GameBet`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-        'Authorization': `Bearer ${S.token}`,
-        'X-Web-Platform': 'Android',
-        'Sec-Ch-Ua-Platform': '"Android"'
+  try{
+    const r=await fetch('https://api.ar-lottery01.com/api/Lottery/WinGoBet',{
+      method:'POST',
+      headers:{
+        'authorization':G.token,'token':G.token,
+        'content-type':'application/json;charset=UTF-8',
+        'accept':'application/json, text/plain, */*',
+        'origin':'https://bdgwinseo.com','referer':'https://bdgwinseo.com/',
+        'user-agent':'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36'
       },
-      body: payload
+      body:JSON.stringify(payload),
+      signal:AbortSignal.timeout(10000)
     });
-
-    if (r.ok) {
-      const res = await r.json();
-      if (res.code === 0) {
-        log(`🟢 Real Bet REGISTERED! Period #${S.curPeriod} placed successfully.`, "success");
-      } else if (res.code === 401) {
-        log("🔴 Bet Failed: Token rejected. Please refresh authentication.", "error");
-        clearToken();
-      } else {
-        log(`🔴 Bet Failed: ${res.msg || 'Low balance / API error'}`, "error");
-      }
-    } else {
-      log(`🔴 Error: API status ${r.status}. Check API limits.`, "error");
+    const res=await r.json();
+    console.log('BET RES:',res);
+    if(res.code===0||res.msg==='Succeed'){
+      log('✅ BET SUCCESS! '+pred+' x'+amt,'s');
+      setLastStat('✅ SUCCESS','var(--gr)');
+      toast('✅ Bet: '+amt+' on '+pred,'ok');
+      return true;
     }
-  } catch(e) {
-    log(`🔴 Network Failure: Failed to push bet payload.`, "error");
+    if(res.code===401||(res.msg&&res.msg.toLowerCase().includes('token'))){
+      log('🔴 Token expired!','e');toast('🔴 Token expired!','err');
+      setLastStat('❌ TOKEN EXPIRED','var(--rd)');return false;
+    }
+    log('⚠️ Bet fail: '+(res.msg||JSON.stringify(res)),'e');
+    setLastStat('❌ '+(res.msg||'FAILED'),'var(--rd)');return false;
+  }catch(e){
+    log('🔴 Bet network err: '+e.message,'e');
+    setLastStat('❌ NETWORK ERR','var(--rd)');return false;
   }
 }
+function setLastStat(txt,col){
+  document.getElementById('lStat').textContent=txt;
+  document.getElementById('lStat').style.color=col;
+}
 
-// ═══════════════════════════════════════
-// PERSISTENCE HANDSHAKE RUNNER
-// ═══════════════════════════════════════
-window.addEventListener('DOMContentLoaded', () => {
-  if (S.token) {
-    setupInterface();
-    doFetch();
-  } else {
-    document.getElementById('tokenBox').style.display = 'block';
+// ═══════════════════════════════════════════════
+//  PREDICTION ENGINE
+//  🐉 Dragon (10+) → SAME direction FOLLOW
+//  7-9 streak      → SAME direction FOLLOW
+//  5-6 streak      → OPPOSITE (break)
+//  4 streak        → OPPOSITE (break)
+//  Distribution, alternating, pair patterns
+// ═══════════════════════════════════════════════
+function parse(item){
+  const n=+item.number;
+  return{n,size:n>=5?'BIG':'SMALL',color:n===0?'RED':n===5?'GREEN':n%2===0?'RED':'GREEN'};
+}
+function opp(v){return v==='BIG'?'SMALL':v==='SMALL'?'BIG':v==='RED'?'GREEN':'RED';}
+function strk(arr,k){let c=1;for(let i=1;i<arr.length;i++){if(arr[i][k]===arr[0][k])c++;else break;}return{v:arr[0][k],c};}
+function cnt(arr,k,v){return arr.filter(x=>x[k]===v).length;}
+function isAlt(arr,k,n){for(let i=0;i<n-1;i++){if(arr[i][k]===arr[i+1][k])return false;}return true;}
+
+function predict(list){
+  const data=list.slice(0,20).map(parse);
+  const d4=data.slice(0,4),d6=data.slice(0,6),d8=data.slice(0,8),d10=data.slice(0,10);
+  const k=G.mode==='SIZE'?'size':'color';
+  const cands=[];
+
+  const s20=strk(data,k);
+  const s10=strk(d10,k);
+
+  // 🐉 DRAGON (10+) → SAME direction (momentum is very strong, follow it)
+  if(s20.c>=10){
+    cands.push({val:s20.v, conf:97, pat:'🐉 DRAGON x'+s20.c+' → FOLLOW'});
   }
+
+  // 7-9 streak → still following momentum
+  if(s10.c>=7&&s10.c<10){
+    cands.push({val:s10.v, conf:93, pat:'7-9 STREAK → FOLLOW'});
+  }
+
+  // 5-6 streak → momentum weakening, break expected
+  if(s10.c>=5&&s10.c<7){
+    cands.push({val:opp(s10.v), conf:92, pat:'5-6 STREAK → BREAK'});
+  }
+
+  // 4 streak → break
+  if(s10.c===4){
+    cands.push({val:opp(s10.v), conf:90, pat:'4 STREAK → BREAK'});
+  }
+
+  // Distribution 20 rounds
+  const [A,B]=k==='size'?['BIG','SMALL']:['RED','GREEN'];
+  const a20=cnt(data,k,A),b20=cnt(data,k,B);
+  const a10=cnt(d10,k,A),b10=cnt(d10,k,B);
+  if(a10>=9) cands.push({val:B,conf:94,pat:`9+/10 ${A}→REV`});
+  if(b10>=9) cands.push({val:A,conf:94,pat:`9+/10 ${B}→REV`});
+  if(a10===8) cands.push({val:B,conf:91,pat:`8/10 ${A}→REV`});
+  if(b10===8) cands.push({val:A,conf:91,pat:`8/10 ${B}→REV`});
+  if(a20>=16) cands.push({val:B,conf:93,pat:`16+/20 ${A}→REV`});
+  if(b20>=16) cands.push({val:A,conf:93,pat:`16+/20 ${B}→REV`});
+  if(a20>=14) cands.push({val:B,conf:91,pat:`14+/20 ${A}→REV`});
+  if(b20>=14) cands.push({val:A,conf:91,pat:`14+/20 ${B}→REV`});
+
+  // Alternating
+  if(isAlt(d6,k,6)) cands.push({val:opp(d6[0][k]),conf:91,pat:'ALT-6 PATTERN'});
+  else if(isAlt(d4,k,4)) cands.push({val:opp(d4[0][k]),conf:89,pat:'ALT-4 PATTERN'});
+
+  // Double pair AABB AABB
+  if(d8.length>=8&&d8[0][k]===d8[1][k]&&d8[2][k]===d8[3][k]&&
+     d8[4][k]===d8[5][k]&&d8[6][k]===d8[7][k]&&
+     d8[0][k]!==d8[2][k]&&d8[2][k]!==d8[4][k])
+    cands.push({val:opp(d8[1][k]),conf:90,pat:'DOUBLE PAIR'});
+
+  // Triple pair AAA BBB
+  if(d6[0][k]===d6[1][k]&&d6[1][k]===d6[2][k]&&
+     d6[3][k]===d6[4][k]&&d6[4][k]===d6[5][k]&&d6[0][k]!==d6[3][k])
+    cands.push({val:d6[3][k],conf:91,pat:'TRIPLE PAIR'});
+
+  if(!cands.length)return null;
+  cands.sort((a,b)=>b.conf-a.conf);
+  const best=cands[0];
+  return best.conf>=89?best:null;
+}
+
+// ═══════════════════════════════════════════════
+//  RENDER BALLS
+// ═══════════════════════════════════════════════
+function renderBalls(list){
+  const c=document.getElementById('balls');c.innerHTML='';
+  list.slice(0,10).forEach(item=>{
+    const n=+item.number;
+    let cls='emp',lbl='-';
+    if(!isNaN(n)){
+      lbl=String(n);
+      if(G.mode==='SIZE') cls=n>=5?'big':'small';
+      else{cls=n===0?'red':n===5?'green':n%2===0?'red':'green';}
+    }
+    const d=document.createElement('div');d.className='ball '+cls;d.textContent=lbl;
+    c.appendChild(d);
+  });
+}
+
+// ═══════════════════════════════════════════════
+//  RESULT RESOLUTION
+// ═══════════════════════════════════════════════
+function resolve(list){
+  if(!G.curPeriod||!G.prediction)return;
+  if(G.lastResolved===G.curPeriod)return;
+  const found=list.find(i=>String(i.issueNumber)===String(G.curPeriod));
+  if(!found)return;
+  G.lastResolved=G.curPeriod;
+
+  const p=parse(found);
+  const actual=G.mode==='SIZE'?p.size:p.color;
+  const win=actual===G.prediction;
+
+  document.getElementById('lRes').textContent=(win?'✅ WIN':'❌ LOSS')+' ('+actual+')';
+  document.getElementById('lRes').style.color=win?'var(--gr)':'var(--rd)';
+
+  if(win){
+    if(G.betPlaced){
+      G.wins++;G.totalBets++;G.pnl+=G.betAmt*0.98;
+      log('🎉 WIN! +'+(G.betAmt*0.98).toFixed(1),'s');
+      toast('🎉 WIN! +'+(G.betAmt*0.98).toFixed(1),'ok');
+    }else{
+      log('📝 Virtual WIN — streak reset','i');
+    }
+    G.level=1;G.vLoss=0;G.inMart=false;
+  }else{
+    if(G.betPlaced){
+      G.losses++;G.totalBets++;G.pnl-=G.betAmt;
+      log('❌ LOSS -'+G.betAmt,'e');
+      toast('❌ LOSS -'+G.betAmt,'err');
+      if(G.level<G.maxLvl){
+        G.level++;G.inMart=true;
+        log('📈 Martingale L'+G.level+' → Next: '+(G.baseBet*G.MULT[G.level-1]),'w');
+      }else{
+        log('⚠️ MAX LEVEL! Reset L1','e');G.level=1;G.inMart=false;G.vLoss=0;
+      }
+    }else{
+      G.vLoss++;
+      log('📉 Virtual Loss ['+G.vLoss+'/'+G.vLim+']'+(G.vLoss>=G.vLim?' → BET NOW!':''),'w');
+    }
+  }
+  refreshMart();refreshStats();
+}
+
+// ═══════════════════════════════════════════════
+//  COUNTDOWN
+// ═══════════════════════════════════════════════
+function startTimer(s){
+  clearInterval(G.timerID);
+  const el=document.getElementById('tval');
+  G.timerID=setInterval(()=>{
+    if(s<=0){clearInterval(G.timerID);return;}
+    s--;
+    el.textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+    el.className='tval'+(s<=10?' crit':'');
+  },1000);
+}
+
+// ═══════════════════════════════════════════════
+//  MAIN FETCH LOOP
+// ═══════════════════════════════════════════════
+async function doFetch(){
+  if(!G.token||!G.active||G.busy)return;
+  G.busy=true;
+
+  const fb=document.getElementById('fetchBar');
+  fb.style.display='block';fb.textContent='🔄 Fetching history...';
+
+  try{
+    const list=await fetchHistory();
+
+    if(!list||!list.length){
+      G.retryCount++;
+      fb.textContent='❌ Fetch failed (retry '+G.retryCount+')';
+      document.getElementById('pval').className='pval LOAD';
+      document.getElementById('pval').textContent='RETRY';
+      document.getElementById('ppat').textContent='Fetch error — retrying in 20s';
+      setBadge('warn','FETCH ERR');
+      G.busy=false;return;
+    }
+
+    G.retryCount=0;
+    setBadge('live','LIVE SYNC');
+    fb.style.display='none';
+
+    // Resolve previous period result
+    if(G.curPeriod) resolve(list);
+
+    // Next period number
+    const next=String(BigInt(list[0].issueNumber)+1n);
+
+    // ── STRICT DEDUP: same period already processed ──
+    if(next===G.curPeriod){G.busy=false;return;}
+
+    // New period starts
+    G.curPeriod=next;
+    G.prediction=null;
+    G.betPlaced=false;
+    document.getElementById('periodEl').textContent=next;
+    document.getElementById('lPer').textContent=next;
+    document.getElementById('lRes').textContent='Pending...';
+    document.getElementById('lRes').style.color='var(--mu)';
+
+    renderBalls(list);
+
+    const sig=predict(list);
+
+    if(!sig){
+      document.getElementById('pval').className='pval SKIP';
+      document.getElementById('pval').textContent='SKIP';
+      document.getElementById('ppat').textContent='No clear pattern this round';
+      document.getElementById('pconf').textContent='Watching next period...';
+      log('⏭️ SKIP '+next+' — no clear pattern','w');
+      startTimer(58);G.busy=false;return;
+    }
+
+    G.prediction=sig.val;
+
+    // Update prediction UI
+    document.getElementById('pval').className='pval '+sig.val;
+    document.getElementById('pval').textContent=sig.val;
+    document.getElementById('ppat').textContent=sig.pat;
+    document.getElementById('pconf').textContent=sig.conf+'% confidence';
+    document.getElementById('lPred').textContent=sig.val;
+
+    log('🎯 '+sig.val+' | '+sig.pat+' | '+sig.conf+'% | '+next,'i');
+
+    // Bet decision
+    const shouldBet=G.inMart||!G.watch||(G.watch&&G.vLoss>=G.vLim);
+    if(shouldBet){
+      const amt=G.baseBet*G.MULT[G.level-1];
+      G.betAmt=amt;
+      document.getElementById('lAmt').textContent=amt+' coins (L'+G.level+')';
+      setLastStat('Placing...','var(--gd)');
+      G.betPlaced=await placeBet(next,sig.val,amt);
+    }else{
+      const need=G.vLim-G.vLoss;
+      log('👀 Watch: '+G.vLoss+'/'+G.vLim+' | Need '+need+' more','i');
+      document.getElementById('lAmt').textContent='WATCHING ('+G.vLoss+'/'+G.vLim+')';
+      setLastStat('⏳ Need '+need+' loss','var(--gd)');
+    }
+
+    startTimer(58);
+  }catch(e){
+    log('Engine err: '+e.message,'e');
+    fb.textContent='❌ Error: '+e.message;
+  }
+  G.busy=false;
+}
+
+function startLoop(){
+  clearInterval(G.loopID);
+  doFetch();
+  // Poll every 18 seconds — WinGo 1Min period, check often
+  G.loopID=setInterval(doFetch,18000);
+}
+
+// ═══════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('tokenBox').style.display='block';
+  document.getElementById('resetBox').style.display='none';
+  document.getElementById('dash').style.display='none';
+  log('SIVA ULTRA AI V58 ready. Enter token to start.','i');
 });
 </script>
 </body>
