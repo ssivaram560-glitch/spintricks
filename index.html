@@ -363,8 +363,10 @@ function toggleEng(){
 // ═══════════════════════════════════════════════
 //  FETCH HISTORY — Claude API as CORS proxy
 //  The Claude API fetches the URL server-side, no CORS issue
+// ══════════════════════════════════async function fetchHistory()
 // ═══════════════════════════════════════════════
-async function fetchHistory(){
+//  FETCH HISTORY - Direct with Extension
+// ═══════════════════════════════════════════════
 async function fetchHistory(){
   const histUrl = 'https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json?ts=' + Date.now();
   try {
@@ -372,7 +374,7 @@ async function fetchHistory(){
       method: 'GET',
       headers: {
         'Accept': 'application/json',
-        'Authorization': G.token // Fresh token inga use aagum
+        'Authorization': G.token 
       }
     });
     if(r.ok) {
@@ -383,10 +385,11 @@ async function fetchHistory(){
       }
     }
   } catch(e) {
-    log('❌ Extension OFF-la irukku! ON pannunga.', 'e');
+    log('❌ Network/CORS Error! Check Extension.', 'e');
   }
   return null;
 }
+
 
 
 // ═══════════════════════════════════════════════
