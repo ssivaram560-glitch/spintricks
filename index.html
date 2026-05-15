@@ -408,53 +408,60 @@ function setLastStat(txt, col) {
 //  PLACE BET — exact devtools payload
 // ═══════════════════════════════════════════════
 async function placeBet(period, pred, amt) {
-  // Bearer token check
   const finalToken = G.token.startsWith('Bearer ') ? G.token : 'Bearer ' + G.token;
   
-  let bc = (G.mode === 'SIZE') ? (pred === 'BIG' ? 'BigSmall_Big' : 'BigSmall_Small') : (pred === 'RED' ? 'Color_Red' : 'Color_Green');
+  // Mapping based on your payload screenshot
+  let bc = "";
+  if (G.mode === 'SIZE') {
+    bc = (pred === 'BIG') ? 'BigSmall_Big' : 'BigSmall_Small';
+  } else {
+    bc = (pred === 'RED') ? 'Color_Red' : 'Color_Green';
+  }
 
-  // Idha thaan nee replace pannanum
-const payload = {
-  gameCode: 'WinGo_1M',
-  issueNumber: period,
-  betContent: bc,
-  // amt-ah direct-ah betMultiple-la podu
-  betMultiple: Number(amt), 
-  // amount eppovum 1-ah irukanum
-  amount: 1 
-};
-
+  // Exact Payload structure from your screenshot
+  const payload = {
+    amount: 1,
+    betContent: bc,
+    betMultiple: Number(amt),
+    gameCode: "WinGo_1M",
+    issueNumber: period,
+    language: "en"
+  };
 
   try {
     const r = await fetch('https://api.ar-lottery01.com/api/Lottery/WinGoBet', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
-        'Authorization': finalToken, // Fix: Correct Bearer format
-        'Accept': 'application/json'
+        'Authorization': finalToken,
+        'Accept': 'application/json',
+        'Origin': 'https://bdgwinseo.com',
+        'Referer': 'https://bdgwinseo.com/'
       },
       body: JSON.stringify(payload)
     });
 
     const res = await r.json();
     
+    // Check for success or signature error
     if (res.code === 0 || res.msg === 'Succeed') {
-      log('✅ BET SUCCESS! Amount: ' + amt, 's');
+      log('✅ BET SUCCESS! Amt: ' + amt, 's');
       setLastStat('SUCCESS', 'var(--gr)');
       return true;
     } else {
-      log('❌ Fail: ' + (res.msg || 'Error'), 'e');
+      log('❌ Server Message: ' + (res.msg || 'Error'), 'e');
+      if(res.msg.includes('signature')) {
+         log('⚠️ Security signature required. Use manual betting.', 'w');
+      }
       setLastStat('FAILED', 'var(--rd)');
       return false;
     }
   } catch (e) {
-    log('🔴 Bet Error: ' + e.message, 'e');
+    log('🔴 Connection Error: ' + e.message, 'e');
     setLastStat('ERROR', 'var(--rd)');
     return false;
   }
 }
-
-
 
 // ═══════════════════════════════════════════════
 //  PREDICTION ENGINE
