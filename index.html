@@ -404,14 +404,17 @@ function setLastStat(txt, col) {
 //  PLACE BET — exact devtools payload
 // ═══════════════════════════════════════════════
 async function placeBet(period, pred, amt) {
+  // Bearer token check
+  const finalToken = G.token.startsWith('Bearer ') ? G.token : 'Bearer ' + G.token;
+  
   let bc = (G.mode === 'SIZE') ? (pred === 'BIG' ? 'BigSmall_Big' : 'BigSmall_Small') : (pred === 'RED' ? 'Color_Red' : 'Color_Green');
 
   const payload = {
     gameCode: 'WinGo_1M',
     issueNumber: period,
     betContent: bc,
-    betMultiple: +amt,
-    amount: +amt
+    betMultiple: 1, // Fix: Use 1 as base multiple
+    amount: Number(amt) // Fix: Ensure amount is a number
   };
 
   try {
@@ -419,28 +422,30 @@ async function placeBet(period, pred, amt) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
-        'Authorization': G.token,
+        'Authorization': finalToken, // Fix: Correct Bearer format
         'Accept': 'application/json'
       },
       body: JSON.stringify(payload)
     });
 
-    const text = await r.text(); // JSON-ah direct-ah edukama text-ah edukkarom
-    if (!text) throw new Error("Empty Response");
-
-    const res = JSON.parse(text);
+    const res = await r.json();
+    
     if (res.code === 0 || res.msg === 'Succeed') {
-      log('✅ BET SUCCESS!', 's');
+      log('✅ BET SUCCESS! Amount: ' + amt, 's');
+      setLastStat('SUCCESS', 'var(--gr)');
       return true;
     } else {
       log('❌ Fail: ' + (res.msg || 'Error'), 'e');
+      setLastStat('FAILED', 'var(--rd)');
       return false;
     }
   } catch (e) {
     log('🔴 Bet Error: ' + e.message, 'e');
+    setLastStat('ERROR', 'var(--rd)');
     return false;
   }
 }
+
 
 
 // ═══════════════════════════════════════════════
