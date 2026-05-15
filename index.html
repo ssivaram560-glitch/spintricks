@@ -395,51 +395,45 @@ async function fetchHistory(){
 // ═══════════════════════════════════════════════
 //  PLACE BET — exact devtools payload
 // ═══════════════════════════════════════════════
-async function placeBet(period,pred,amt){
-  // betContent confirmed from devtools screenshots
-  let bc='';
-  if(G.mode==='SIZE') bc=pred==='BIG'?'BigSmall_Big':'BigSmall_Small';
-  else bc=pred==='RED'?'Color_Red':'Color_Green';
+async function placeBet(period, pred, amt) {
+  let bc = (G.mode === 'SIZE') ? (pred === 'BIG' ? 'BigSmall_Big' : 'BigSmall_Small') : (pred === 'RED' ? 'Color_Red' : 'Color_Green');
 
-  const payload={gameCode:'WinGo_1M',issueNumber:period,betContent:bc,betMultiple:+amt,amount:+amt};
-  log('🚀 BET: '+bc+' | '+amt+' coins | '+period,'i');
+  const payload = {
+    gameCode: 'WinGo_1M',
+    issueNumber: period,
+    betContent: bc,
+    betMultiple: +amt,
+    amount: +amt
+  };
 
-  try{
-    const r=await fetch('https://api.ar-lottery01.com/api/Lottery/WinGoBet',{
-      method:'POST',
-      headers:{
-        'authorization':G.token,'token':G.token,
-        'content-type':'application/json;charset=UTF-8',
-        'accept':'application/json, text/plain, */*',
-        'origin':'https://bdgwinseo.com','referer':'https://bdgwinseo.com/',
-        'user-agent':'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36'
+  try {
+    const r = await fetch('https://api.ar-lottery01.com/api/Lottery/WinGoBet', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Authorization': G.token,
+        'Accept': 'application/json'
       },
-      body:JSON.stringify(payload),
-      signal:AbortSignal.timeout(10000)
+      body: JSON.stringify(payload)
     });
-    const res=await r.json();
-    console.log('BET RES:',res);
-    if(res.code===0||res.msg==='Succeed'){
-      log('✅ BET SUCCESS! '+pred+' x'+amt,'s');
-      setLastStat('✅ SUCCESS','var(--gr)');
-      toast('✅ Bet: '+amt+' on '+pred,'ok');
+
+    const text = await r.text(); // JSON-ah direct-ah edukama text-ah edukkarom
+    if (!text) throw new Error("Empty Response");
+
+    const res = JSON.parse(text);
+    if (res.code === 0 || res.msg === 'Succeed') {
+      log('✅ BET SUCCESS!', 's');
       return true;
+    } else {
+      log('❌ Fail: ' + (res.msg || 'Error'), 'e');
+      return false;
     }
-    if(res.code===401||(res.msg&&res.msg.toLowerCase().includes('token'))){
-      log('🔴 Token expired!','e');toast('🔴 Token expired!','err');
-      setLastStat('❌ TOKEN EXPIRED','var(--rd)');return false;
-    }
-    log('⚠️ Bet fail: '+(res.msg||JSON.stringify(res)),'e');
-    setLastStat('❌ '+(res.msg||'FAILED'),'var(--rd)');return false;
-  }catch(e){
-    log('🔴 Bet network err: '+e.message,'e');
-    setLastStat('❌ NETWORK ERR','var(--rd)');return false;
+  } catch (e) {
+    log('🔴 Bet Error: ' + e.message, 'e');
+    return false;
   }
 }
-function setLastStat(txt,col){
-  document.getElementById('lStat').textContent=txt;
-  document.getElementById('lStat').style.color=col;
-}
+
 
 // ═══════════════════════════════════════════════
 //  PREDICTION ENGINE
