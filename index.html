@@ -278,18 +278,22 @@ function toast(msg,t='w'){
 //  TOKEN SETUP
 // ═══════════════════════════════════════════════
 function saveToken(){
-  let raw=document.getElementById('tokenInput').value.trim().replace(/^Bearer\s+/i,'').trim();
-  if(raw.length<20){toast('⚠️ Invalid token!','err');return;}
-  G.token=raw;
-  document.getElementById('tokenBox').style.display='none';
-  document.getElementById('resetBox').style.display='block';
-  document.getElementById('dash').style.display='block';
-  setBadge('live','LIVE SYNC');
+  let raw = document.getElementById('tokenInput').value.trim();
+  if(raw.length < 20){ toast('⚠️ Invalid token!', 'err'); return; }
+  
+  // Token-la "Bearer " illana adha add pannikun
+  G.token = raw.startsWith('Bearer ') ? raw : 'Bearer ' + raw;
+
+  document.getElementById('tokenBox').style.display = 'none';
+  document.getElementById('resetBox').style.display = 'block';
+  document.getElementById('dash').style.display = 'block';
+  setBadge('live', 'LIVE SYNC');
   buildMart();
-  log('Token set. Starting engine...','s');
-  toast('✅ Engine started!','ok');
+  log('Token set. Starting engine...', 's');
+  toast('✅ Engine started!', 'ok');
   startLoop();
 }
+
 function clearToken(){
   G.token='';G.active=true;
   clearInterval(G.loopID);clearInterval(G.timerID);
@@ -409,13 +413,17 @@ async function placeBet(period, pred, amt) {
   
   let bc = (G.mode === 'SIZE') ? (pred === 'BIG' ? 'BigSmall_Big' : 'BigSmall_Small') : (pred === 'RED' ? 'Color_Red' : 'Color_Green');
 
-  const payload = {
-    gameCode: 'WinGo_1M',
-    issueNumber: period,
-    betContent: bc,
-    betMultiple: 1, // Fix: Use 1 as base multiple
-    amount: Number(amt) // Fix: Ensure amount is a number
-  };
+  // Idha thaan nee replace pannanum
+const payload = {
+  gameCode: 'WinGo_1M',
+  issueNumber: period,
+  betContent: bc,
+  // amt-ah direct-ah betMultiple-la podu
+  betMultiple: Number(amt), 
+  // amount eppovum 1-ah irukanum
+  amount: 1 
+};
+
 
   try {
     const r = await fetch('https://api.ar-lottery01.com/api/Lottery/WinGoBet', {
