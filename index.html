@@ -365,73 +365,29 @@ function toggleEng(){
 //  The Claude API fetches the URL server-side, no CORS issue
 // ═══════════════════════════════════════════════
 async function fetchHistory(){
-  const histUrl='https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json?ts='+Date.now();
-
-  // Method 1: Claude API as proxy (server-side fetch, no CORS)
-  try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        messages:[{
-          role:'user',
-          content:`Fetch this URL and return ONLY the raw JSON response body, nothing else, no explanation:\n${histUrl}`
-        }]
-      }),
-      signal:AbortSignal.timeout(15000)
+async function fetchHistory(){
+  const histUrl = 'https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json?ts=' + Date.now();
+  try {
+    const r = await fetch(histUrl, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': G.token // Fresh token inga use aagum
+      }
     });
-    if(r.ok){
-      const d=await r.json();
-      const txt=d.content?.[0]?.text||'';
-      // strip markdown code fences if any
-      const clean=txt.replace(/```[a-z]*\n?/g,'').replace(/```/g,'').trim();
-      try{
-        const parsed=JSON.parse(clean);
-        const list=parsed?.data?.list;
-        if(list&&list.length>0){log('✅ Fetch OK via Claude proxy ('+list.length+' records)','s');return list;}
-      }catch(e){}
+    if(r.ok) {
+      const d = await r.json();
+      if(d?.data?.list) {
+        log('✅ Connection Live: Data Fetch Success!', 's');
+        return d.data.list;
+      }
     }
-  }catch(e){log('Claude proxy err: '+e.message,'w');}
-
-  // Method 2: allorigins.win
-  try{
-    const r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent(histUrl),{signal:AbortSignal.timeout(10000)});
-    if(r.ok){
-      const w=await r.json();
-      const d=JSON.parse(w.contents);
-      const list=d?.data?.list;
-      if(list&&list.length>0){log('✅ Fetch OK via allorigins','s');return list;}
-    }
-  }catch(e){}
-
-  // Method 3: corsproxy.io
-  try{
-    const r=await fetch('https://corsproxy.io/?'+encodeURIComponent(histUrl),{signal:AbortSignal.timeout(10000)});
-    if(r.ok){
-      const d=await r.json();
-      const list=d?.data?.list;
-      if(list&&list.length>0){log('✅ Fetch OK via corsproxy','s');return list;}
-    }
-  }catch(e){}
-
-  // Method 4: Direct (works on mobile Chrome sometimes)
-  try{
-    const r=await fetch(histUrl,{
-      headers:{'Accept':'application/json','Origin':'https://bdgwinseo.com','Referer':'https://bdgwinseo.com/'},
-      signal:AbortSignal.timeout(8000)
-    });
-    if(r.ok){
-      const d=await r.json();
-      const list=d?.data?.list;
-      if(list&&list.length>0){log('✅ Fetch OK direct','s');return list;}
-    }
-  }catch(e){}
-
-  log('❌ All fetch methods failed','e');
+  } catch(e) {
+    log('❌ Extension OFF-la irukku! ON pannunga.', 'e');
+  }
   return null;
 }
+
 
 // ═══════════════════════════════════════════════
 //  PLACE BET — exact devtools payload
