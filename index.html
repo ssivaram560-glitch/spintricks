@@ -4,502 +4,501 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>SIVA ULTRA AI</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#060610;--c1:#0d0d1f;--c2:#12122a;--c3:#1a1a38;
+  --bg:#05050f;--c1:#0c0c1e;--c2:#111128;--c3:#181830;
   --pu:#7c3aed;--pu2:#a78bfa;--gr:#059669;--gr2:#10b981;
-  --gd:#d97706;--gd2:#f59e0b;--rd:#dc2626;--rd2:#ef4444;
-  --bl:#1d4ed8;--bl2:#3b82f6;--mu:#475569;--tx:#e2e8f0;
-  --bor:rgba(124,58,237,0.25);--bor2:rgba(167,139,250,0.15);
+  --gd:#b45309;--gd2:#f59e0b;--rd:#b91c1c;--rd2:#ef4444;
+  --cy:#0e7490;--cy2:#22d3ee;--mu:#475569;--tx:#dde4f0;
+  --bor:rgba(124,58,237,0.2);--bor2:rgba(255,255,255,0.06);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden}
-body{background:var(--bg);color:var(--tx);font-family:'Rajdhani',sans-serif;max-width:430px;margin:0 auto;position:relative}
+html,body{height:100%;overflow:hidden;background:var(--bg)}
+body{color:var(--tx);font-family:'Rajdhani',sans-serif;max-width:430px;margin:0 auto;position:relative}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 90% 50% at 50% -5%,rgba(124,58,237,.12),transparent 65%),radial-gradient(ellipse 50% 30% at 90% 100%,rgba(5,150,105,.08),transparent 60%);pointer-events:none;z-index:0}
 
-/* ─── BACKGROUND EFFECT ─── */
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 40% at 50% -10%,rgba(124,58,237,0.15) 0%,transparent 70%),radial-gradient(ellipse 60% 30% at 80% 110%,rgba(5,150,105,0.1) 0%,transparent 70%);pointer-events:none;z-index:0}
-
-/* ─── APP SHELL ─── */
+/* ── SHELL ── */
 .app{display:flex;flex-direction:column;height:100vh;position:relative;z-index:1}
+.topbar{flex-shrink:0;background:rgba(5,5,15,.96);backdrop-filter:blur(18px);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bor);z-index:50}
+.tlogo{font-family:'Orbitron',monospace;font-size:11px;font-weight:900;background:linear-gradient(90deg,var(--pu2),var(--cy2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:1px}
+.tbadge{display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;border:1px solid;font-size:10px;font-weight:700}
+.tbadge.live{background:rgba(5,150,105,.1);border-color:rgba(16,185,129,.4);color:var(--gr2)}
+.tbadge.err{background:rgba(185,28,28,.1);border-color:rgba(239,68,68,.35);color:var(--rd2)}
+.tbadge.warn{background:rgba(180,83,9,.1);border-color:rgba(245,158,11,.35);color:var(--gd2)}
+.tdot{width:7px;height:7px;border-radius:50%}
+.tbadge.live .tdot{background:var(--gr2);box-shadow:0 0 5px var(--gr2);animation:blink 1.4s infinite}
+.tbadge.err .tdot{background:var(--rd2)}
+.tbadge.warn .tdot{background:var(--gd2);animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* ─── TOP BAR ─── */
-.topbar{flex-shrink:0;background:rgba(6,6,16,0.95);backdrop-filter:blur(20px);padding:11px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bor);position:relative;z-index:50}
-.topbar-logo{font-family:'Orbitron',monospace;font-size:12px;font-weight:900;background:linear-gradient(90deg,var(--pu2),var(--gr2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:1px}
-.topbar-right{display:flex;align-items:center;gap:8px}
-.sync-dot{width:8px;height:8px;border-radius:50%;background:var(--rd2)}
-.sync-dot.live{background:var(--gr2);box-shadow:0 0 6px var(--gr2);animation:pulse 1.5s infinite}
-.sync-dot.warn{background:var(--gd2);animation:pulse 1.5s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.sync-label{font-size:10px;font-weight:700;color:var(--mu)}
+.scrl{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:72px}
+.scrl::-webkit-scrollbar{width:2px}
+.scrl::-webkit-scrollbar-thumb{background:var(--bor);border-radius:2px}
 
-/* ─── SCROLL CONTENT ─── */
-.page-content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:70px}
-.page-content::-webkit-scrollbar{width:3px}
-.page-content::-webkit-scrollbar-track{background:transparent}
-.page-content::-webkit-scrollbar-thumb{background:var(--bor);border-radius:3px}
+/* ── NAV ── */
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(5,5,15,.98);backdrop-filter:blur(18px);border-top:1px solid var(--bor);display:grid;grid-template-columns:repeat(5,1fr);z-index:50;padding:5px 0 max(5px,env(safe-area-inset-bottom))}
+.nit{display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 3px;cursor:pointer;border:none;background:none;color:var(--mu);transition:color .2s}
+.nit.on{color:var(--pu2)}
+.nico{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;border:1px solid transparent;transition:all .2s}
+.nit.on .nico{background:rgba(124,58,237,.18);border-color:rgba(167,139,250,.35)}
+.nlbl{font-size:8px;font-weight:700;letter-spacing:.3px}
 
-/* ─── BOTTOM NAV ─── */
-.nav{flex-shrink:0;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(6,6,16,0.98);backdrop-filter:blur(20px);border-top:1px solid var(--bor);display:grid;grid-template-columns:repeat(5,1fr);z-index:50;padding:6px 0 max(6px,env(safe-area-inset-bottom))}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;cursor:pointer;transition:all .2s;border:none;background:none;color:var(--mu)}
-.nav-item.active{color:var(--pu2)}
-.nav-item.active .nav-icon{background:rgba(124,58,237,0.2);border-color:rgba(167,139,250,0.4)}
-.nav-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;border:1px solid transparent;transition:all .2s}
-.nav-label{font-size:9px;font-weight:700;letter-spacing:.3px}
+/* ── PAGES ── */
+.pg{display:none;animation:fi .2s ease}
+.pg.on{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 
-/* ─── PAGES ─── */
-.page{display:none;animation:fadeIn .2s ease}
-.page.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+/* ── CARDS ── */
+.card{margin:9px;background:var(--c2);border-radius:15px;padding:13px;border:1px solid var(--bor2)}
+.chdr{font-size:9px;font-weight:700;letter-spacing:1.8px;color:var(--mu);text-transform:uppercase;margin-bottom:11px;display:flex;align-items:center;gap:5px}
+.chdr-bar{width:3px;height:13px;border-radius:2px;background:linear-gradient(var(--pu),var(--cy));flex-shrink:0}
 
-/* ─── CARDS ─── */
-.card{margin:10px;background:var(--c2);border-radius:16px;padding:14px;border:1px solid var(--bor2)}
-.card-hdr{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--mu);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:6px}
-.card-hdr::before{content:'';width:3px;height:14px;border-radius:2px;background:var(--pu)}
-
-/* ─── INPUTS ─── */
+/* ── INPUTS ── */
 .inp{width:100%;background:rgba(0,0,0,.5);border:1px solid var(--bor);border-radius:10px;padding:11px 13px;color:var(--tx);font-size:12px;font-family:'Rajdhani',sans-serif;outline:none;transition:border-color .2s}
 .inp:focus{border-color:var(--pu2)}
 .inp::placeholder{color:var(--mu)}
 textarea.inp{resize:none}
 
-/* ─── BUTTONS ─── */
-.btn{width:100%;padding:13px;border-radius:11px;border:none;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.5px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-primary{background:linear-gradient(135deg,var(--pu),#5b21b6);color:#fff;box-shadow:0 4px 15px rgba(124,58,237,.3)}
-.btn-primary:active{transform:scale(.98)}
-.btn-green{background:linear-gradient(135deg,var(--gr),#047857);color:#fff;box-shadow:0 4px 15px rgba(5,150,105,.3)}
-.btn-red{background:rgba(220,38,38,.1);border:1px solid rgba(239,68,68,.3);color:var(--rd2)}
-.btn-sm{padding:9px 14px;font-size:11px;width:auto;border-radius:9px}
+/* ── BUTTONS ── */
+.btn{width:100%;padding:13px;border-radius:11px;border:none;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.5px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px}
+.btn:active{transform:scale(.97)}
+.btn-pu{background:linear-gradient(135deg,var(--pu),#4c1d95);color:#fff;box-shadow:0 4px 14px rgba(124,58,237,.3)}
+.btn-gr{background:linear-gradient(135deg,var(--gr),#065f46);color:#fff;box-shadow:0 4px 14px rgba(5,150,105,.3)}
+.btn-rd{background:rgba(185,28,28,.12);border:1px solid rgba(239,68,68,.3);color:var(--rd2)}
+.btn-cy{background:linear-gradient(135deg,var(--cy),#164e63);color:#fff;box-shadow:0 4px 14px rgba(14,116,144,.3)}
+.btn-sm{padding:8px 13px;font-size:10px;width:auto;border-radius:9px}
 
-/* ─── HERO STAT ─── */
-.hero-pred{margin:10px;background:linear-gradient(135deg,rgba(124,58,237,.15),rgba(5,150,105,.1));border:1px solid rgba(124,58,237,.3);border-radius:20px;padding:20px;display:flex;gap:12px;align-items:stretch}
-.pred-main{flex:1.4;background:rgba(0,0,0,.4);border-radius:14px;padding:16px;text-align:center;display:flex;flex-direction:column;justify-content:center;border:1px solid rgba(255,255,255,.05)}
-.pred-lbl{font-size:9px;letter-spacing:2px;color:var(--mu);text-transform:uppercase;margin-bottom:6px}
-.pred-val{font-family:'Orbitron',monospace;font-size:26px;font-weight:900;transition:all .3s}
-.pred-val.BIG{color:var(--pu2);text-shadow:0 0 20px rgba(167,139,250,.5)}
-.pred-val.SMALL{color:var(--gr2);text-shadow:0 0 20px rgba(16,185,129,.5)}
-.pred-val.RED{color:var(--rd2);text-shadow:0 0 20px rgba(239,68,68,.5)}
-.pred-val.GREEN{color:#22c55e;text-shadow:0 0 20px rgba(34,197,94,.5)}
-.pred-val.LOAD{color:var(--gd2);font-size:14px}
-.pred-val.SKIP{color:var(--mu);font-size:16px}
-.pred-pat{font-size:9px;color:var(--gd2);font-weight:700;margin-top:5px}
-.pred-conf{font-size:9px;color:var(--mu);margin-top:2px}
-.pred-timer{flex:1;background:rgba(0,0,0,.4);border-radius:14px;padding:14px;text-align:center;display:flex;flex-direction:column;justify-content:center;border:1px solid rgba(255,255,255,.05)}
-.timer-val{font-family:'Orbitron',monospace;font-size:26px;font-weight:900;color:var(--gd2)}
-.timer-val.crit{color:var(--rd2);text-shadow:0 0 15px rgba(239,68,68,.5)}
-.period-lbl{font-size:8px;color:var(--mu);margin-top:4px}
-.period-val{font-size:9px;color:var(--tx);margin-top:2px;word-break:break-all;line-height:1.3}
+/* ── LOGIN ── */
+.login-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;padding:24px;gap:16px}
+.login-icon{font-size:52px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.login-title{font-family:'Orbitron',monospace;font-size:18px;font-weight:900;color:var(--pu2);text-align:center}
+.login-sub{font-size:12px;color:var(--mu);text-align:center;line-height:1.5}
+.login-box{width:100%;max-width:340px;background:var(--c2);border-radius:16px;padding:20px;border:1px solid var(--bor)}
 
-/* ─── STATS ROW ─── */
-.stats-4{margin:0 10px 10px;display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
-.stat-box{background:var(--c2);border-radius:12px;padding:10px 5px;text-align:center;border:1px solid var(--bor2)}
-.stat-lbl{font-size:8px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
-.stat-val{font-family:'Orbitron',monospace;font-size:15px;font-weight:700}
+/* ── HERO PRED ── */
+.pred-hero{margin:9px;background:linear-gradient(135deg,rgba(124,58,237,.14),rgba(5,150,105,.09));border:1px solid rgba(124,58,237,.28);border-radius:18px;padding:16px;display:flex;gap:10px}
+.ph-main{flex:1.3;background:rgba(0,0,0,.42);border-radius:13px;padding:14px;text-align:center;border:1px solid rgba(255,255,255,.05)}
+.ph-lbl{font-size:8px;letter-spacing:2px;color:var(--mu);text-transform:uppercase;margin-bottom:5px}
+.pv{font-family:'Orbitron',monospace;font-size:24px;font-weight:900;transition:all .3s;margin:4px 0}
+.pv.BIG{color:var(--pu2);text-shadow:0 0 18px rgba(167,139,250,.5)}
+.pv.SMALL{color:var(--gr2);text-shadow:0 0 18px rgba(16,185,129,.5)}
+.pv.RED{color:var(--rd2);text-shadow:0 0 18px rgba(239,68,68,.5)}
+.pv.GREEN{color:#22c55e;text-shadow:0 0 18px rgba(34,197,94,.5)}
+.pv.LOAD{color:var(--gd2);font-size:13px}
+.pv.SKIP{color:var(--mu);font-size:16px}
+.ph-pat{font-size:8px;color:var(--gd2);font-weight:700;margin-top:3px}
+.ph-conf{font-size:8px;color:var(--mu);margin-top:1px}
+.ph-timer{flex:1;background:rgba(0,0,0,.42);border-radius:13px;padding:13px;text-align:center;display:flex;flex-direction:column;justify-content:center;border:1px solid rgba(255,255,255,.05)}
+.tv{font-family:'Orbitron',monospace;font-size:26px;font-weight:900;color:var(--gd2)}
+.tv.crit{color:var(--rd2);text-shadow:0 0 14px rgba(239,68,68,.5)}
+.per-lbl{font-size:8px;color:var(--mu);margin-top:3px}
+.per-v{font-size:8px;color:var(--tx);margin-top:2px;word-break:break-all;line-height:1.3}
 
-/* ─── BALLS ─── */
-.balls{display:flex;gap:5px;justify-content:flex-start;flex-wrap:wrap;margin-top:8px}
-.ball{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:11px;font-weight:900;flex-shrink:0}
+/* ── STATS ROW ── */
+.s4{margin:0 9px 9px;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.sb{background:var(--c2);border-radius:11px;padding:9px 4px;text-align:center;border:1px solid var(--bor2)}
+.sl{font-size:8px;color:var(--mu);text-transform:uppercase;margin-bottom:2px;letter-spacing:.4px}
+.sv{font-family:'Orbitron',monospace;font-size:15px;font-weight:700}
+
+/* ── BALLS ── */
+.brow{display:flex;gap:5px;justify-content:flex-start;flex-wrap:wrap;margin-top:8px}
+.ball{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:10px;font-weight:900;flex-shrink:0}
 .ball.big{background:rgba(124,58,237,.3);border:2px solid var(--pu2);color:#c4b5fd}
 .ball.small{background:rgba(5,150,105,.25);border:2px solid var(--gr2);color:#6ee7b7}
-.ball.red{background:rgba(220,38,38,.25);border:2px solid var(--rd2);color:#fca5a5}
+.ball.red{background:rgba(185,28,28,.25);border:2px solid var(--rd2);color:#fca5a5}
 .ball.green{background:rgba(34,197,94,.25);border:2px solid #22c55e;color:#86efac}
 .ball.emp{background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.1);color:var(--mu)}
 
-/* ─── HISTORY TABLE ─── */
-.hist-list{display:flex;flex-direction:column;gap:6px;margin-top:8px}
-.hist-row{display:grid;grid-template-columns:1fr 60px 60px 80px;gap:6px;padding:8px 10px;background:rgba(0,0,0,.3);border-radius:10px;border:1px solid rgba(255,255,255,.04);align-items:center}
-.hist-row.win-row{border-left:3px solid var(--gr2)}
-.hist-row.loss-row{border-left:3px solid var(--rd2)}
-.hist-row.skip-row{border-left:3px solid var(--mu)}
-.hist-period{font-size:9px;color:var(--mu);font-family:'Orbitron',monospace}
-.hist-pred{font-size:10px;font-weight:700;font-family:'Orbitron',monospace}
-.hist-pred.BIG,.hist-pred.SMALL,.hist-pred.RED,.hist-pred.GREEN{color:var(--pu2)}
-.hist-result{font-size:10px;font-weight:700;font-family:'Orbitron',monospace;color:var(--tx)}
-.hist-outcome{font-size:10px;font-weight:700;text-align:right}
-.hist-outcome.WIN{color:var(--gr2)}
-.hist-outcome.LOSS{color:var(--rd2)}
-.hist-outcome.SKIP{color:var(--mu)}
+/* ── HISTORY ── */
+.hist-hdr{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:4px;padding:5px 8px;margin-bottom:3px}
+.hist-hdr span{font-size:8px;color:var(--mu);font-weight:700;text-transform:uppercase}
+.hist-hdr span:last-child{text-align:right}
+.hrow{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:4px;padding:7px 9px;background:rgba(0,0,0,.28);border-radius:9px;border:1px solid var(--bor2);align-items:center;margin-bottom:4px}
+.hrow.win{border-left:3px solid var(--gr2)}
+.hrow.loss{border-left:3px solid var(--rd2)}
+.hrow span{font-size:9px;font-family:'Orbitron',monospace;font-weight:700}
+.hrow .hper{color:var(--mu);font-size:8px}
+.hrow .hpred{color:var(--pu2)}
+.hrow .hact{color:var(--tx)}
+.hrow .hout{text-align:right}
+.hrow.win .hout{color:var(--gr2)}
+.hrow.loss .hout{color:var(--rd2)}
 
-/* ─── MARTINGALE GRID ─── */
-.mart-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:8px}
-.ml{background:rgba(0,0,0,.4);border:1.5px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 5px;text-align:center;transition:all .2s}
+/* ── MART ── */
+.mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:8px}
+.ml{background:rgba(0,0,0,.35);border:1.5px solid var(--bor2);border-radius:10px;padding:10px 5px;text-align:center;transition:all .2s}
 .ml.on{background:rgba(5,150,105,.12);border-color:var(--gr2)}
+.ml-l{font-size:8px;color:var(--mu);font-weight:700;display:block;margin-bottom:2px}
 .ml.on .ml-l{color:var(--gr2)}
-.ml-l{font-size:9px;color:var(--mu);font-weight:700;display:block;margin-bottom:3px}
 .ml-a{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;color:#fff}
 
-/* ─── TOGGLE SWITCH ─── */
-.sw{position:relative;display:inline-block;width:44px;height:24px}
+/* ── SWITCH ── */
+.sw{position:relative;display:inline-block;width:42px;height:22px}
 .sw input{opacity:0;width:0;height:0}
-.sl{position:absolute;cursor:pointer;inset:0;background:#1e293b;border-radius:34px;transition:.3s;border:1px solid rgba(255,255,255,.1)}
-.sl:before{position:absolute;content:'';height:18px;width:18px;left:2px;bottom:2px;background:#fff;border-radius:50%;transition:.3s;box-shadow:0 2px 4px rgba(0,0,0,.3)}
-input:checked+.sl{background:var(--gr);border-color:var(--gr2)}
-input:checked+.sl:before{transform:translateX(20px)}
+.sl2{position:absolute;cursor:pointer;inset:0;background:#1e293b;border-radius:34px;transition:.3s;border:1px solid rgba(255,255,255,.08)}
+.sl2:before{position:absolute;content:'';height:16px;width:16px;left:2px;bottom:2px;background:#fff;border-radius:50%;transition:.3s}
+input:checked+.sl2{background:var(--gr);border-color:var(--gr2)}
+input:checked+.sl2:before{transform:translateX(20px)}
 
-/* ─── INFO ROWS ─── */
-.irow{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+/* ── IROW ── */
+.irow{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bor2)}
 .irow:last-child{border-bottom:none}
-.ikey{font-size:11px;color:var(--mu)}
-.ival{font-size:11px;font-weight:700;color:var(--tx);font-family:'Orbitron',monospace;font-size:10px}
+.ik{font-size:11px;color:var(--mu)}
+.iv{font-size:10px;font-weight:700;color:var(--tx);font-family:'Orbitron',monospace;max-width:60%;text-align:right;word-break:break-all}
 
-/* ─── LOG ─── */
-.logbox{background:#000;border-radius:10px;padding:10px;height:110px;overflow-y:auto;font-family:'Courier New',monospace;font-size:9px;line-height:1.5;margin-top:8px}
-.logbox::-webkit-scrollbar{width:2px}
-.logbox::-webkit-scrollbar-thumb{background:var(--bor)}
+/* ── LOG ── */
+.logb{background:#000;border-radius:9px;padding:9px;height:100px;overflow-y:auto;font-family:'Courier New',monospace;font-size:9px;line-height:1.5;margin-top:7px}
+.logb::-webkit-scrollbar{width:2px}
+.logb::-webkit-scrollbar-thumb{background:var(--bor)}
 .ll{margin-bottom:1px}
 .li{color:var(--gd2)}.ls{color:var(--gr2)}.le{color:var(--rd2)}.lw{color:#fb923c}
 
-/* ─── USER PROFILE ─── */
-.profile-avatar{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,var(--pu),var(--gr));display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:24px;font-weight:900;color:#fff;margin:0 auto 12px;box-shadow:0 0 25px rgba(124,58,237,.4)}
-.profile-name{text-align:center;font-family:'Orbitron',monospace;font-size:14px;font-weight:900;color:var(--pu2);margin-bottom:4px}
-.profile-sub{text-align:center;font-size:11px;color:var(--mu);margin-bottom:16px}
-
-/* ─── SECTION DIVIDER ─── */
-.sdiv{margin:0 10px 6px;font-size:9px;font-weight:700;letter-spacing:2px;color:var(--mu);text-transform:uppercase;padding:0 4px}
-
-/* ─── ENGINE TOGGLE BTN ─── */
-.eng-btn{margin:10px;width:calc(100% - 20px);padding:14px;border-radius:13px;border:none;font-family:'Orbitron',sans-serif;font-weight:900;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;letter-spacing:.5px}
-.eng-btn.stop{background:linear-gradient(135deg,var(--rd),#991b1b);color:#fff;box-shadow:0 4px 15px rgba(220,38,38,.3)}
-.eng-btn.start{background:linear-gradient(135deg,var(--gr),#065f46);color:#fff;box-shadow:0 4px 15px rgba(5,150,105,.3)}
-
-/* ─── MODAL ─── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(6px);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
-.modal-overlay.show{opacity:1;pointer-events:all}
-.modal{width:100%;max-width:430px;background:var(--c2);border-radius:20px 20px 0 0;padding:24px 20px max(24px,env(safe-area-inset-bottom));border-top:1px solid var(--bor);transform:translateY(40px);transition:transform .3s}
-.modal-overlay.show .modal{transform:translateY(0)}
-.modal-title{font-family:'Orbitron',monospace;font-size:14px;font-weight:900;color:var(--pu2);margin-bottom:16px;text-align:center}
-
-/* ─── TOAST ─── */
-.toast{position:fixed;top:65px;left:50%;transform:translateX(-50%);background:rgba(6,6,16,.97);border-radius:9px;padding:10px 18px;font-size:12px;font-weight:700;z-index:300;border:1px solid;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;max-width:90vw;text-overflow:ellipsis;overflow:hidden}
+/* ── TOAST ── */
+.toast{position:fixed;top:62px;left:50%;transform:translateX(-50%);background:rgba(5,5,15,.97);border-radius:9px;padding:9px 16px;font-size:11px;font-weight:700;z-index:300;border:1px solid;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;max-width:88vw;overflow:hidden;text-overflow:ellipsis}
 .toast.show{opacity:1}
 .toast.ok{border-color:var(--gr2);color:var(--gr2)}
 .toast.err{border-color:var(--rd2);color:var(--rd2)}
 .toast.w{border-color:var(--gd2);color:var(--gd2)}
 
-/* ─── LOCK PAGE ─── */
-.lock-screen{position:fixed;inset:0;background:var(--bg);z-index:150;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;gap:20px}
-.lock-icon{font-size:50px;animation:float 3s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.lock-title{font-family:'Orbitron',monospace;font-size:18px;font-weight:900;color:var(--pu2);text-align:center}
-.lock-sub{font-size:13px;color:var(--mu);text-align:center}
-.lock-dots{display:flex;gap:10px;margin:10px 0}
-.lock-dot{width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.1);border:2px solid var(--bor);transition:all .2s}
-.lock-dot.filled{background:var(--pu2);border-color:var(--pu2);box-shadow:0 0 8px var(--pu2)}
-.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:280px}
-.kbtn{padding:16px;border-radius:14px;border:1px solid var(--bor);background:var(--c2);color:var(--tx);font-family:'Orbitron',monospace;font-size:16px;font-weight:700;cursor:pointer;text-align:center;transition:all .15s}
-.kbtn:active{background:rgba(124,58,237,.3);border-color:var(--pu2);transform:scale(.95)}
+/* ── ENG BTN ── */
+.eng-btn{margin:9px;width:calc(100% - 18px);padding:13px;border-radius:12px;border:none;font-family:'Orbitron',sans-serif;font-weight:900;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .2s;letter-spacing:.4px}
+.eng-btn.stop{background:linear-gradient(135deg,var(--rd),#7f1d1d);color:#fff;box-shadow:0 4px 14px rgba(185,28,28,.3)}
+.eng-btn.start{background:linear-gradient(135deg,var(--gr),#064e3b);color:#fff;box-shadow:0 4px 14px rgba(5,150,105,.3)}
 
-/* ─── FETCH BAR ─── */
-.fbar{margin:0 10px 8px;padding:7px 12px;border-radius:8px;font-size:10px;font-weight:700;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.06);color:var(--mu);text-align:center;display:none}
+/* ── FBAR ── */
+.fbar{margin:0 9px 7px;padding:6px 11px;border-radius:8px;font-size:9px;font-weight:700;background:rgba(0,0,0,.3);border:1px solid var(--bor2);color:var(--mu);text-align:center;display:none}
 
-/* ─── CFG GRID ─── */
-.cfg2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.flbl{font-size:9px;color:var(--mu);margin-bottom:4px;font-weight:700;text-transform:uppercase;display:block;letter-spacing:.5px}
-.fval{width:100%;background:rgba(0,0,0,.5);border:1px solid var(--bor);border-radius:9px;padding:9px;color:#fff;font-family:'Orbitron',monospace;font-size:13px;text-align:center;outline:none}
+/* ── USER CARD ── */
+.ucard{background:var(--c2);border-radius:13px;padding:12px;border:1px solid var(--bor2);margin-bottom:7px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ucard-info{flex:1;min-width:0}
+.uid-txt{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;color:var(--pu2);margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.uday-txt{font-size:10px;color:var(--gd2);font-weight:600}
+.uexp-txt{font-size:9px;color:var(--mu);margin-top:1px}
+.ucard-actions{display:flex;gap:6px;flex-shrink:0}
+.ubtn{padding:6px 10px;border-radius:7px;border:none;font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;cursor:pointer;transition:all .15s}
+.ubtn:active{transform:scale(.93)}
+.ubtn-r{background:rgba(185,28,28,.15);border:1px solid rgba(239,68,68,.3);color:var(--rd2)}
 
-/* ─── MODE BTNS ─── */
-.mrow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
-.mbtn{padding:10px;border-radius:9px;border:1.5px solid var(--bor);background:rgba(0,0,0,.3);color:var(--mu);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:12px;cursor:pointer;transition:all .2s}
-.mbtn.sz{background:rgba(124,58,237,.2);border-color:var(--pu2);color:var(--pu2)}
-.mbtn.cl{background:rgba(5,150,105,.2);border-color:var(--gr2);color:var(--gr2)}
+/* ── OWNER PROFILE ── */
+.owner-avatar{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--pu),var(--cy));display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:22px;font-weight:900;color:#fff;margin:0 auto 10px;box-shadow:0 0 22px rgba(124,58,237,.4)}
+.owner-name{text-align:center;font-family:'Orbitron',monospace;font-size:13px;font-weight:900;color:var(--pu2);margin-bottom:3px}
+.owner-tag{text-align:center;font-size:10px;color:var(--mu);margin-bottom:14px}
 
-/* ─── WBOX ─── */
-.wbox{background:rgba(0,0,0,.25);border-radius:11px;padding:12px;border:1px solid rgba(255,255,255,.05);margin-top:10px}
+/* ── SECTION LABEL ── */
+.slbl{margin:4px 9px 5px;font-size:8px;font-weight:700;letter-spacing:2px;color:var(--mu);text-transform:uppercase}
+
+/* ── ADD USER FORM ── */
+.add-form{display:flex;gap:7px;margin-top:9px}
+.add-form .inp{flex:1}
+.daybadge{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:6px;font-size:9px;font-weight:700;font-family:'Orbitron',monospace;cursor:pointer;border:1px solid var(--bor);background:rgba(0,0,0,.3);color:var(--mu);transition:all .15s}
+.daybadge.sel{background:rgba(124,58,237,.2);border-color:var(--pu2);color:var(--pu2)}
+.days-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+
+/* ── WBOX ── */
+.wbox{background:rgba(0,0,0,.22);border-radius:10px;padding:11px;border:1px solid var(--bor2);margin-top:9px}
 .row2{display:flex;justify-content:space-between;align-items:center}
+
+/* ── LOCK PAGE ── */
+.lock-pg{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;padding:24px;gap:14px}
+.lock-icon{font-size:46px;animation:float 3s ease-in-out infinite}
+.lock-title{font-family:'Orbitron',monospace;font-size:14px;font-weight:900;color:var(--pu2);text-align:center}
+.lock-sub{font-size:11px;color:var(--mu);text-align:center}
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- ─── TOP BAR ─── -->
+<!-- TOP BAR -->
 <div class="topbar">
-  <div class="topbar-logo">SIVA ULTRA AI</div>
-  <div class="topbar-right">
-    <div class="sync-dot" id="syncDot"></div>
-    <div class="sync-label" id="syncLabel">OFFLINE</div>
+  <div class="tlogo">SIVA ULTRA AI</div>
+  <div class="tbadge err" id="badge"><span class="tdot"></span><span id="badgeTxt">OFFLINE</span></div>
+</div>
+
+<!-- SCROLL -->
+<div class="scrl">
+
+<!-- ═══════════ PAGE 0: LOGIN (first shown) ═══════════ -->
+<div class="pg on" id="pg0">
+
+  <!-- Prediction Token Entry (shown when no token) -->
+  <div id="predLogin">
+    <div class="login-wrap">
+      <div class="login-icon">🎯</div>
+      <div class="login-title">ENTER TOKEN</div>
+      <div class="login-sub">Contact admin<br>to activate predictions</div>
+      <div class="login-box">
+        <textarea class="inp" id="tokenInput" rows="3" placeholder="Paste Bearer token here..."></textarea>
+        <button class="btn btn-pu" style="margin-top:10px" onclick="saveToken()">▶️ START PREDICTION</button>
+        <button class="btn btn-cy" style="margin-top:8px;font-size:10px" onclick="showOwnerLogin()">👑 OWNER LOGIN</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Owner Login (shown when button clicked) -->
+  <div id="ownerLogin" style="display:none">
+    <div class="login-wrap">
+      <div class="login-icon">👑</div>
+      <div class="login-title">OWNER CONTROL</div>
+      <div class="login-sub">Enter your owner access key</div>
+      <div class="login-box">
+        <input class="inp" id="ownerKeyInput" type="password" placeholder="Owner key...">
+        <button class="btn btn-pu" style="margin-top:10px" onclick="ownerLogin()">🔓 ENTER</button>
+        <button class="btn btn-rd" style="margin-top:8px;font-size:10px" onclick="showPredLogin()">← Back</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════ PAGE 1: PREDICTION ═══════════ -->
+<div class="pg" id="pg1">
+  <div class="fbar" id="fbar">🔄 Fetching...</div>
+
+  <div class="pred-hero">
+    <div class="ph-main">
+      <div class="ph-lbl">LIVE PREDICTION</div>
+      <div class="pv LOAD" id="predVal">LOADING</div>
+      <div class="ph-pat" id="predPat">Connecting...</div>
+      <div class="ph-conf" id="predConf"></div>
+    </div>
+    <div class="ph-timer">
+      <div class="tv" id="timerEl">--:--</div>
+      <div class="per-lbl">PERIOD</div>
+      <div class="per-v" id="periodEl">--</div>
+    </div>
+  </div>
+
+  <div class="s4">
+    <div class="sb"><div class="sl">BETS</div><div class="sv" id="sBets">0</div></div>
+    <div class="sb"><div class="sl">WINS</div><div class="sv" style="color:var(--gr2)" id="sWins">0</div></div>
+    <div class="sb"><div class="sl">LOSS</div><div class="sv" style="color:var(--rd2)" id="sLoss">0</div></div>
+    <div class="sb"><div class="sl">LEVEL</div><div class="sv" id="sLvl" style="color:var(--pu2)">L1</div></div>
+  </div>
+
+  <div class="card">
+    <div class="chdr"><div class="chdr-bar"></div>RECENT RESULTS</div>
+    <div class="brow" id="balls">
+      <div class="ball emp">-</div><div class="ball emp">-</div><div class="ball emp">-</div><div class="ball emp">-</div><div class="ball emp">-</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="chdr"><div class="chdr-bar"></div>SYSTEM LOG</div>
+    <div class="logb" id="logEl"></div>
   </div>
 </div>
 
-<!-- ─── SCROLLABLE CONTENT ─── -->
-<div class="page-content">
+<!-- ═══════════ PAGE 2: HISTORY ═══════════ -->
+<div class="pg" id="pg2">
+  <div class="card">
+    <div class="chdr" style="justify-content:space-between">
+      <span style="display:flex;align-items:center;gap:5px"><div class="chdr-bar"></div>PREDICTION HISTORY</span>
+      <span style="font-size:9px;color:var(--pu2);cursor:pointer;font-weight:700" onclick="clearHistory()">CLEAR ALL</span>
+    </div>
 
-  <!-- ══════════ PAGE 1: OWNER / TOKEN ══════════ -->
-  <div class="page active" id="pg0">
-
-    <!-- Token Setup -->
-    <div id="tokenSetup">
-      <div style="text-align:center;padding:30px 20px 10px">
-        <div style="font-size:44px;margin-bottom:10px">🔐</div>
-        <div style="font-family:'Orbitron',monospace;font-size:16px;font-weight:900;color:var(--pu2);margin-bottom:6px">OWNER ACCESS</div>
-        <div style="font-size:12px;color:var(--mu)">Enter your Bearer token to activate</div>
+    <!-- Summary stats -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:11px">
+      <div style="background:rgba(5,150,105,.1);border:1px solid rgba(16,185,129,.25);border-radius:11px;padding:10px;text-align:center">
+        <div style="font-size:8px;color:var(--mu);margin-bottom:2px">TOTAL BETS</div>
+        <div style="font-family:'Orbitron',monospace;font-size:20px;font-weight:900" id="hTotal">0</div>
       </div>
-      <div class="card">
-        <div class="card-hdr">BEARER TOKEN</div>
-        <textarea class="inp" id="tokenInput" rows="3" placeholder="Paste token here (with or without 'Bearer ')..."></textarea>
-        <button class="btn btn-primary" style="margin-top:10px" onclick="saveToken()">✅ INITIALIZE ENGINE</button>
+      <div style="background:rgba(5,150,105,.1);border:1px solid rgba(16,185,129,.25);border-radius:11px;padding:10px;text-align:center">
+        <div style="font-size:8px;color:var(--mu);margin-bottom:2px">WIN RATE</div>
+        <div style="font-family:'Orbitron',monospace;font-size:20px;font-weight:900;color:var(--gr2)" id="hRate">0%</div>
+      </div>
+      <div style="background:rgba(124,58,237,.1);border:1px solid rgba(167,139,250,.2);border-radius:11px;padding:10px;text-align:center">
+        <div style="font-size:8px;color:var(--mu);margin-bottom:2px">P&L</div>
+        <div style="font-family:'Orbitron',monospace;font-size:20px;font-weight:900" id="hPnl">0</div>
       </div>
     </div>
 
-    <!-- Active Token Panel -->
-    <div id="ownerPanel" style="display:none">
-      <div style="text-align:center;padding:20px 20px 0">
-        <div style="font-size:36px;margin-bottom:8px">👑</div>
-        <div style="font-family:'Orbitron',monospace;font-size:13px;font-weight:900;color:var(--gr2)">TOKEN ACTIVE</div>
-        <div style="font-size:11px;color:var(--mu);margin-top:4px" id="tokenPreview">--</div>
+    <!-- Streak -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:11px">
+      <div style="background:rgba(0,0,0,.28);border-radius:10px;padding:9px;text-align:center;border:1px solid var(--bor2)">
+        <div style="font-size:8px;color:var(--mu);margin-bottom:2px">MAX WIN STREAK 🔥</div>
+        <div style="font-family:'Orbitron',monospace;font-size:22px;font-weight:900;color:var(--gr2)" id="hMaxW">0</div>
       </div>
+      <div style="background:rgba(0,0,0,.28);border-radius:10px;padding:9px;text-align:center;border:1px solid var(--bor2)">
+        <div style="font-size:8px;color:var(--mu);margin-bottom:2px">MAX LOSS STREAK 💀</div>
+        <div style="font-family:'Orbitron',monospace;font-size:22px;font-weight:900;color:var(--rd2)" id="hMaxL">0</div>
+      </div>
+    </div>
 
-      <!-- Engine Control -->
-      <button class="eng-btn stop" id="engBtn" onclick="toggleEng()">🛑 STOP ENGINE</button>
+    <!-- Win bar -->
+    <div style="background:rgba(0,0,0,.4);border-radius:7px;height:7px;overflow:hidden;margin-bottom:11px;border:1px solid var(--bor2)">
+      <div id="winBar" style="height:100%;background:linear-gradient(90deg,var(--gr),var(--gr2));border-radius:7px;width:0%;transition:width .6s"></div>
+    </div>
 
-      <!-- Config -->
-      <div class="card">
-        <div class="card-hdr">ENGINE CONFIG</div>
-        <div class="cfg2">
-          <div><span class="flbl">BASE BET (L1)</span><input type="number" id="baseBet" class="fval" value="10" min="1" onchange="buildMart()"></div>
-          <div><span class="flbl">MAX LEVELS</span><input type="number" id="maxLvl" class="fval" value="5" min="1" max="7" onchange="buildMart()"></div>
+    <!-- Streak display -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:11px">
+      <div style="background:rgba(0,0,0,.28);border-radius:10px;padding:9px;text-align:center;border:1px solid var(--bor2)">
+        <div style="font-size:8px;color:var(--mu);margin-bottom:2px">CURRENT WIN STREAK</div>
+        <div style="font-family:'Orbitron',monospace;font-size:18px;font-weight:900;color:var(--gr2)" id="hCurW">0</div>
+      </div>
+      <div style="background:rgba(0,0,0,.28);border-radius:10px;padding:9px;text-align:center;border:1px solid var(--bor2)">
+        <div style="font-size:8px;color:var(--mu);margin-bottom:2px">CURRENT LOSS STREAK</div>
+        <div style="font-family:'Orbitron',monospace;font-size:18px;font-weight:900;color:var(--rd2)" id="hCurL">0</div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="hist-hdr">
+      <span>PERIOD</span><span>PRED</span><span>ACTUAL</span><span style="text-align:right">RESULT</span>
+    </div>
+    <div id="histList">
+      <div style="text-align:center;padding:18px;color:var(--mu);font-size:11px">No predictions yet...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 3: AUTOBET ═══════════ -->
+<div class="pg" id="pg3">
+
+  <!-- Lock screen -->
+  <div id="abLock" class="lock-pg">
+    <div class="lock-icon">🤖</div>
+    <div class="lock-title">AUTOBET ACCESS</div>
+    <div class="lock-sub">Enter key to unlock AutoBet panel</div>
+    <div class="login-box" style="max-width:320px">
+      <input class="inp" id="abKeyIn" type="password" placeholder="Access key...">
+      <button class="btn btn-pu" style="margin-top:10px" onclick="unlockAb()">🔓 UNLOCK</button>
+    </div>
+  </div>
+
+  <!-- AutoBet Panel -->
+  <div id="abPanel" style="display:none">
+    <div class="eng-btn stop" id="engBtn" onclick="toggleEng()">🛑 STOP ENGINE</div>
+
+    <!-- Config -->
+    <div class="card">
+      <div class="chdr"><div class="chdr-bar"></div>ENGINE CONFIG</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px">
+        <div><span style="font-size:8px;color:var(--mu);font-weight:700;display:block;margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px">BASE BET (L1)</span>
+          <input type="number" id="baseBet" class="inp" value="10" min="1" style="padding:8px;font-family:'Orbitron',monospace;font-size:13px;text-align:center" onchange="buildMart()"></div>
+        <div><span style="font-size:8px;color:var(--mu);font-weight:700;display:block;margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px">MAX LEVELS</span>
+          <input type="number" id="maxLvl" class="inp" value="5" min="1" max="7" style="padding:8px;font-family:'Orbitron',monospace;font-size:13px;text-align:center" onchange="buildMart()"></div>
+      </div>
+      <div style="font-size:9px;color:var(--mu);text-align:center" id="riskLbl">--</div>
+
+      <div class="wbox">
+        <div class="row2">
+          <span style="font-size:10px;color:var(--gd2);font-weight:700">👀 WATCH MODE</span>
+          <label class="sw"><input type="checkbox" id="wt" checked onchange="G.watch=this.checked;updateAbUI()"><span class="sl2"></span></label>
         </div>
-        <div style="font-size:10px;color:var(--mu);margin-top:6px;text-align:center" id="riskLbl">--</div>
-        <div class="mrow">
-          <button class="mbtn sz" id="btnS" onclick="setMode('SIZE')">🔵 BIG/SMALL</button>
-          <button class="mbtn" id="btnC" onclick="setMode('COLOR')">🔴 RED/GREEN</button>
-        </div>
-        <div class="wbox">
-          <div class="row2">
-            <span style="font-size:11px;color:var(--gd2);font-weight:700">👀 WATCH MODE</span>
-            <label class="sw"><input type="checkbox" id="wt" checked onchange="G.watch=this.checked"><span class="sl"></span></label>
-          </div>
-          <div style="font-size:10px;color:var(--mu);margin-top:4px">Wait N virtual losses before real bets</div>
-          <div class="row2" style="margin-top:8px">
-            <span class="flbl" style="margin:0">LOSSES TO WAIT:</span>
-            <input type="number" id="vlim" class="fval" value="3" min="1" style="width:75px;padding:7px" onchange="G.vLim=+this.value">
-          </div>
+        <div style="font-size:9px;color:var(--mu);margin-top:3px">Wait N losses before real bets</div>
+        <div class="row2" style="margin-top:8px">
+          <span style="font-size:8px;color:var(--mu);font-weight:700;text-transform:uppercase">LOSSES TO WAIT:</span>
+          <input type="number" id="vlim" class="inp" value="3" min="1" style="width:70px;padding:6px;font-family:'Orbitron',monospace;font-size:13px;text-align:center" onchange="G.vLim=+this.value">
         </div>
       </div>
+    </div>
 
-      <div class="card">
-        <div class="card-hdr">TOKEN</div>
-        <button class="btn btn-red" onclick="clearToken()">🔄 Reset Token</button>
+    <!-- Martingale -->
+    <div class="card">
+      <div class="chdr"><div class="chdr-bar"></div>MARTINGALE (x3 MULT)</div>
+      <div class="mgrid" id="mgrid"></div>
+    </div>
+
+    <!-- Status -->
+    <div class="card">
+      <div class="chdr"><div class="chdr-bar"></div>AUTOBET STATUS</div>
+      <div class="irow"><span class="ik">Last Period</span><span class="iv" id="lPer">--</span></div>
+      <div class="irow"><span class="ik">Prediction</span><span class="iv" id="lPred">--</span></div>
+      <div class="irow"><span class="ik">Amount</span><span class="iv" id="lAmt">--</span></div>
+      <div class="irow"><span class="ik">Bet Status</span><span class="iv" id="lStat" style="color:var(--mu)">--</span></div>
+      <div class="irow"><span class="ik">Result</span><span class="iv" id="lRes">--</span></div>
+      <div class="irow"><span class="ik">Watch Progress</span><span class="iv" id="abVL" style="color:var(--gd2)">0/3</span></div>
+      <div class="irow"><span class="ik">In Martingale</span><span class="iv" id="abMart" style="color:var(--mu)">NO</span></div>
+      <button class="btn btn-rd" style="margin-top:10px;padding:9px;font-size:10px" onclick="resetStats()">🔄 Reset All Stats</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE 4: OWNER CONTROL ROOM ═══════════ -->
+<div class="pg" id="pg4">
+
+  <!-- Locked state -->
+  <div id="ownerLocked" class="lock-pg">
+    <div class="lock-icon">👑</div>
+    <div class="lock-title">OWNER CONTROL ROOM</div>
+    <div class="lock-sub">Login from the main screen to access</div>
+    <button class="btn btn-pu" style="max-width:220px" onclick="showOwnerLogin();gotoPage(0)">→ GO TO LOGIN</button>
+  </div>
+
+  <!-- Owner Panel -->
+  <div id="ownerPanel" style="display:none">
+
+    <!-- Profile -->
+    <div class="card">
+      <div class="owner-avatar">👑</div>
+      <div class="owner-name">SIVA OWNER</div>
+      <div class="owner-tag">Control Room </div      <div class="irow"><span class="ik">Active Users<an><span class="iv" id="owActiveCount" style="color:var(--gr2)">0</span></div>
+      <div class="irow"><span class="ik">Total Users Added</span><span class="iv" id="owTotalCount">0</span></div>
+      <div class="irow"><span class="ik">Owner Session</span><span class="iv" id="owSession" style="color:var(--cy2)">--</span></div>
+      <button class="btn btn-rd" style="margin-top:10px;padding:9px;font-size:10px" onclick="ownerLogout()">🚪 Logout</button>
+    </div>
+
+    <!-- Add User -->
+    <div class="card">
+      <div class="chdr"><div class="chdr-bar"></div>ADD USER</div>
+      <input class="inp" id="addUid" placeholder="User ID (from their profile)">
+
+      <!-- Day presets -->
+      <div class="days-row">
+        <div class="daybadge sel" id="db7" onclick="selDay(7)">7 days</div>
+        <div class="daybadge" id="db14" onclick="selDay(14)">14 days</div>
+        <div class="daybadge" id="db30" onclick="selDay(30)">30 days</div>
+        <div class="daybadge" id="db1" onclick="selDay(1)">1 day</div>
+        <div class="daybadge" id="dbcustom" onclick="selDay(0)">custom</div>
+      </div>
+      <div id="customDayWrap" style="display:none;margin-top:7px">
+        <input class="inp" id="customDays" type="number" placeholder="Enter days..." min="1">
+      </div>
+      <button class="btn btn-gr" style="margin-top:10px" onclick="addUser()">➕ ADD USER</button>
+    </div>
+
+    <!-- Active Users -->
+    <div class="card">
+      <div class="chdr" style="justify-content:space-between">
+        <span style="display:flex;align-items:center;gap:5px"><div class="chdr-bar"></div>ACTIVE USERS</span>
+        <span style="font-size:9px;color:var(--mu)" id="owUserCountLbl">0 users</span>
+      </div>
+      <div id="userList">
+        <div style="text-align:center;padding:16px;color:var(--mu);font-size:11px">No users added yet...</div>
+      </div>
+    </div>
+
+    <!-- Expired Users -->
+    <div class="card">
+      <div class="chdr"><div class="chdr-bar"></div>EXPIRED / REMOVED</div>
+      <div id="expiredList">
+        <div style="text-align:center;padding:16px;color:var(--mu);font-size:11px">None...</div>
       </div>
     </div>
 
   </div>
+</div>
 
-  <!-- ══════════ PAGE 2: PREDICTION ══════════ -->
-  <div class="page" id="pg1">
-    <div class="fbar" id="fbar">🔄 Fetching...</div>
+</div><!-- end scrl -->
 
-    <div class="hero-pred">
-      <div class="pred-main">
-        <div class="pred-lbl">LIVE PREDICTION</div>
-        <div class="pred-val LOAD" id="predVal">LOADING</div>
-        <div class="pred-pat" id="predPat">Connecting...</div>
-        <div class="pred-conf" id="predConf"></div>
-      </div>
-      <div class="pred-timer">
-        <div class="timer-val" id="timerEl">--:--</div>
-        <div class="period-lbl">PERIOD</div>
-        <div class="period-val" id="periodEl">--</div>
-      </div>
-    </div>
-
-    <div class="stats-4">
-      <div class="stat-box"><div class="stat-lbl">BETS</div><div class="stat-val" id="sBets">0</div></div>
-      <div class="stat-box"><div class="stat-lbl">WIN</div><div class="stat-val" style="color:var(--gr2)" id="sWins">0</div></div>
-      <div class="stat-box"><div class="stat-lbl">LOSS</div><div class="stat-val" style="color:var(--rd2)" id="sLoss">0</div></div>
-      <div class="stat-box"><div class="stat-lbl">LEVEL</div><div class="stat-val" id="sLvl" style="color:var(--pu2)">L1</div></div>
-    </div>
-
-    <div class="card">
-      <div class="card-hdr">RECENT RESULTS</div>
-      <div class="balls" id="balls">
-        <div class="ball emp">-</div><div class="ball emp">-</div><div class="ball emp">-</div>
-        <div class="ball emp">-</div><div class="ball emp">-</div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-hdr">SYSTEM LOG</div>
-      <div class="logbox" id="logEl"></div>
-    </div>
-  </div>
-
-  <!-- ══════════ PAGE 3: HISTORY ══════════ -->
-  <div class="page" id="pg2">
-    <div class="card">
-      <div class="card-hdr" style="justify-content:space-between;display:flex;align-items:center">
-        <span style="display:flex;align-items:center;gap:6px"><span style="width:3px;height:14px;border-radius:2px;background:var(--pu);display:inline-block"></span>PREDICTION HISTORY</span>
-        <span style="font-size:10px;color:var(--pu2);cursor:pointer;font-weight:700" onclick="clearHistory()">CLEAR</span>
-      </div>
-
-      <!-- Summary -->
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
-        <div style="background:rgba(5,150,105,.1);border:1px solid rgba(16,185,129,.3);border-radius:10px;padding:10px;text-align:center">
-          <div style="font-size:9px;color:var(--mu);margin-bottom:2px">TOTAL</div>
-          <div style="font-family:'Orbitron',monospace;font-size:18px;font-weight:900;color:var(--tx)" id="hTotal">0</div>
-        </div>
-        <div style="background:rgba(5,150,105,.1);border:1px solid rgba(16,185,129,.3);border-radius:10px;padding:10px;text-align:center">
-          <div style="font-size:9px;color:var(--mu);margin-bottom:2px">WIN RATE</div>
-          <div style="font-family:'Orbitron',monospace;font-size:18px;font-weight:900;color:var(--gr2)" id="hRate">0%</div>
-        </div>
-        <div style="background:rgba(124,58,237,.1);border:1px solid rgba(167,139,250,.3);border-radius:10px;padding:10px;text-align:center">
-          <div style="font-size:9px;color:var(--mu);margin-bottom:2px">P&L</div>
-          <div style="font-family:'Orbitron',monospace;font-size:18px;font-weight:900" id="hPnl" style="color:var(--gr2)">0</div>
-        </div>
-      </div>
-
-      <!-- Streaks -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
-        <div style="background:rgba(0,0,0,.3);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(255,255,255,.04)">
-          <div style="font-size:9px;color:var(--mu);margin-bottom:2px">MAX WIN STREAK</div>
-          <div style="font-family:'Orbitron',monospace;font-size:20px;font-weight:900;color:var(--gr2)" id="hMaxWin">0</div>
-        </div>
-        <div style="background:rgba(0,0,0,.3);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(255,255,255,.04)">
-          <div style="font-size:9px;color:var(--mu);margin-bottom:2px">MAX LOSS STREAK</div>
-          <div style="font-family:'Orbitron',monospace;font-size:20px;font-weight:900;color:var(--rd2)" id="hMaxLoss">0</div>
-        </div>
-      </div>
-
-      <!-- Win/loss bar -->
-      <div style="background:rgba(0,0,0,.4);border-radius:8px;height:8px;overflow:hidden;margin-bottom:12px">
-        <div id="winBar" style="height:100%;background:linear-gradient(90deg,var(--gr),var(--gr2));border-radius:8px;width:0%;transition:width .5s"></div>
-      </div>
-
-      <!-- History List -->
-      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:4px;padding:5px 8px;margin-bottom:4px">
-        <div style="font-size:9px;color:var(--mu);font-weight:700">PERIOD</div>
-        <div style="font-size:9px;color:var(--mu);font-weight:700">PRED</div>
-        <div style="font-size:9px;color:var(--mu);font-weight:700">ACTUAL</div>
-        <div style="font-size:9px;color:var(--mu);font-weight:700;text-align:right">RESULT</div>
-      </div>
-      <div class="hist-list" id="histList">
-        <div style="text-align:center;padding:20px;color:var(--mu);font-size:12px">No history yet...</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════ PAGE 4: AUTOBET ══════════ -->
-  <div class="page" id="pg3">
-    <!-- Lock screen shown if not unlocked -->
-    <div id="abLock" style="padding:40px 20px;text-align:center">
-      <div style="font-size:48px;margin-bottom:16px">🔒</div>
-      <div style="font-family:'Orbitron',monospace;font-size:15px;font-weight:900;color:var(--pu2);margin-bottom:8px">AUTOBET ACCESS</div>
-      <div style="font-size:12px;color:var(--mu);margin-bottom:24px">Enter access key to unlock AutoBet</div>
-      <div class="card" style="margin:0">
-        <input class="inp" id="abKeyInput" type="password" placeholder="Enter access key...">
-        <button class="btn btn-primary" style="margin-top:10px" onclick="unlockAutobet()">🔓 UNLOCK</button>
-      </div>
-    </div>
-
-    <!-- AutoBet Panel (unlocked) -->
-    <div id="abPanel" style="display:none">
-
-      <!-- Last Bet Info -->
-      <div class="card">
-        <div class="card-hdr">🤖 LAST BET STATUS</div>
-        <div class="irow"><span class="ikey">Period</span><span class="ival" id="lPer">--</span></div>
-        <div class="irow"><span class="ikey">Prediction</span><span class="ival" id="lPred">--</span></div>
-        <div class="irow"><span class="ikey">Amount</span><span class="ival" id="lAmt">--</span></div>
-        <div class="irow"><span class="ikey">Bet Status</span><span class="ival" id="lStat" style="color:var(--mu)">--</span></div>
-        <div class="irow"><span class="ikey">Result</span><span class="ival" id="lRes">--</span></div>
-      </div>
-
-      <!-- AutoBet Stats -->
-      <div class="stats-4">
-        <div class="stat-box"><div class="stat-lbl">BETS</div><div class="stat-val" id="abBets">0</div></div>
-        <div class="stat-box"><div class="stat-lbl">W/L</div><div class="stat-val" id="abWL">0/0</div></div>
-        <div class="stat-box"><div class="stat-lbl">P&L</div><div class="stat-val" id="abPL" style="color:var(--gr2)">0</div></div>
-        <div class="stat-box"><div class="stat-lbl">LEVEL</div><div class="stat-val" id="abLvl" style="color:var(--pu2)">L1</div></div>
-      </div>
-
-      <!-- Martingale -->
-      <div class="card">
-        <div class="card-hdr">📊 MARTINGALE LEVELS (x3)</div>
-        <div class="mart-grid" id="mgrid"></div>
-        <div style="font-size:10px;color:var(--mu);text-align:center;margin-top:8px" id="martRisk">--</div>
-      </div>
-
-      <!-- Watch Mode Info -->
-      <div class="card">
-        <div class="card-hdr">STATUS</div>
-        <div class="irow">
-          <span class="ikey">Watch Mode</span>
-          <span class="ival" id="abWatchStat" style="color:var(--gd2)">ON</span>
-        </div>
-        <div class="irow">
-          <span class="ikey">Virtual Losses</span>
-          <span class="ival" id="abVLoss">0 / 3</span>
-        </div>
-        <div class="irow">
-          <span class="ikey">In Martingale</span>
-          <span class="ival" id="abInMart" style="color:var(--mu)">NO</span>
-        </div>
-        <button class="btn btn-red" style="margin-top:10px;padding:9px;font-size:11px" onclick="resetAutoBet()">🔄 Reset AutoBet Stats</button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ══════════ PAGE 5: USER DETAILS ══════════ -->
-  <div class="page" id="pg4">
-    <div class="card">
-      <div class="profile-avatar" id="profileAvatar">S</div>
-      <div class="profile-name" id="profileName">SIVA USER</div>
-      <div class="profile-sub" id="profileSub">ar-lottery01 Engine</div>
-
-      <div class="card-hdr">SESSION INFO</div>
-      <div class="irow"><span class="ikey">User ID</span><span class="ival" id="uId">--</span></div>
-      <div class="irow"><span class="ikey">Session Start</span><span class="ival" id="uSession">--</span></div>
-      <div class="irow"><span class="ikey">Engine Mode</span><span class="ival" id="uMode">SIZE</span></div>
-      <div class="irow"><span class="ikey">Base Bet</span><span class="ival" id="uBase">10</span></div>
-      <div class="irow"><span class="ikey">Watch Mode</span><span class="ival" id="uWatch">ON</span></div>
-    </div>
-
-    <div class="card">
-      <div class="card-hdr">PERFORMANCE SUMMARY</div>
-      <div class="irow"><span class="ikey">Total Predictions</span><span class="ival" id="uTotal">0</span></div>
-      <div class="irow"><span class="ikey">Wins</span><span class="ival" style="color:var(--gr2)" id="uWins">0</span></div>
-      <div class="irow"><span class="ikey">Losses</span><span class="ival" style="color:var(--rd2)" id="uLosses">0</span></div>
-      <div class="irow"><span class="ikey">Win Rate</span><span class="ival" id="uRate">0%</span></div>
-      <div class="irow"><span class="ikey">Max Win Streak</span><span class="ival" style="color:var(--gr2)" id="uMaxW">0</span></div>
-      <div class="irow"><span class="ikey">Max Loss Streak</span><span class="ival" style="color:var(--rd2)" id="uMaxL">0</span></div>
-      <div class="irow"><span class="ikey">Total P&L</span><span class="ival" id="uPnl">0</span></div>
-    </div>
-
-    <div class="card">
-      <div class="card-hdr">ABOUT</div>
-      <div style="font-size:11px;color:var(--mu);line-height:1.6">
-        SIVA ULTRA AI V58<br>
-        Platform: ar-lottery01.com<br>
-        Game: WinGo 1Min<br>
-        Engine: Multi-Layer Pattern Analysis<br>
-        Dragon Logic: 10+ streak = FOLLOW momentum
-      </div>
-    </div>
-  </div>
-
-</div><!-- end page-content -->
-
-<!-- ─── BOTTOM NAV ─── -->
-<div class="nav">
-  <button class="nav-item active" id="nav0" onclick="gotoPage(0)">
-    <div class="nav-icon">🔑</div>
-    <div class="nav-label">OWNER</div>
+<!-- NAV -->
+<div class="nav" id="mainNav" style="display:none">
+  <button class="nit" id="n0" onclick="gotoPage(0)">
+    <div class="nico">🔑</div><div class="nlbl">TOKEN</div>
   </button>
-  <button class="nav-item" id="nav1" onclick="gotoPage(1)">
-    <div class="nav-icon">🎯</div>
-    <div class="nav-label">PREDICT</div>
+  <button class="nit on" id="n1" onclick="gotoPage(1)">
+    <div class="nico">🎯</div><div class="nlbl">PREDICT</div>
   </button>
-  <button class="nav-item" id="nav2" onclick="gotoPage(2)">
-    <div class="nav-icon">📊</div>
-    <div class="nav-label">HISTORY</div>
+  <button class="nit" id="n2" onclick="gotoPage(2)">
+    <div class="nico">📊</div><div class="nlbl">HISTORY</div>
   </button>
-  <button class="nav-item" id="nav3" onclick="gotoPage(3)">
-    <div class="nav-icon">🤖</div>
-    <div class="nav-label">AUTOBET</div>
+  <button class="nit" id="n3" onclick="gotoPage(3)">
+    <div class="nico">🤖</div><div class="nlbl">AUTOBET</div>
   </button>
-  <button class="nav-item" id="nav4" onclick="gotoPage(4)">
-    <div class="nav-icon">👤</div>
-    <div class="nav-label">PROFILE</div>
+  <button class="nit" id="n4" onclick="gotoPage(4)">
+    <div class="nico">👑</div><div class="nlbl">OWNER</div>
   </button>
 </div>
 
@@ -507,106 +506,159 @@ input:checked+.sl:before{transform:translateX(20px)}
 <div class="toast" id="toast"></div>
 
 <script>
-// ════════════════════════════════════════════════
-//  GLOBAL STATE
-// ════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════
+const OWNER_KEY = 'suthamari6381';
+const AB_KEY    = 'siva6381';
+const USER_ID   = 'UID-' + Math.random().toString(36).substr(2,6).toUpperCase();
+const SESSION_START = new Date().toLocaleTimeString();
+
 const G = {
-  token:'', active:true, mode:'SIZE',
+  token:'', active:true, mode:'AUTO', // AUTO = pick highest confidence between SIZE/COLOR
   watch:true, vLim:3,
   baseBet:10, maxLvl:5,
   MULT:[1,3,9,27,81,243,729],
-  // runtime
   curPeriod:null, lastResolved:null,
-  prediction:null, betPlaced:false, betAmt:0,
+  prediction:null, predType:null, betPlaced:false, betAmt:0,
   level:1, vLoss:0, inMart:false,
   wins:0, losses:0, totalBets:0, pnl:0,
   maxWinStreak:0, maxLossStreak:0, curWinStreak:0, curLossStreak:0,
   timerID:null, loopID:null, busy:false,
-  sessionStart: new Date().toLocaleTimeString(),
-  userId: 'U'+Math.random().toString(36).substr(2,6).toUpperCase(),
+  historyLog:[], retries:0,
+  ownerLoggedIn:false,
   abUnlocked:false,
-  historyLog:[], // {period, pred, actual, outcome, profit}
-  retries:0
+  navActive:false,
+  selectedDays:7,
+  // User management
+  users:{}, // {uid: {expiry, addedMs, days}}
+  expiredUsers:[]
 };
 
-const AB_KEY = 'siva6381';
-
-// ════════════════════════════════════════════════
-//  NAVIGATION
-// ════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+//  NAV
+// ═══════════════════════════════════════════════════
 function gotoPage(n){
-  document.querySelectorAll('.page').forEach((p,i)=>{
-    p.classList.toggle('active', i===n);
-  });
-  document.querySelectorAll('.nav-item').forEach((b,i)=>{
-    b.classList.toggle('active', i===n);
-  });
+  if(!G.navActive && n!==0) return;
+  document.querySelectorAll('.pg').forEach((p,i)=>p.classList.toggle('on',i===n));
+  document.querySelectorAll('.nit').forEach((b,i)=>b.classList.toggle('on',i===n));
   if(n===2) updateHistoryUI();
-  if(n===3) updateAbPanel();
-  if(n===4) updateProfileUI();
+  if(n===3) updateAbUI();
+  if(n===4) updateOwnerUI();
+}
+function activateNav(startPage=1){
+  document.getElementById('mainNav').style.display='grid';
+  G.navActive=true;
+  document.querySelectorAll('.pg').forEach((p,i)=>p.classList.toggle('on',i===startPage));
+  document.querySelectorAll('.nit').forEach((b,i)=>b.classList.toggle('on',i===startPage));
 }
 
-// ════════════════════════════════════════════════
-//  LOGGING
-// ════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+//  LOGGING & TOAST
+// ═══════════════════════════════════════════════════
 function log(msg,t='i'){
   const a=document.getElementById('logEl');if(!a)return;
   const d=document.createElement('div');d.className='ll l'+t;
   d.textContent='['+new Date().toLocaleTimeString('en-US',{hour12:false})+'] '+msg;
   a.appendChild(d);a.scrollTop=a.scrollHeight;
-  if(a.children.length>300)a.removeChild(a.children[0]);
+  if(a.children.length>300) a.removeChild(a.children[0]);
 }
 function toast(msg,t='w'){
   const el=document.getElementById('toast');
   el.textContent=msg;el.className='toast show '+t;
-  clearTimeout(el._t);el._t=setTimeout(()=>el.className='toast',3000);
+  clearTimeout(el._t);el._t=setTimeout(()=>el.className='toast',3200);
 }
-function setSyncStatus(cls,txt){
-  const d=document.getElementById('syncDot');
-  const l=document.getElementById('syncLabel');
-  d.className='sync-dot '+(cls==='live'?'live':cls==='warn'?'warn':'');
-  l.textContent=txt;
+function setBadge(cls,txt){
+  document.getElementById('badge').className='tbadge '+cls;
+  document.getElementById('badgeTxt').textContent=txt;
 }
 
-// ════════════════════════════════════════════════
-//  TOKEN
-// ════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+//  LOGIN SCREENS
+// ═══════════════════════════════════════════════════
+function showOwnerLogin(){
+  document.getElementById('predLogin').style.display='none';
+  document.getElementById('ownerLogin').style.display='block';
+}
+function showPredLogin(){
+  document.getElementById('ownerLogin').style.display='none';
+  document.getElementById('predLogin').style.display='block';
+}
+function ownerLogin(){
+  const k=document.getElementById('ownerKeyInput').value.trim();
+  if(k===OWNER_KEY){
+    G.ownerLoggedIn=true;
+    // Show owner control room directly
+    document.getElementById('ownerLocked').style.display='none';
+    document.getElementById('ownerPanel').style.display='block';
+    document.getElementById('owSession').textContent=SESSION_START;
+    activateNav(4);
+    toast('👑 Owner logged in!','ok');
+    updateOwnerUI();
+  }else{
+    toast('❌ Wrong owner key!','err');
+    document.getElementById('ownerKeyInput').value='';
+  }
+}
+function ownerLogout(){
+  G.ownerLoggedIn=false;
+  document.getElementById('ownerLocked').style.display='flex';
+  document.getElementById('ownerPanel').style.display='none';
+  showPredLogin();
+  gotoPage(0);
+  toast('Logged out','w');
+}
+
+// ═══════════════════════════════════════════════════
+//  TOKEN (for prediction)
+// ═══════════════════════════════════════════════════
 function saveToken(){
-  let raw=document.getElementById('tokenInput').value.trim();
-  if(raw.length<20){toast('⚠️ Invalid token','err');return;}
-  G.token=raw.replace(/^Bearer\s+/i,'').trim();
-  document.getElementById('tokenSetup').style.display='none';
-  document.getElementById('ownerPanel').style.display='block';
-  document.getElementById('tokenPreview').textContent=G.token.slice(0,20)+'...';
+  let raw=document.getElementById('tokenInput').value.trim().replace(/^Bearer\s+/i,'').trim();
+  if(raw.length<20){toast('⚠️ Token too short!','err');return;}
+  G.token=raw;
+  activateNav(1);
   buildMart();
-  log('Token set. Engine starting...','s');
+  log('Token set. Starting engine...','s');
   toast('✅ Engine started!','ok');
-  setSyncStatus('warn','CONNECTING');
+  setBadge('warn','CONNECTING');
   startLoop();
 }
-function clearToken(){
-  G.token='';G.active=true;
-  clearInterval(G.loopID);clearInterval(G.timerID);
-  document.getElementById('tokenSetup').style.display='block';
-  document.getElementById('ownerPanel').style.display='none';
-  setSyncStatus('','OFFLINE');
-  document.getElementById('engBtn').className='eng-btn stop';
-  document.getElementById('engBtn').textContent='🛑 STOP ENGINE';
+
+// ═══════════════════════════════════════════════════
+//  AUTOBET UNLOCK
+// ═══════════════════════════════════════════════════
+function unlockAb(){
+  const k=document.getElementById('abKeyIn').value.trim();
+  if(k===AB_KEY){
+    G.abUnlocked=true;
+    document.getElementById('abLock').style.display='none';
+    document.getElementById('abPanel').style.display='block';
+    buildMart();updateAbUI();toast('🔓 AutoBet unlocked!','ok');
+  }else{
+    toast('❌ Wrong key!','err');
+    document.getElementById('abKeyIn').value='';
+  }
 }
 
-// ════════════════════════════════════════════════
-//  MODE
-// ════════════════════════════════════════════════
-function setMode(m){
-  G.mode=m;
-  document.getElementById('btnS').className='mbtn'+(m==='SIZE'?' sz':'');
-  document.getElementById('btnC').className='mbtn'+(m==='COLOR'?' cl':'');
-  log('Mode: '+m,'i');
+// ═══════════════════════════════════════════════════
+//  ENGINE
+// ═══════════════════════════════════════════════════
+function toggleEng(){
+  G.active=!G.active;
+  const b=document.getElementById('engBtn');
+  if(G.active){
+    b.className='eng-btn stop';b.textContent='🛑 STOP ENGINE';
+    log('Engine RESUMED','s');startLoop();
+  }else{
+    b.className='eng-btn start';b.textContent='▶️ START ENGINE';
+    log('Engine STOPPED','e');clearInterval(G.loopID);clearInterval(G.timerID);
+    setBadge('err','STOPPED');
+  }
 }
 
-// ════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 //  MARTINGALE
-// ════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 function buildMart(){
   G.baseBet=+document.getElementById('baseBet').value||10;
   G.maxLvl=Math.min(7,Math.max(1,+document.getElementById('maxLvl').value||5));
@@ -619,9 +671,7 @@ function buildMart(){
     d.innerHTML=`<span class="ml-l">L${i}</span><span class="ml-a">${amt}</span>`;
     g.appendChild(d);
   }
-  document.getElementById('riskLbl').textContent='Max Risk: '+risk+' coins';
-  const mr=document.getElementById('martRisk');
-  if(mr)mr.textContent='Max Session Risk: '+risk+' coins';
+  document.getElementById('riskLbl').textContent='Max risk: '+risk+' coins across '+G.maxLvl+' levels';
 }
 function refreshMart(){
   for(let i=1;i<=G.maxLvl;i++){
@@ -629,78 +679,40 @@ function refreshMart(){
     if(e)e.className='ml'+(i===G.level?' on':'');
   }
   document.getElementById('sLvl').textContent='L'+G.level;
-  const ab=document.getElementById('abLvl');
-  if(ab)ab.textContent='L'+G.level;
 }
 
-// ════════════════════════════════════════════════
-//  ENGINE
-// ════════════════════════════════════════════════
-function toggleEng(){
-  G.active=!G.active;
-  const b=document.getElementById('engBtn');
-  if(G.active){
-    b.className='eng-btn stop';b.textContent='🛑 STOP ENGINE';
-    log('Engine RESUMED','s');startLoop();
-  }else{
-    b.className='eng-btn start';b.textContent='▶️ START ENGINE';
-    log('Engine STOPPED','e');
-    clearInterval(G.loopID);clearInterval(G.timerID);
-    setSyncStatus('','STOPPED');
-  }
-}
-
-// ════════════════════════════════════════════════
-//  FETCH HISTORY — 4 fallback methods
-// ════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+//  FETCH — 4 fallback methods
+// ═══════════════════════════════════════════════════
 async function fetchHistory(){
   const url='https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json?ts='+Date.now();
-  const hdrs={'Accept':'application/json','Origin':'https://bdgwinseo.com','Referer':'https://bdgwinseo.com/'};
-
-  // Method 1: Direct
+  const h={'Accept':'application/json','Origin':'https://bdgwinseo.com','Referer':'https://bdgwinseo.com/'};
+  // 1: Direct
+  try{const r=await fetch(url,{headers:h,signal:AbortSignal.timeout(6000)});if(r.ok){const d=await r.json();const l=d?.data?.list;if(l?.length>0){log('✅ Direct OK','s');return l;}}}catch(e){}
+  // 2: allorigins
+  try{const r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent(url),{signal:AbortSignal.timeout(9000)});if(r.ok){const w=await r.json();const d=JSON.parse(w.contents);const l=d?.data?.list;if(l?.length>0){log('✅ Proxy1 OK','s');return l;}}}catch(e){}
+  // 3: corsproxy
+  try{const r=await fetch('https://corsproxy.io/?'+encodeURIComponent(url),{signal:AbortSignal.timeout(9000)});if(r.ok){const d=await r.json();const l=d?.data?.list;if(l?.length>0){log('✅ Proxy2 OK','s');return l;}}}catch(e){}
+  // 4: Claude proxy
   try{
-    const r=await fetch(url,{headers:hdrs,signal:AbortSignal.timeout(7000)});
-    if(r.ok){const d=await r.json();const l=d?.data?.list;if(l?.length>0){log('✅ Direct fetch OK','s');return l;}}
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:'Fetch this URL and return ONLY raw JSON:\n'+url}]}),
+      signal:AbortSignal.timeout(14000)});
+    if(r.ok){const d=await r.json();const txt=(d.content?.[0]?.text||'').replace(/```[a-z]*\n?/g,'').replace(/```/g,'').trim();
+      try{const p=JSON.parse(txt);const l=p?.data?.list;if(l?.length>0){log('✅ Claude proxy OK','s');return l;}}catch(e){}}
   }catch(e){}
-
-  // Method 2: allorigins
-  try{
-    const r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent(url),{signal:AbortSignal.timeout(10000)});
-    if(r.ok){const w=await r.json();const d=JSON.parse(w.contents);const l=d?.data?.list;if(l?.length>0){log('✅ Proxy1 fetch OK','s');return l;}}
-  }catch(e){}
-
-  // Method 3: corsproxy.io
-  try{
-    const r=await fetch('https://corsproxy.io/?'+encodeURIComponent(url),{signal:AbortSignal.timeout(10000)});
-    if(r.ok){const d=await r.json();const l=d?.data?.list;if(l?.length>0){log('✅ Proxy2 fetch OK','s');return l;}}
-  }catch(e){}
-
-  // Method 4: Claude API proxy
-  try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,
-        messages:[{role:'user',content:'Fetch this URL and return ONLY the raw JSON, no explanation:\n'+url}]}),
-      signal:AbortSignal.timeout(15000)
-    });
-    if(r.ok){
-      const d=await r.json();const txt=(d.content?.[0]?.text||'').replace(/```[a-z]*\n?/g,'').replace(/```/g,'').trim();
-      try{const p=JSON.parse(txt);const l=p?.data?.list;if(l?.length>0){log('✅ Claude proxy OK','s');return l;}}catch(e){}
-    }
-  }catch(e){}
-
-  log('❌ All fetch methods failed','e');return null;
+  log('❌ All fetch failed','e');return null;
 }
 
-// ════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 //  PLACE BET
-// ════════════════════════════════════════════════
-async function placeBet(period,pred,amt){
+// ═══════════════════════════════════════════════════
+async function placeBet(period,pred,type,amt){
   let bc='';
-  if(G.mode==='SIZE') bc=pred==='BIG'?'BigSmall_Big':'BigSmall_Small';
+  if(type==='SIZE') bc=pred==='BIG'?'BigSmall_Big':'BigSmall_Small';
   else bc=pred==='RED'?'Color_Red':'Color_Green';
   const payload={gameCode:'WinGo_1M',issueNumber:period,betContent:bc,betMultiple:+amt,amount:+amt};
-  log('🚀 Bet: '+bc+' | '+amt+' | '+period,'i');
+  log('🚀 Bet: '+bc+' | '+amt,'i');
   try{
     const r=await fetch('https://api.ar-lottery01.com/api/Lottery/WinGoBet',{
       method:'POST',
@@ -712,152 +724,141 @@ async function placeBet(period,pred,amt){
     const res=await r.json();
     if(res.code===0||res.msg==='Succeed'){
       log('✅ BET SUCCESS '+pred+' x'+amt,'s');
-      setLastStat('✅ SUCCESS','var(--gr2)');toast('✅ Bet: '+amt+' on '+pred,'ok');return true;
+      setStat('lStat','✅ SUCCESS','var(--gr2)');
+      toast('✅ Bet: '+amt+' on '+pred,'ok');return true;
     }
     if(res.code===401||(res.msg&&res.msg.toLowerCase().includes('token'))){
-      log('🔴 Token expired!','e');toast('Token expired! Reset token','err');
-      setLastStat('❌ TOKEN EXPIRED','var(--rd2)');return false;
+      log('🔴 Token expired!','e');toast('Token expired!','err');setStat('lStat','❌ TOKEN EXPIRED','var(--rd2)');return false;
     }
-    log('⚠️ Bet fail: '+(res.msg||'Unknown'),'e');
-    setLastStat('❌ '+(res.msg||'FAILED').slice(0,15),'var(--rd2)');return false;
-  }catch(e){
-    log('🔴 Bet err: '+e.message,'e');setLastStat('❌ NET ERR','var(--rd2)');return false;
-  }
+    log('⚠️ Bet fail: '+(res.msg||'err'),'e');
+    setStat('lStat','❌ '+(res.msg||'FAILED').slice(0,14),'var(--rd2)');return false;
+  }catch(e){log('🔴 Bet err: '+e.message,'e');setStat('lStat','❌ NET ERR','var(--rd2)');return false;}
 }
-function setLastStat(txt,col){
-  ['lStat'].forEach(id=>{const e=document.getElementById(id);if(e){e.textContent=txt;e.style.color=col;}});
-}
+function setStat(id,txt,col){const e=document.getElementById(id);if(e){e.textContent=txt;if(col)e.style.color=col;}}
 
-// ════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 //  PREDICTION ENGINE V3
-//  Multi-layer weighted voting system
+//  AUTO mode: runs both SIZE and COLOR, picks highest weight
 //  Dragon 10+ = SAME direction (momentum follow)
-//  Requires 2+ patterns to agree
-// ════════════════════════════════════════════════
+//  Multi-layer weighted voting, conflict detection
+// ═══════════════════════════════════════════════════
 function parse(item){const n=+item.number;return{n,size:n>=5?'BIG':'SMALL',color:n===0?'RED':n===5?'GREEN':n%2===0?'RED':'GREEN'};}
 function opp(v){return v==='BIG'?'SMALL':v==='SMALL'?'BIG':v==='RED'?'GREEN':'RED';}
 function strk(arr,k){let c=1;for(let i=1;i<arr.length;i++){if(arr[i][k]===arr[0][k])c++;else break;}return{v:arr[0][k],c};}
 function cnt(arr,k,v){return arr.filter(x=>x[k]===v).length;}
 function isAlt(arr,k,n){for(let i=0;i<n-1;i++){if(arr[i][k]===arr[i+1][k])return false;}return true;}
 
-function predict(list){
-  const data=list.slice(0,20).map(parse);
+function analyzeType(data,k){
   const d4=data.slice(0,4),d6=data.slice(0,6),d8=data.slice(0,8),d10=data.slice(0,10),d15=data.slice(0,15);
-  const k=G.mode==='SIZE'?'size':'color';
   const [A,B]=k==='size'?['BIG','SMALL']:['RED','GREEN'];
   const votes={};
-  function vote(val,w,pat){
-    if(!votes[val])votes[val]={w:0,pats:[]};
-    votes[val].w+=w;votes[val].pats.push(pat);
-  }
-
+  function vote(val,w,pat){if(!votes[val])votes[val]={w:0,pats:[]};votes[val].w+=w;votes[val].pats.push(pat);}
   const s20=strk(data,k),s10=strk(d10,k),s4=strk(d4,k);
-
-  // 🐉 DRAGON (10+) = SAME direction (momentum is dominant)
-  if(s20.c>=15) vote(s20.v,55,'🐉 MEGA DRAGON x'+s20.c);
-  else if(s20.c>=10) vote(s20.v,42,'🐉 DRAGON x'+s20.c);
-  // 7-9 streak = follow same direction
-  if(s10.c>=7&&s10.c<10) vote(s10.v,30,'7-9 FOLLOW');
+  // Dragon 10+ = SAME direction follow
+  if(s20.c>=15)vote(s20.v,58,'🐉 MEGA DRAGON x'+s20.c);
+  else if(s20.c>=10)vote(s20.v,44,'🐉 DRAGON x'+s20.c);
+  // 7-9 streak = follow
+  if(s10.c>=7&&s10.c<10)vote(s10.v,31,'7-9 FOLLOW');
   // 5-6 streak = break
-  if(s10.c>=5&&s10.c<7) vote(opp(s10.v),25,'5-6 BREAK');
+  if(s10.c>=5&&s10.c<7)vote(opp(s10.v),25,'5-6 BREAK');
   // 4 streak = break
-  if(s10.c===4) vote(opp(s10.v),18,'4 BREAK');
-
-  // Distribution 10 rounds
+  if(s10.c===4)vote(opp(s10.v),18,'4 BREAK');
+  // Distribution 10
   const a10=cnt(d10,k,A),b10=cnt(d10,k,B);
-  if(a10>=9) vote(B,40,'9+/10 '+A+'→REV');
-  if(b10>=9) vote(A,40,'9+/10 '+B+'→REV');
-  if(a10===8) vote(B,22,'8/10 '+A+'→REV');
-  if(b10===8) vote(A,22,'8/10 '+B+'→REV');
-
-  // Distribution 15 rounds
+  if(a10>=9)vote(B,42,'9+/10 '+A+'→REV');
+  if(b10>=9)vote(A,42,'9+/10 '+B+'→REV');
+  if(a10===8)vote(B,22,'8/10 '+A+'→REV');
+  if(b10===8)vote(A,22,'8/10 '+B+'→REV');
+  // Distribution 15
   const a15=cnt(d15,k,A),b15=cnt(d15,k,B);
-  if(a15>=13) vote(B,24,'13+/15 '+A+'→REV');
-  if(b15>=13) vote(A,24,'13+/15 '+B+'→REV');
-  if(a15>=12) vote(B,16,'12/15 '+A+'→REV');
-  if(b15>=12) vote(A,16,'12/15 '+B+'→REV');
-
-  // Distribution 20 rounds
+  if(a15>=13)vote(B,26,'13+/15 '+A+'→REV');
+  if(b15>=13)vote(A,26,'13+/15 '+B+'→REV');
+  if(a15>=12)vote(B,17,'12/15 '+A+'→REV');
+  if(b15>=12)vote(A,17,'12/15 '+B+'→REV');
+  // Distribution 20
   const a20=cnt(data,k,A),b20=cnt(data,k,B);
-  if(a20>=17) vote(B,36,'17+/20 '+A+'→REV');
-  if(b20>=17) vote(A,36,'17+/20 '+B+'→REV');
-  if(a20>=15) vote(B,26,'15+/20 '+A+'→REV');
-  if(b20>=15) vote(A,26,'15+/20 '+B+'→REV');
-  if(a20>=14) vote(B,18,'14+/20 '+A+'→REV');
-  if(b20>=14) vote(A,18,'14+/20 '+B+'→REV');
-
+  if(a20>=17)vote(B,37,'17+/20 '+A+'→REV');
+  if(b20>=17)vote(A,37,'17+/20 '+B+'→REV');
+  if(a20>=15)vote(B,26,'15+/20 '+A+'→REV');
+  if(b20>=15)vote(A,26,'15+/20 '+B+'→REV');
+  if(a20>=14)vote(B,18,'14+/20 '+A+'→REV');
+  if(b20>=14)vote(A,18,'14+/20 '+B+'→REV');
   // Alternating
-  if(isAlt(d6,k,6)) vote(opp(d6[0][k]),28,'ALT-6');
-  else if(isAlt(d4,k,4)) vote(opp(d4[0][k]),16,'ALT-4');
-
+  if(isAlt(d6,k,6))vote(opp(d6[0][k]),28,'ALT-6');
+  else if(isAlt(d4,k,4))vote(opp(d4[0][k]),16,'ALT-4');
   // Triple pair AAA BBB
   if(d6[0][k]===d6[1][k]&&d6[1][k]===d6[2][k]&&d6[3][k]===d6[4][k]&&d6[4][k]===d6[5][k]&&d6[0][k]!==d6[3][k])
     vote(d6[3][k],22,'TRIPLE PAIR');
-
   // Double pair AABB AABB
   if(d8.length>=8&&d8[0][k]===d8[1][k]&&d8[2][k]===d8[3][k]&&d8[4][k]===d8[5][k]&&d8[6][k]===d8[7][k]&&d8[0][k]!==d8[2][k]&&d8[2][k]!==d8[4][k])
     vote(opp(d8[1][k]),20,'DOUBLE PAIR');
-
   // Momentum confirm
-  if(s10.c>=3&&s4.c>=3&&s4.v===s10.v) vote(s10.v,12,'MOMENTUM');
+  if(s10.c>=3&&s4.c>=3&&s4.v===s10.v)vote(s10.v,12,'MOMENTUM');
 
   const arr=Object.entries(votes).map(([val,v])=>({val,...v})).sort((a,b)=>b.w-a.w);
-  if(!arr.length||arr[0].w<35) return null;
-
+  if(!arr.length||arr[0].w<35)return null;
   const best=arr[0];
-  // Conflict check
-  if(arr.length>=2&&arr[1].val!==best.val&&arr[1].w>=best.w*0.72){
-    log('⚡ Conflicting signals — SKIP','w');return null;
-  }
-
-  let conf=best.w>=80?98:best.w>=60?97:best.w>=50?96:best.w>=40?95:best.w>=35?93:90;
-  return{val:best.val,conf,pat:best.pats.slice(0,2).join(' + ')+(best.pats.length>2?' +':'')};
+  // Conflict check — if opposing has ≥70% of winner's weight, skip
+  if(arr.length>=2&&arr[1].val!==best.val&&arr[1].w>=best.w*0.70)return null;
+  const conf=best.w>=80?98:best.w>=60?97:best.w>=50?96:best.w>=40?95:best.w>=35?93:90;
+  return{type:k==='size'?'SIZE':'COLOR',val:best.val,conf,w:best.w,pat:best.pats.slice(0,2).join(' + ')+(best.pats.length>2?' +':'')};
 }
 
-// ════════════════════════════════════════════════
+function predict(list){
+  const data=list.slice(0,20).map(parse);
+  const sizeRes=analyzeType(data,'size');
+  const colorRes=analyzeType(data,'color');
+  // AUTO: pick whichever has higher weight
+  const candidates=[sizeRes,colorRes].filter(Boolean);
+  if(!candidates.length)return null;
+  candidates.sort((a,b)=>b.w-a.w);
+  return candidates[0];
+}
+
+// ═══════════════════════════════════════════════════
 //  RENDER BALLS
-// ════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 function renderBalls(list){
   const c=document.getElementById('balls');c.innerHTML='';
   list.slice(0,10).forEach(item=>{
     const n=+item.number;let cls='emp',lbl='-';
     if(!isNaN(n)){
       lbl=String(n);
-      if(G.mode==='SIZE') cls=n>=5?'big':'small';
+      // Show based on prediction type last used, default size
+      const t=G.predType||'SIZE';
+      if(t==='SIZE') cls=n>=5?'big':'small';
       else cls=n===0?'red':n===5?'green':n%2===0?'red':'green';
     }
     const d=document.createElement('div');d.className='ball '+cls;d.textContent=lbl;c.appendChild(d);
   });
 }
 
-// ════════════════════════════════════════════════
-//  RESULT RESOLUTION
-// ════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+//  RESOLVE RESULT
+// ═══════════════════════════════════════════════════
 function resolve(list){
   if(!G.curPeriod||!G.prediction)return;
   if(G.lastResolved===G.curPeriod)return;
   const found=list.find(i=>String(i.issueNumber)===String(G.curPeriod));
   if(!found)return;
   G.lastResolved=G.curPeriod;
-
   const p=parse(found);
-  const actual=G.mode==='SIZE'?p.size:p.color;
+  const actual=G.predType==='SIZE'?p.size:p.color;
   const win=actual===G.prediction;
-  const hr={period:G.curPeriod.slice(-6),pred:G.prediction,actual,outcome:win?'WIN':'LOSS',profit:G.betPlaced?(win?G.betAmt*0.98:-G.betAmt):0};
-  G.historyLog.unshift(hr);
-  if(G.historyLog.length>100)G.historyLog.pop();
-
-  // Update last bet panel
-  document.getElementById('lRes').textContent=(win?'✅ WIN':'❌ LOSS')+' ('+actual+')';
-  document.getElementById('lRes').style.color=win?'var(--gr2)':'var(--rd2)';
-
+  // Add to history — only if bet was placed (no SKIP rows)
+  if(G.betPlaced||G.prediction){
+    G.historyLog.unshift({period:G.curPeriod.slice(-6),pred:G.prediction,actual,
+      outcome:win?'WIN':'LOSS',profit:G.betPlaced?(win?G.betAmt*0.98:-G.betAmt):0,wasBet:G.betPlaced});
+    if(G.historyLog.length>100)G.historyLog.pop();
+  }
+  setStat('lRes',(win?'✅ WIN':'❌ LOSS')+' ('+actual+')',win?'var(--gr2)':'var(--rd2)');
   if(win){
     if(G.betPlaced){
       G.wins++;G.totalBets++;G.pnl+=G.betAmt*0.98;
       G.curWinStreak++;G.curLossStreak=0;
       if(G.curWinStreak>G.maxWinStreak)G.maxWinStreak=G.curWinStreak;
       log('🎉 WIN! +'+(G.betAmt*0.98).toFixed(1),'s');toast('🎉 WIN! +'+(G.betAmt*0.98).toFixed(1),'ok');
-    }else{log('📝 Virtual WIN — streak reset','i');}
+    }else{log('📝 Virtual WIN','i');}
     G.level=1;G.vLoss=0;G.inMart=false;
   }else{
     G.curLossStreak++;G.curWinStreak=0;
@@ -865,136 +866,105 @@ function resolve(list){
     if(G.betPlaced){
       G.losses++;G.totalBets++;G.pnl-=G.betAmt;
       log('❌ LOSS -'+G.betAmt,'e');toast('❌ LOSS -'+G.betAmt,'err');
-      if(G.level<G.maxLvl){G.level++;G.inMart=true;log('📈 Mart L'+G.level,' → '+(G.baseBet*G.MULT[G.level-1]),'w');}
+      if(G.level<G.maxLvl){G.level++;G.inMart=true;log('📈 Mart L'+G.level,'w');}
       else{log('⚠️ MAX LEVEL! Reset','e');G.level=1;G.inMart=false;G.vLoss=0;}
-    }else{G.vLoss++;log('📉 VLoss ['+G.vLoss+'/'+G.vLim+']'+(G.vLoss>=G.vLim?' → BET!':''),'w');}
+    }else{G.vLoss++;log('📉 VLoss ['+G.vLoss+'/'+G.vLim+']','w');}
   }
   refreshMart();refreshPredStats();
 }
 
 function refreshPredStats(){
-  document.getElementById('sBets').textContent=G.totalBets;
-  document.getElementById('sWins').textContent=G.wins;
-  document.getElementById('sLoss').textContent=G.losses;
-  const p=document.getElementById('sPL');if(p){p.textContent=(G.pnl>=0?'+':'')+G.pnl.toFixed(1);p.style.color=G.pnl>=0?'var(--gr2)':'var(--rd2)';}
+  setStat('sBets',G.totalBets);setStat('sWins',G.wins);setStat('sLoss',G.losses);
 }
 
-// ════════════════════════════════════════════════
-//  COUNTDOWN
-// ════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+//  TIMER
+// ═══════════════════════════════════════════════════
 function startTimer(s){
   clearInterval(G.timerID);
   const el=document.getElementById('timerEl');
   G.timerID=setInterval(()=>{
-    if(s<=0){clearInterval(G.timerID);return;}
-    s--;
+    if(s<=0){clearInterval(G.timerID);return;}s--;
     el.textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
-    el.className='timer-val'+(s<=10?' crit':'');
+    el.className='tv'+(s<=10?' crit':'');
   },1000);
 }
 
-// ════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 //  MAIN LOOP
-// ════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 async function doFetch(){
   if(!G.token||!G.active||G.busy)return;
   G.busy=true;
-  const fb=document.getElementById('fbar');
-  fb.style.display='block';fb.textContent='🔄 Fetching...';
+  const fb=document.getElementById('fbar');fb.style.display='block';fb.textContent='🔄 Fetching...';
   try{
     const list=await fetchHistory();
     if(!list||!list.length){
-      G.retries++;
-      fb.textContent='❌ Fetch failed ('+G.retries+') — retrying...';
-      setSyncStatus('warn','FETCH ERR');
-      G.busy=false;return;
+      G.retries++;fb.textContent='❌ Fetch failed ('+G.retries+')';setBadge('warn','FETCH ERR');G.busy=false;return;
     }
-    G.retries=0;setSyncStatus('live','LIVE');fb.style.display='none';
+    G.retries=0;setBadge('live','LIVE');fb.style.display='none';
     if(G.curPeriod)resolve(list);
     const next=String(BigInt(list[0].issueNumber)+1n);
     if(next===G.curPeriod){G.busy=false;return;}
-
-    G.curPeriod=next;G.prediction=null;G.betPlaced=false;
-    document.getElementById('periodEl').textContent=next;
-    document.getElementById('lPer').textContent=next.slice(-8);
-    document.getElementById('lRes').textContent='Pending...';
-    document.getElementById('lRes').style.color='var(--mu)';
-
+    G.curPeriod=next;G.prediction=null;G.predType=null;G.betPlaced=false;
+    document.getElementById('periodEl').textContent=next.slice(-8);
+    setStat('lPer',next.slice(-8));
+    setStat('lRes','Pending...','var(--mu)');
     renderBalls(list);
-
     const sig=predict(list);
     if(!sig){
-      // SKIP — no duplicate in history for skip periods
-      document.getElementById('predVal').className='pred-val SKIP';
+      document.getElementById('predVal').className='pv SKIP';
       document.getElementById('predVal').textContent='SKIP';
       document.getElementById('predPat').textContent='No pattern — watching';
       document.getElementById('predConf').textContent='';
-      log('⏭️ SKIP '+next.slice(-6)+' — no pattern','w');
-      startTimer(58);G.busy=false;return;
+      log('⏭️ SKIP '+next.slice(-6),'w');startTimer(58);G.busy=false;return;
     }
-
-    G.prediction=sig.val;
-    document.getElementById('predVal').className='pred-val '+sig.val;
+    G.prediction=sig.val;G.predType=sig.type;
+    document.getElementById('predVal').className='pv '+sig.val;
     document.getElementById('predVal').textContent=sig.val;
-    document.getElementById('predPat').textContent=sig.pat;
+    document.getElementById('predPat').textContent=sig.pat+' ['+sig.type+']';
     document.getElementById('predConf').textContent=sig.conf+'% confidence';
-    document.getElementById('lPred').textContent=sig.val;
-    log('🎯 '+sig.val+' | '+sig.pat+' | '+sig.conf+'% | '+next.slice(-6),'i');
-
+    setStat('lPred',sig.val);
+    log('🎯 '+sig.val+' | '+sig.pat+' | '+sig.conf+'%','i');
+    // Bet decision
     const shouldBet=G.inMart||!G.watch||(G.watch&&G.vLoss>=G.vLim);
-    if(shouldBet){
-      const amt=G.baseBet*G.MULT[G.level-1];
-      G.betAmt=amt;
-      document.getElementById('lAmt').textContent=amt+' (L'+G.level+')';
-      setLastStat('Placing...','var(--gd2)');
-      G.betPlaced=await placeBet(next,sig.val,amt);
+    if(shouldBet&&G.abUnlocked){
+      const amt=G.baseBet*G.MULT[G.level-1];G.betAmt=amt;
+      setStat('lAmt',amt+' (L'+G.level+')');setStat('lStat','Placing...','var(--gd2)');
+      G.betPlaced=await placeBet(next,sig.val,sig.type,amt);
     }else{
       const need=G.vLim-G.vLoss;
-      log('👀 Watch '+G.vLoss+'/'+G.vLim+' need '+need,'i');
-      document.getElementById('lAmt').textContent='WATCH ('+G.vLoss+'/'+G.vLim+')';
-      setLastStat('⏳ Need '+need+' more','var(--gd2)');
+      setStat('lAmt','WATCHING ('+G.vLoss+'/'+G.vLim+')');
+      setStat('lStat',shouldBet&&!G.abUnlocked?'⚠️ UNLOCK AUTOBET':'⏳ Need '+need+' more','var(--gd2)');
+      log('👀 Watch '+G.vLoss+'/'+G.vLim+(G.abUnlocked?'':' | Unlock AutoBet'),'i');
     }
     startTimer(58);
-  }catch(e){log('Engine err: '+e.message,'e');fb.textContent='❌ '+e.message;}
+  }catch(e){log('Engine err: '+e.message,'e');}
   G.busy=false;
 }
-function startLoop(){
-  clearInterval(G.loopID);doFetch();
-  G.loopID=setInterval(doFetch,18000);
-}
+function startLoop(){clearInterval(G.loopID);doFetch();G.loopID=setInterval(doFetch,18000);}
 
-// ════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 //  HISTORY PAGE
-// ════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 function updateHistoryUI(){
-  const logs=G.historyLog.filter(h=>h.outcome!=='SKIP');
+  const logs=G.historyLog.filter(h=>h.wasBet);
   const total=logs.length,wins=logs.filter(h=>h.outcome==='WIN').length;
   const pnl=logs.reduce((s,h)=>s+h.profit,0);
-  document.getElementById('hTotal').textContent=total;
-  document.getElementById('hRate').textContent=total?Math.round(wins/total*100)+'%':'0%';
+  setStat('hTotal',G.historyLog.length);
+  setStat('hRate',total?Math.round(wins/total*100)+'%':'0%');
   const pnlEl=document.getElementById('hPnl');
-  pnlEl.textContent=(pnl>=0?'+':'')+pnl.toFixed(1);
-  pnlEl.style.color=pnl>=0?'var(--gr2)':'var(--rd2)';
-  document.getElementById('hMaxWin').textContent=G.maxWinStreak;
-  document.getElementById('hMaxLoss').textContent=G.maxLossStreak;
+  pnlEl.textContent=(pnl>=0?'+':'')+pnl.toFixed(1);pnlEl.style.color=pnl>=0?'var(--gr2)':'var(--rd2)';
+  setStat('hMaxW',G.maxWinStreak);setStat('hMaxL',G.maxLossStreak);
+  setStat('hCurW',G.curWinStreak);setStat('hCurL',G.curLossStreak);
   document.getElementById('winBar').style.width=total?(wins/total*100)+'%':'0%';
-
-  const list=document.getElementById('histList');
-  list.innerHTML='';
-  if(!G.historyLog.length){list.innerHTML='<div style="text-align:center;padding:20px;color:var(--mu);font-size:12px">No history yet...</div>';return;}
+  const list=document.getElementById('histList');list.innerHTML='';
+  if(!G.historyLog.length){list.innerHTML='<div style="text-align:center;padding:16px;color:var(--mu);font-size:11px">No predictions yet...</div>';return;}
   G.historyLog.forEach(h=>{
     const row=document.createElement('div');
-    row.style.cssText='display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:4px;padding:7px 10px;background:rgba(0,0,0,.3);border-radius:9px;border:1px solid rgba(255,255,255,.04);align-items:center;margin-bottom:5px;';
-    if(h.outcome==='WIN') row.style.borderLeft='3px solid var(--gr2)';
-    else if(h.outcome==='LOSS') row.style.borderLeft='3px solid var(--rd2)';
-    else row.style.borderLeft='3px solid var(--mu)';
-    const outcomeColor=h.outcome==='WIN'?'var(--gr2)':h.outcome==='LOSS'?'var(--rd2)':'var(--mu)';
-    row.innerHTML=`
-      <div style="font-size:9px;color:var(--mu);font-family:'Orbitron',monospace">${h.period}</div>
-      <div style="font-size:10px;font-weight:700;color:var(--pu2);font-family:'Orbitron',monospace">${h.pred}</div>
-      <div style="font-size:10px;font-weight:700;color:var(--tx);font-family:'Orbitron',monospace">${h.actual||'-'}</div>
-      <div style="font-size:10px;font-weight:700;color:${outcomeColor};text-align:right;font-family:'Orbitron',monospace">${h.outcome}</div>
-    `;
+    row.className='hrow '+(h.outcome==='WIN'?'win':'loss');
+    const oc=h.outcome==='WIN'?'var(--gr2)':'var(--rd2)';
+    row.innerHTML=`<span class="hper">${h.period}</span><span class="hpred">${h.pred}</span><span class="hact">${h.actual||'-'}</span><span class="hout" style="color:${oc}">${h.outcome}</span>`;
     list.appendChild(row);
   });
 }
@@ -1004,70 +974,130 @@ function clearHistory(){
   refreshPredStats();updateHistoryUI();toast('History cleared','w');
 }
 
-// ════════════════════════════════════════════════
-//  AUTOBET PAGE
-// ════════════════════════════════════════════════
-function unlockAutobet(){
-  const k=document.getElementById('abKeyInput').value.trim();
-  if(k===AB_KEY){
-    G.abUnlocked=true;
-    document.getElementById('abLock').style.display='none';
-    document.getElementById('abPanel').style.display='block';
-    buildMart();updateAbPanel();
-    toast('🔓 AutoBet unlocked!','ok');
-  }else{
-    toast('❌ Wrong key!','err');
-    document.getElementById('abKeyInput').value='';
-    document.getElementById('abKeyInput').style.borderColor='var(--rd2)';
-    setTimeout(()=>document.getElementById('abKeyInput').style.borderColor='',1500);
-  }
-}
-function updateAbPanel(){
+// ═══════════════════════════════════════════════════
+//  AUTOBET UI
+// ═══════════════════════════════════════════════════
+function updateAbUI(){
   if(!G.abUnlocked)return;
-  document.getElementById('abBets').textContent=G.totalBets;
-  document.getElementById('abWL').textContent=G.wins+'/'+G.losses;
-  const pl=document.getElementById('abPL');
-  pl.textContent=(G.pnl>=0?'+':'')+G.pnl.toFixed(1);
-  pl.style.color=G.pnl>=0?'var(--gr2)':'var(--rd2)';
-  document.getElementById('abLvl').textContent='L'+G.level;
-  document.getElementById('abWatchStat').textContent=G.watch?'ON':'OFF';
-  document.getElementById('abVLoss').textContent=G.vLoss+' / '+G.vLim;
-  document.getElementById('abInMart').textContent=G.inMart?'YES':'NO';
-  document.getElementById('abInMart').style.color=G.inMart?'var(--gd2)':'var(--mu)';
+  setStat('sLvl','L'+G.level);refreshMart();
+  const vl=document.getElementById('abVL');if(vl)vl.textContent=G.vLoss+'/'+G.vLim;
+  const im=document.getElementById('abMart');if(im){im.textContent=G.inMart?'YES':'NO';im.style.color=G.inMart?'var(--gd2)':'var(--mu)';}
 }
-function resetAutoBet(){
+function resetStats(){
   G.wins=0;G.losses=0;G.totalBets=0;G.pnl=0;G.level=1;G.vLoss=0;G.inMart=false;
   G.maxWinStreak=0;G.maxLossStreak=0;G.curWinStreak=0;G.curLossStreak=0;
-  refreshMart();refreshPredStats();updateAbPanel();toast('AutoBet reset','w');
+  G.historyLog=[];
+  refreshMart();refreshPredStats();updateAbUI();toast('Stats reset','w');
 }
 
-// ════════════════════════════════════════════════
-//  PROFILE PAGE
-// ════════════════════════════════════════════════
-function updateProfileUI(){
-  document.getElementById('uId').textContent=G.userId;
-  document.getElementById('uSession').textContent=G.sessionStart;
-  document.getElementById('uMode').textContent=G.mode;
-  document.getElementById('uBase').textContent=G.baseBet;
-  document.getElementById('uWatch').textContent=G.watch?'ON':'OFF';
-  document.getElementById('uTotal').textContent=G.totalBets;
-  document.getElementById('uWins').textContent=G.wins;
-  document.getElementById('uLosses').textContent=G.losses;
-  document.getElementById('uRate').textContent=G.totalBets?Math.round(G.wins/G.totalBets*100)+'%':'0%';
-  document.getElementById('uMaxW').textContent=G.maxWinStreak;
-  document.getElementById('uMaxL').textContent=G.maxLossStreak;
-  const p=document.getElementById('uPnl');
-  p.textContent=(G.pnl>=0?'+':'')+G.pnl.toFixed(1);
-  p.style.color=G.pnl>=0?'var(--gr2)':'var(--rd2)';
+// ═══════════════════════════════════════════════════
+//  OWNER — USER MANAGEMENT
+// ═══════════════════════════════════════════════════
+let selDays=7;
+function selDay(d){
+  selDays=d;
+  ['7','14','30','1','custom'].forEach(k=>document.getElementById('db'+k).className='daybadge');
+  document.getElementById('db'+(d||'custom')).className='daybadge sel';
+  document.getElementById('customDayWrap').style.display=d===0?'block':'none';
 }
 
-// ════════════════════════════════════════════════
+function addUser(){
+  const uid=document.getElementById('addUid').value.trim();
+  if(!uid){toast('Enter User ID','err');return;}
+  let days=selDays;
+  if(days===0){days=+document.getElementById('customDays').value||0;}
+  if(!days||days<1){toast('Enter valid days','err');return;}
+  const expiry=Date.now()+days*86400000;
+  G.users[uid]={expiry,addedMs:Date.now(),days,uid};
+  document.getElementById('addUid').value='';
+  toast('✅ '+uid+' added for '+days+' days','ok');
+  updateOwnerUI();log('USER ADD: '+uid+' | '+days+'d','s');
+}
+
+function removeUser(uid){
+  if(!G.users[uid])return;
+  G.expiredUsers.unshift({uid,removedMs:Date.now(),...G.users[uid]});
+  if(G.expiredUsers.length>50)G.expiredUsers.pop();
+  delete G.users[uid];
+  toast('Removed '+uid,'w');updateOwnerUI();
+}
+
+function extendUser(uid){
+  if(!G.users[uid])return;
+  const days=G.users[uid].days;
+  G.users[uid].expiry=Math.max(G.users[uid].expiry,Date.now())+7*86400000;
+  toast('Extended '+uid+' +7 days','ok');updateOwnerUI();
+}
+
+function updateOwnerUI(){
+  if(!G.ownerLoggedIn)return;
+  const now=Date.now();
+  const active=Object.values(G.users).filter(u=>u.expiry>now);
+  const expired=Object.values(G.users).filter(u=>u.expiry<=now);
+  // Move expired to expired list
+  expired.forEach(u=>{G.expiredUsers.unshift({...u,removedMs:u.expiry});delete G.users[u.uid];});
+  setStat('owActiveCount',active.length);
+  setStat('owTotalCount',Object.values(G.users).length+G.expiredUsers.length);
+  setStat('owUserCountLbl',active.length+' users');
+  document.getElementById('owUserCountLbl').textContent=active.length+' active';
+
+  // User list
+  const ul=document.getElementById('userList');ul.innerHTML='';
+  const allUsers=Object.values(G.users);
+  if(!allUsers.length){ul.innerHTML='<div style="text-align:center;padding:14px;color:var(--mu);font-size:10px">No active users...</div>';}
+  else{
+    allUsers.sort((a,b)=>a.expiry-b.expiry).forEach(u=>{
+      const daysLeft=((u.expiry-now)/86400000).toFixed(1);
+      const expDate=new Date(u.expiry).toLocaleDateString();
+      const isExpiring=u.expiry-now<2*86400000;
+      const div=document.createElement('div');div.className='ucard';
+      div.style.borderColor=isExpiring?'rgba(239,68,68,.3)':'var(--bor2)';
+      div.innerHTML=`
+        <div class="ucard-info">
+          <div class="uid-txt">${u.uid}</div>
+          <div class="uday-txt">${daysLeft}d left</div>
+          <div class="uexp-txt">Expires: ${expDate}</div>
+        </div>
+        <div class="ucard-actions">
+          <button class="ubtn" onclick="extendUser('${u.uid}')" style="background:rgba(5,150,105,.15);border:1px solid rgba(16,185,129,.3);color:var(--gr2);font-family:'Orbitron',sans-serif;font-size:8px;padding:6px 8px;border-radius:7px;cursor:pointer;font-weight:700">+7D</button>
+          <button class="ubtn ubtn-r" onclick="removeUser('${u.uid}')">REMOVE</button>
+        </div>`;
+      ul.appendChild(div);
+    });
+  }
+
+  // Expired list
+  const el=document.getElementById('expiredList');el.innerHTML='';
+  if(!G.expiredUsers.length){el.innerHTML='<div style="text-align:center;padding:12px;color:var(--mu);font-size:10px">None...</div>';}
+  else{
+    G.expiredUsers.slice(0,20).forEach(u=>{
+      const rDate=u.removedMs?new Date(u.removedMs).toLocaleDateString():'--';
+      const div=document.createElement('div');
+      div.style.cssText='background:rgba(0,0,0,.25);border-radius:9px;padding:9px 11px;margin-bottom:5px;border:1px solid rgba(239,68,68,.15);display:flex;justify-content:space-between;align-items:center';
+      div.innerHTML=`<div><div style="font-family:'Orbitron',monospace;font-size:10px;color:var(--mu);font-weight:700">${u.uid}</div><div style="font-size:9px;color:var(--rd2);margin-top:1px">Expired/Removed: ${rDate}</div></div>
+        <button onclick="readdUser('${u.uid}',${u.days})" style="background:rgba(124,58,237,.15);border:1px solid rgba(167,139,250,.3);color:var(--pu2);font-family:'Orbitron',sans-serif;font-size:8px;padding:5px 8px;border-radius:7px;cursor:pointer;font-weight:700">RE-ADD</button>`;
+      el.appendChild(div);
+    });
+  }
+}
+
+function readdUser(uid,days){
+  G.users[uid]={expiry:Date.now()+(days||7)*86400000,addedMs:Date.now(),days:days||7,uid};
+  G.expiredUsers=G.expiredUsers.filter(u=>u.uid!==uid);
+  toast('Re-added '+uid,'ok');updateOwnerUI();
+}
+
+function ownerLogout2(){ownerLogout();}
+
+// ═══════════════════════════════════════════════════
 //  INIT
-// ════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
 window.addEventListener('DOMContentLoaded',()=>{
-  log('SIVA ULTRA AI V58 initialized','s');
-  log('Dragon 10+ = SAME direction (momentum)','i');
-  log('Enter token on OWNER tab to start','i');
+  // Show login page, no nav initially
+  document.getElementById('mainNav').style.display='none';
+  log('SIVA ULTRA AI ready','s');
+  log('Your User ID: '+USER_ID,'i');
+  log('Dragon 10+ = SAME direction follow','i');
 });
 </script>
 </body>
