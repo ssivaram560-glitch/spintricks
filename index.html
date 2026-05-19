@@ -8,8 +8,7 @@
 <style>
 :root{
   --bg:#030a03;--c2:#0a140a;--c3:#0f1f0f;
-  --gr:#00ff41;--gr2:#00cc33;--gr3:rgba(0,255,65,.12);
-  --grd:rgba(0,255,65,.4);--grb:rgba(0,255,65,.08);
+  --gr:#00ff41;--gr2:#00cc33;
   --pu:#7c3aed;--pu2:#a78bfa;
   --gd:#f59e0b;--rd:#ef4444;--cy:#22d3ee;
   --mu:#4a7a4a;--tx:#c8ffc8;--tx2:#7db87d;
@@ -18,18 +17,14 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;background:var(--bg)}
 body{color:var(--tx);font-family:'Share Tech Mono',monospace;max-width:430px;margin:0 auto;position:relative}
-
-/* scanline effect */
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.15) 2px,rgba(0,0,0,.15) 4px);pointer-events:none;z-index:999;animation:scan 8s linear infinite}
-@keyframes scan{0%{background-position:0 0}100%{background-position:0 100px}}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.13) 2px,rgba(0,0,0,.13) 4px);pointer-events:none;z-index:999}
 body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(0,255,65,.04),transparent 70%);pointer-events:none;z-index:0}
-
 .app{display:flex;flex-direction:column;height:100vh;position:relative;z-index:1}
 
-/* ── TOPBAR ── */
+/* TOPBAR */
 .topbar{flex-shrink:0;background:rgba(3,10,3,.97);backdrop-filter:blur(18px);padding:9px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bor);z-index:50}
 .tlogo{font-family:'Orbitron',monospace;font-size:10px;font-weight:900;color:var(--gr);letter-spacing:2px;text-shadow:0 0 10px var(--gr)}
-.tbadge{display:flex;align-items:center;gap:5px;padding:3px 9px;border-radius:3px;border:1px solid;font-size:9px;font-weight:700;font-family:'Share Tech Mono',monospace}
+.tbadge{display:flex;align-items:center;gap:5px;padding:3px 9px;border-radius:3px;border:1px solid;font-size:9px;font-weight:700}
 .tbadge.live{background:rgba(0,255,65,.08);border-color:var(--bor);color:var(--gr)}
 .tbadge.err{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.4);color:var(--rd)}
 .tbadge.warn{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.4);color:var(--gd)}
@@ -38,12 +33,11 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 .tbadge.err .tdot{background:var(--rd)}
 .tbadge.warn .tdot{background:var(--gd);animation:blink 1.2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-
 .scrl{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:72px}
 .scrl::-webkit-scrollbar{width:2px}
 .scrl::-webkit-scrollbar-thumb{background:var(--bor);border-radius:2px}
 
-/* ── NAV ── */
+/* NAV */
 .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(3,10,3,.98);backdrop-filter:blur(18px);border-top:1px solid var(--bor);display:grid;z-index:50;padding:4px 0 max(4px,env(safe-area-inset-bottom))}
 .nit{display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 2px;cursor:pointer;border:none;background:none;color:var(--mu);transition:color .2s;font-family:'Share Tech Mono',monospace}
 .nit.on{color:var(--gr)}
@@ -51,103 +45,88 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 .nit.on .nico{background:rgba(0,255,65,.1);border-color:var(--bor)}
 .nlbl{font-size:7px;font-weight:700;letter-spacing:.5px}
 
-/* ── PAGES ── */
+/* PAGES */
 .pg{display:none;animation:fi .2s ease}
 .pg.on{display:block}
 @keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── CARD ── */
-.card{margin:8px;background:var(--c2);border-radius:6px;padding:13px;border:1px solid var(--bor2);position:relative}
+/* CARD */
+.card{margin:8px;background:var(--c2);border-radius:6px;padding:13px;border:1px solid var(--bor2);position:relative;overflow:hidden}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gr),transparent);opacity:.4}
 .chdr{font-size:8px;font-weight:700;letter-spacing:2px;color:var(--mu);text-transform:uppercase;margin-bottom:11px;display:flex;align-items:center;gap:6px}
 .chdr-bar{width:2px;height:12px;border-radius:1px;background:var(--gr);box-shadow:0 0 6px var(--gr);flex-shrink:0}
 
-/* ── INPUTS ── */
+/* INPUTS */
 .inp{width:100%;background:rgba(0,0,0,.6);border:1px solid var(--bor2);border-radius:4px;padding:11px 13px;color:var(--gr);font-size:12px;font-family:'Share Tech Mono',monospace;outline:none;transition:border-color .2s}
 .inp:focus{border-color:var(--gr);box-shadow:0 0 8px rgba(0,255,65,.2)}
 .inp::placeholder{color:var(--mu)}
-textarea.inp{resize:none}
 
-/* ── BUTTONS ── */
+/* BUTTONS */
 .btn{width:100%;padding:13px;border-radius:4px;border:none;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px}
 .btn:active{transform:scale(.97)}
-.btn-gr{background:transparent;border:2px solid var(--gr);color:var(--gr);box-shadow:0 0 12px rgba(0,255,65,.2),inset 0 0 12px rgba(0,255,65,.05)}
-.btn-gr:hover,.btn-gr:active{background:rgba(0,255,65,.08);box-shadow:0 0 20px rgba(0,255,65,.4)}
+.btn-gr{background:transparent;border:2px solid var(--gr);color:var(--gr);box-shadow:0 0 12px rgba(0,255,65,.2)}
+.btn-gr:active{background:rgba(0,255,65,.08)}
 .btn-rd{background:transparent;border:1px solid rgba(239,68,68,.5);color:var(--rd)}
-.btn-cy{background:transparent;border:2px solid var(--cy);color:var(--cy);box-shadow:0 0 10px rgba(34,211,238,.15)}
-.btn-pu{background:transparent;border:2px solid var(--pu2);color:var(--pu2);box-shadow:0 0 10px rgba(167,139,250,.15)}
+.btn-cy{background:transparent;border:2px solid var(--cy);color:var(--cy)}
 
-/* ════════════════════════════════
-   LOGIN PAGE — CYBER STYLE
-════════════════════════════════ */
+/* LOGIN */
 .cyber-login{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:20px;position:relative}
-
-/* corner brackets */
 .corner{position:absolute;width:28px;height:28px;border-color:var(--gr);border-style:solid;opacity:.7}
 .corner.tl{top:14px;left:14px;border-width:2px 0 0 2px}
 .corner.tr{top:14px;right:14px;border-width:2px 2px 0 0}
 .corner.bl{bottom:14px;left:14px;border-width:0 0 2px 2px}
 .corner.br{bottom:14px;right:14px;border-width:0 2px 2px 0}
-
 .cyber-icon{font-size:48px;margin-bottom:14px;filter:drop-shadow(0 0 12px var(--gr));animation:float 3s ease-in-out infinite}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-
 .cyber-title{font-family:'Orbitron',monospace;font-size:26px;font-weight:900;color:var(--gr);text-align:center;line-height:1.1;text-shadow:0 0 20px rgba(0,255,65,.6);letter-spacing:3px;margin-bottom:4px}
-.cyber-sub{font-size:10px;color:var(--mu);letter-spacing:3px;text-align:center;margin-bottom:24px}
-
+.cyber-sub{font-size:10px;color:var(--mu);letter-spacing:3px;text-align:center;margin-bottom:20px}
 .cyber-form{width:100%;max-width:340px;display:flex;flex-direction:column;gap:10px}
 .cyber-lbl{font-size:9px;color:var(--mu);letter-spacing:2px;margin-bottom:4px;display:block}
-
 .cyber-err{display:none;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.4);border-radius:4px;padding:10px 14px;font-size:10px;color:var(--rd);text-align:center;letter-spacing:1px}
 .cyber-err.show{display:block}
-
 .cyber-divider{display:flex;align-items:center;gap:8px;margin:4px 0;opacity:.5}
 .cyber-divider::before,.cyber-divider::after{content:'';flex:1;height:1px;background:var(--bor)}
 .cyber-divider span{font-size:8px;color:var(--mu);letter-spacing:2px}
-
-.tg-box{background:rgba(34,211,238,.06);border:1px solid rgba(34,211,238,.2);border-radius:4px;padding:12px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .2s}
-.tg-box:hover{background:rgba(34,211,238,.1)}
+.tg-box{background:rgba(34,211,238,.06);border:1px solid rgba(34,211,238,.2);border-radius:4px;padding:12px;display:flex;align-items:center;gap:10px;cursor:pointer}
 .tg-icon{font-size:22px;flex-shrink:0}
-.tg-info{flex:1}
 .tg-name{font-size:11px;font-weight:700;color:var(--cy);letter-spacing:.5px}
 .tg-link{font-size:9px;color:var(--mu);margin-top:1px}
-
-.sys-status{margin-top:20px;font-size:8px;color:var(--mu);letter-spacing:2px;display:flex;align-items:center;gap:6px}
+.sys-status{margin-top:18px;font-size:8px;color:var(--mu);letter-spacing:2px;display:flex;align-items:center;gap:6px}
 .sys-dot{width:6px;height:6px;border-radius:50%;background:var(--gr);box-shadow:0 0 6px var(--gr);animation:blink 1.2s infinite;flex-shrink:0}
 
-/* ── UID DISPLAY on login ── */
-.uid-box{background:rgba(0,255,65,.06);border:1px solid var(--bor);border-radius:4px;padding:11px;text-align:center;width:100%}
+/* UID */
+.uid-box{background:rgba(0,255,65,.06);border:1px solid var(--bor);border-radius:4px;padding:11px;text-align:center;width:100%;max-width:340px;margin-bottom:12px}
 .uid-lbl2{font-size:8px;letter-spacing:2px;color:var(--mu);margin-bottom:4px}
-.uid-num{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;color:var(--gr);text-shadow:0 0 12px rgba(0,255,65,.5);letter-spacing:3px}
+.uid-num{font-family:'Orbitron',monospace;font-size:24px;font-weight:900;color:var(--gr);text-shadow:0 0 12px rgba(0,255,65,.5);letter-spacing:4px}
 .uid-copy{font-size:9px;color:var(--cy);margin-top:5px;cursor:pointer;letter-spacing:1px}
 
-/* ── HERO PRED ── */
-.pred-hero{margin:8px;background:var(--c2);border:1px solid var(--bor);border-radius:6px;padding:14px;display:flex;gap:9px;position:relative}
+/* PRED HERO */
+.pred-hero{margin:8px;background:var(--c2);border:1px solid var(--bor);border-radius:6px;padding:14px;display:flex;gap:9px;position:relative;overflow:hidden}
 .pred-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gr),transparent);opacity:.5}
 .ph-main{flex:1.3;background:rgba(0,0,0,.5);border-radius:4px;padding:13px;text-align:center;border:1px solid var(--bor2)}
 .ph-lbl{font-size:7px;letter-spacing:2px;color:var(--mu);text-transform:uppercase;margin-bottom:5px}
-.pv{font-family:'Orbitron',monospace;font-size:26px;font-weight:900;transition:all .3s;margin:4px 0;text-shadow:0 0 16px currentColor}
-.pv.BIG{color:var(--pu2)}
-.pv.SMALL{color:var(--gr)}
-.pv.RED{color:var(--rd)}
-.pv.GREEN{color:#22c55e}
-.pv.LOAD{color:var(--gd);font-size:12px;text-shadow:none}
-.pv.SKIP{color:var(--mu);font-size:15px;text-shadow:none}
+.pv{font-family:'Orbitron',monospace;font-size:28px;font-weight:900;transition:all .3s;margin:4px 0}
+.pv.BIG{color:var(--pu2);text-shadow:0 0 16px rgba(167,139,250,.6)}
+.pv.SMALL{color:var(--gr);text-shadow:0 0 16px rgba(0,255,65,.6)}
+.pv.RED{color:var(--rd);text-shadow:0 0 16px rgba(239,68,68,.6)}
+.pv.GREEN{color:#22c55e;text-shadow:0 0 16px rgba(34,197,94,.6)}
+.pv.LOAD{color:var(--gd);font-size:11px;text-shadow:none;letter-spacing:1px}
+.pv.SKIP{color:var(--mu);font-size:14px;text-shadow:none}
 .ph-pat{font-size:8px;color:var(--gd);font-weight:700;margin-top:3px;letter-spacing:.5px}
 .ph-conf{font-size:8px;color:var(--mu);margin-top:1px}
 .ph-timer{flex:1;background:rgba(0,0,0,.5);border-radius:4px;padding:12px;text-align:center;display:flex;flex-direction:column;justify-content:center;border:1px solid var(--bor2)}
-.tv{font-family:'Orbitron',monospace;font-size:26px;font-weight:900;color:var(--gd)}
+.tv{font-family:'Orbitron',monospace;font-size:28px;font-weight:900;color:var(--gd)}
 .tv.crit{color:var(--rd);text-shadow:0 0 12px rgba(239,68,68,.6);animation:blink .6s infinite}
 .per-lbl{font-size:7px;color:var(--mu);margin-top:3px;letter-spacing:1px}
 .per-v{font-size:8px;color:var(--tx2);margin-top:2px;word-break:break-all;line-height:1.3}
 
-/* ── STATS ── */
+/* STATS */
 .s4{margin:0 8px 8px;display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
 .sb{background:var(--c2);border-radius:5px;padding:9px 4px;text-align:center;border:1px solid var(--bor2)}
 .sl{font-size:7px;color:var(--mu);text-transform:uppercase;margin-bottom:2px;letter-spacing:.5px}
 .sv{font-family:'Orbitron',monospace;font-size:15px;font-weight:700}
 
-/* ── BALLS ── */
+/* BALLS */
 .brow{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
 .ball{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:10px;font-weight:900;flex-shrink:0}
 .ball.big{background:rgba(124,58,237,.2);border:2px solid var(--pu2);color:#c4b5fd}
@@ -156,7 +135,7 @@ textarea.inp{resize:none}
 .ball.green{background:rgba(34,197,94,.2);border:2px solid #22c55e;color:#86efac}
 .ball.emp{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--mu)}
 
-/* ── HISTORY ── */
+/* HISTORY */
 .hist-hdr{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:4px;padding:5px 6px;margin-bottom:3px}
 .hist-hdr span{font-size:7px;color:var(--mu);font-weight:700;letter-spacing:1px}
 .hist-hdr span:last-child{text-align:right}
@@ -171,15 +150,17 @@ textarea.inp{resize:none}
 .hrow.win .hout{color:var(--gr)}
 .hrow.loss .hout{color:var(--rd)}
 
-/* ── MARTINGALE ── */
-.mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
-.ml{background:rgba(0,0,0,.4);border:1px solid var(--bor2);border-radius:5px;padding:9px 4px;text-align:center;transition:all .2s}
+/* MARTINGALE */
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:8px}
+.ml{background:rgba(0,0,0,.4);border:1px solid var(--bor2);border-radius:5px;padding:8px 3px;text-align:center;transition:all .2s}
 .ml.on{background:rgba(0,255,65,.08);border-color:var(--gr);box-shadow:0 0 8px rgba(0,255,65,.15)}
-.ml-l{font-size:8px;color:var(--mu);font-weight:700;display:block;margin-bottom:2px}
+.ml.done{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)}
+.ml-l{font-size:7px;color:var(--mu);font-weight:700;display:block;margin-bottom:2px}
 .ml.on .ml-l{color:var(--gr)}
-.ml-a{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;color:var(--tx)}
+.ml.done .ml-l{color:var(--rd)}
+.ml-a{font-family:'Orbitron',monospace;font-size:12px;font-weight:700;color:var(--tx)}
 
-/* ── SWITCH ── */
+/* SWITCH */
 .sw{position:relative;display:inline-block;width:40px;height:20px}
 .sw input{opacity:0;width:0;height:0}
 .sl2{position:absolute;cursor:pointer;inset:0;background:#0a150a;border-radius:34px;transition:.3s;border:1px solid var(--bor2)}
@@ -187,38 +168,38 @@ textarea.inp{resize:none}
 input:checked+.sl2{background:rgba(0,255,65,.15);border-color:var(--gr)}
 input:checked+.sl2:before{transform:translateX(20px);background:var(--gr)}
 
-/* ── IROW ── */
+/* IROW */
 .irow{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bor2)}
 .irow:last-child{border-bottom:none}
 .ik{font-size:10px;color:var(--mu)}
 .iv{font-size:10px;font-weight:700;color:var(--tx);font-family:'Orbitron',monospace;max-width:60%;text-align:right;word-break:break-all}
 
-/* ── LOG ── */
+/* LOG */
 .logb{background:#000;border-radius:4px;padding:8px;height:90px;overflow-y:auto;font-family:'Share Tech Mono',monospace;font-size:9px;line-height:1.5;margin-top:7px;border:1px solid var(--bor2)}
 .logb::-webkit-scrollbar{width:2px}
 .logb::-webkit-scrollbar-thumb{background:var(--bor)}
 .ll{margin-bottom:1px}
 .li{color:var(--gd)}.ls{color:var(--gr)}.le{color:var(--rd)}.lw{color:#fb923c}
 
-/* ── TOAST ── */
+/* TOAST */
 .toast{position:fixed;top:56px;left:50%;transform:translateX(-50%);background:rgba(3,10,3,.98);border-radius:4px;padding:8px 16px;font-size:10px;font-weight:700;z-index:300;border:1px solid;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis;font-family:'Share Tech Mono',monospace;letter-spacing:1px}
 .toast.show{opacity:1}
 .toast.ok{border-color:var(--gr);color:var(--gr)}
 .toast.err{border-color:var(--rd);color:var(--rd)}
 .toast.w{border-color:var(--gd);color:var(--gd)}
 
-/* ── ENG BTN ── */
+/* ENG BTN */
 .eng-btn{margin:8px;width:calc(100% - 16px);padding:12px;border-radius:4px;border:2px solid;font-family:'Orbitron',sans-serif;font-weight:900;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .2s;letter-spacing:1px;background:transparent}
 .eng-btn.stop{border-color:var(--rd);color:var(--rd);box-shadow:0 0 10px rgba(239,68,68,.2)}
 .eng-btn.start{border-color:var(--gr);color:var(--gr);box-shadow:0 0 10px rgba(0,255,65,.2)}
 
-/* ── FBAR ── */
+/* FBAR */
 .fbar{margin:0 8px 6px;padding:5px 10px;border-radius:4px;font-size:8px;font-weight:700;background:rgba(0,0,0,.4);border:1px solid var(--bor2);color:var(--mu);text-align:center;display:none;letter-spacing:1px}
 
-/* ── USER CARD ── */
+/* USER CARD */
 .ucard{background:rgba(0,0,0,.35);border-radius:5px;padding:11px;border:1px solid var(--bor2);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:7px}
 .ucard-info{flex:1;min-width:0}
-.uid-txt{font-family:'Orbitron',monospace;font-size:13px;font-weight:900;color:var(--gr);margin-bottom:2px;text-shadow:0 0 8px rgba(0,255,65,.4)}
+.uid-txt{font-family:'Orbitron',monospace;font-size:14px;font-weight:900;color:var(--gr);margin-bottom:2px;text-shadow:0 0 8px rgba(0,255,65,.4)}
 .uday-txt{font-size:9px;color:var(--gd);font-weight:700}
 .uexp-txt{font-size:8px;color:var(--mu);margin-top:1px}
 .ucard-actions{display:flex;gap:4px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
@@ -228,37 +209,31 @@ input:checked+.sl2:before{transform:translateX(20px);background:var(--gr)}
 .ubtn-blk{border-color:rgba(100,116,139,.4);color:#64748b}
 .ubtn-g{border-color:rgba(0,255,65,.4);color:var(--gr)}
 
-/* ── OWNER PROFILE ── */
+/* OWNER */
 .owner-avatar{width:60px;height:60px;border-radius:4px;background:rgba(0,255,65,.1);border:2px solid var(--gr);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 10px;box-shadow:0 0 20px rgba(0,255,65,.2)}
-.owner-name{text-align:center;font-family:'Orbitron',monospace;font-size:12px;font-weight:900;color:var(--gr);margin-bottom:2px;text-shadow:0 0 10px rgba(0,255,65,.4)}
+.owner-name{text-align:center;font-family:'Orbitron',monospace;font-size:12px;font-weight:900;color:var(--gr);margin-bottom:2px}
 .owner-tag{text-align:center;font-size:9px;color:var(--mu);margin-bottom:14px;letter-spacing:1px}
-
-/* ── DAYBADGE ── */
-.daybadge{display:inline-flex;align-items:center;padding:4px 9px;border-radius:3px;font-size:9px;font-weight:700;font-family:'Share Tech Mono',monospace;cursor:pointer;border:1px solid var(--bor2);background:transparent;color:var(--mu);transition:all .15s}
+.daybadge{display:inline-flex;align-items:center;padding:4px 9px;border-radius:3px;font-size:9px;font-weight:700;cursor:pointer;border:1px solid var(--bor2);background:transparent;color:var(--mu);transition:all .15s}
 .daybadge.sel{background:rgba(0,255,65,.1);border-color:var(--gr);color:var(--gr)}
 .days-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
-
-/* ── WBOX ── */
 .wbox{background:rgba(0,0,0,.3);border-radius:4px;padding:10px;border:1px solid var(--bor2);margin-top:9px}
 .row2{display:flex;justify-content:space-between;align-items:center}
-
-/* ── LOCK PAGE ── */
 .lock-pg{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;padding:24px;gap:14px;text-align:center}
 .lock-icon{font-size:40px;animation:float 3s ease-in-out infinite}
 .lock-title{font-family:'Orbitron',monospace;font-size:13px;font-weight:900;color:var(--gr)}
-.lock-sub{font-size:10px;color:var(--mu);letter-spacing:.5px}
-
-/* blocked */
+.lock-sub{font-size:10px;color:var(--mu)}
 .blocked-tag{display:inline-block;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--rd);font-size:7px;padding:1px 5px;border-radius:2px;margin-left:4px;font-weight:700}
-
-/* key result box */
 .key-result{display:none;margin-top:10px;background:rgba(0,0,0,.5);border:1px solid var(--bor);border-radius:4px;padding:12px;text-align:center}
 .key-result.show{display:block}
 .key-result-lbl{font-size:7px;color:var(--mu);letter-spacing:2px;margin-bottom:6px}
-.key-result-val{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--gr);word-break:break-all;letter-spacing:.5px}
+.key-result-val{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--gr);word-break:break-all}
 .key-copy{font-size:9px;color:var(--cy);margin-top:7px;cursor:pointer;letter-spacing:1px}
 
-/* wbox toggle */
+/* TOKEN INPUT SECTION */
+.token-section{background:rgba(0,255,65,.04);border:1px solid var(--bor);border-radius:5px;padding:11px;margin-bottom:9px}
+.token-status{font-size:9px;color:var(--mu);margin-top:5px;letter-spacing:.5px}
+.token-status.ok{color:var(--gr)}
+.token-status.err{color:var(--rd)}
 </style>
 </head>
 <body>
@@ -272,52 +247,40 @@ input:checked+.sl2:before{transform:translateX(20px);background:var(--gr)}
 
 <div class="scrl">
 
-<!-- ══════════ PAGE 0: CYBER LOGIN ══════════ -->
+<!-- ══════════ PAGE 0: LOGIN ══════════ -->
 <div class="pg on" id="pg0">
-
-  <!-- MAIN LOGIN -->
   <div id="loginMain">
     <div class="cyber-login">
       <div class="corner tl"></div><div class="corner tr"></div>
       <div class="corner bl"></div><div class="corner br"></div>
-
       <div class="cyber-icon">⚡</div>
       <div class="cyber-title">SIVA<br>ULTRA AI</div>
-      <div class="cyber-sub">PREDICTION ENGINE · SECURE ACCESS</div>
-
-      <!-- UID display -->
-      <div class="uid-box" style="max-width:340px;margin-bottom:12px">
+      <div class="cyber-sub">PREDICTION ENGINE · GOAOKO PLATFORM</div>
+      <div class="uid-box">
         <div class="uid-lbl2">YOUR UID</div>
-        <div class="uid-num" id="displayUID">---</div>
+        <div class="uid-num" id="displayUID">----</div>
         <div class="uid-copy" onclick="copyUID()">📋 TAP TO COPY · SEND TO OWNER</div>
       </div>
-
       <div class="cyber-form">
         <div>
           <span class="cyber-lbl">ACCESS KEY</span>
           <input class="inp" id="userKeyInput" type="password" placeholder="Enter your access key 🔑">
         </div>
-        <button class="btn btn-gr" onclick="verifyUserKey()">ENTER SYSTEM</button>
-        <div class="cyber-err" id="loginErr">⚠ INVALID KEY — ACCESS DENIED</div>
-
-        <div class="cyber-divider"><span>JOIN US</span></div>
+        <button class="btn btn-gr" onclick="verifyUserKey()">▶ ENTER SYSTEM</button>
+        <div class="cyber-err" id="loginErr"></div>
+        <div class="cyber-divider"><span>GET ACCESS</span></div>
         <div class="tg-box" onclick="window.open('https://t.me/OnlineEarningapp_bot','_blank')">
           <div class="tg-icon">✈️</div>
           <div class="tg-info">
-            <div class="tg-name">SIVA ULTRA AI CHANNEL</div>
-            <div class="tg-link">@OnlineEarningapp_bot · Get Access Key</div>
+            <div class="tg-name">@OnlineEarningapp_bot</div>
+            <div class="tg-link">Send UID → Get Access Key</div>
           </div>
         </div>
       </div>
-
-      <div class="sys-status">
-        <div class="sys-dot"></div>
-        SYSTEM ONLINE · SECURE CONNECTION
-      </div>
+      <div class="sys-status"><div class="sys-dot"></div>GOAOKO · WINGO 1MIN · LIVE</div>
     </div>
   </div>
-
-  <!-- OWNER LOGIN (hidden) -->
+  <!-- Owner Login -->
   <div id="ownerLoginDiv" style="display:none">
     <div class="cyber-login">
       <div class="corner tl"></div><div class="corner tr"></div>
@@ -326,8 +289,7 @@ input:checked+.sl2:before{transform:translateX(20px);background:var(--gr)}
       <div class="cyber-title" style="font-size:18px">OWNER<br>CONTROL</div>
       <div class="cyber-sub">AUTHORIZED ACCESS ONLY</div>
       <div class="cyber-form">
-        <div>
-          <span class="cyber-lbl">OWNER KEY</span>
+        <div><span class="cyber-lbl">OWNER KEY</span>
           <input class="inp" id="ownerKeyInput" type="password" placeholder="Owner key...">
         </div>
         <button class="btn btn-gr" onclick="ownerLogin()">🔓 ENTER</button>
@@ -335,16 +297,25 @@ input:checked+.sl2:before{transform:translateX(20px);background:var(--gr)}
       </div>
     </div>
   </div>
-
 </div>
 
 <!-- ══════════ PAGE 1: PREDICTION ══════════ -->
 <div class="pg" id="pg1">
   <div class="fbar" id="fbar">⟳ FETCHING...</div>
+
+  <!-- TOKEN SETUP (shown until token set) -->
+  <div id="tokenSetup" class="card" style="display:none">
+    <div class="chdr"><div class="chdr-bar"></div>GOAOKO BEARER TOKEN</div>
+    <div style="font-size:9px;color:var(--mu);margin-bottom:8px;letter-spacing:.5px">Paste your Goaoko Bearer token to enable AutoBet</div>
+    <textarea class="inp" id="tokenInput" rows="3" placeholder="Bearer eyJhbGci... (from DevTools → Headers → Authorization)"></textarea>
+    <button class="btn btn-gr" style="margin-top:8px" onclick="saveToken()">💾 SAVE TOKEN</button>
+    <div class="token-status" id="tokenStatus">No token — prediction only mode</div>
+  </div>
+
   <div class="pred-hero">
     <div class="ph-main">
-      <div class="ph-lbl">LIVE PREDICTION</div>
-      <div class="pv LOAD" id="predVal">LOADING</div>
+      <div class="ph-lbl">NEXT PERIOD SIGNAL</div>
+      <div class="pv LOAD" id="predVal">SCANNING</div>
       <div class="ph-pat" id="predPat">Connecting...</div>
       <div class="ph-conf" id="predConf"></div>
     </div>
@@ -354,18 +325,22 @@ input:checked+.sl2:before{transform:translateX(20px);background:var(--gr)}
       <div class="per-v" id="periodEl">--</div>
     </div>
   </div>
+
   <div class="s4">
-    <div class="sb"><div class="sl">BETS</div><div class="sv" id="sBets">0</div></div>
+    <div class="sb"><div class="sl">TOTAL</div><div class="sv" id="sBets">0</div></div>
     <div class="sb"><div class="sl">WINS</div><div class="sv" style="color:var(--gr)" id="sWins">0</div></div>
     <div class="sb"><div class="sl">LOSS</div><div class="sv" style="color:var(--rd)" id="sLoss">0</div></div>
-    <div class="sb"><div class="sl">LEVEL</div><div class="sv" id="sLvl" style="color:var(--pu2)">L1</div></div>
+    <div class="sb"><div class="sl">WIN%</div><div class="sv" style="color:var(--gd)" id="sAcc">-</div></div>
   </div>
+
   <div class="card">
     <div class="chdr"><div class="chdr-bar"></div>RECENT RESULTS</div>
     <div class="brow" id="balls">
-      <div class="ball emp">-</div><div class="ball emp">-</div><div class="ball emp">-</div><div class="ball emp">-</div><div class="ball emp">-</div>
+      <div class="ball emp">-</div><div class="ball emp">-</div><div class="ball emp">-</div>
+      <div class="ball emp">-</div><div class="ball emp">-</div>
     </div>
   </div>
+
   <div class="card">
     <div class="chdr"><div class="chdr-bar"></div>SYSTEM LOG</div>
     <div class="logb" id="logEl"></div>
@@ -377,7 +352,7 @@ input:checked+.sl2:before{transform:translateX(20px);background:var(--gr)}
   <div class="card">
     <div class="chdr" style="justify-content:space-between">
       <span style="display:flex;align-items:center;gap:5px"><div class="chdr-bar"></div>PREDICTION HISTORY</span>
-      <span style="font-size:8px;color:var(--gr);cursor:pointer;font-weight:700;letter-spacing:1px" onclick="clearHistory()">CLEAR ALL</span>
+      <span style="font-size:8px;color:var(--gr);cursor:pointer;font-weight:700" onclick="clearHistory()">CLEAR</span>
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px">
       <div style="background:rgba(0,0,0,.4);border:1px solid var(--bor2);border-radius:5px;padding:9px;text-align:center">
@@ -395,29 +370,19 @@ input:checked+.sl2:before{transform:translateX(20px);background:var(--gr)}
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
       <div style="background:rgba(0,0,0,.4);border-radius:5px;padding:9px;text-align:center;border:1px solid var(--bor2)">
-        <div style="font-size:7px;color:var(--mu);margin-bottom:2px;letter-spacing:1px">MAX WIN 🔥</div>
+        <div style="font-size:7px;color:var(--mu);margin-bottom:2px">MAX WIN 🔥</div>
         <div style="font-family:'Orbitron',monospace;font-size:20px;font-weight:900;color:var(--gr)" id="hMaxW">0</div>
       </div>
       <div style="background:rgba(0,0,0,.4);border-radius:5px;padding:9px;text-align:center;border:1px solid var(--bor2)">
-        <div style="font-size:7px;color:var(--mu);margin-bottom:2px;letter-spacing:1px">MAX LOSS 💀</div>
+        <div style="font-size:7px;color:var(--mu);margin-bottom:2px">MAX LOSS 💀</div>
         <div style="font-family:'Orbitron',monospace;font-size:20px;font-weight:900;color:var(--rd)" id="hMaxL">0</div>
       </div>
     </div>
     <div style="background:rgba(0,0,0,.5);border-radius:3px;height:5px;overflow:hidden;margin-bottom:10px;border:1px solid var(--bor2)">
       <div id="winBar" style="height:100%;background:var(--gr);border-radius:3px;width:0%;transition:width .6s;box-shadow:0 0 8px var(--gr)"></div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
-      <div style="background:rgba(0,0,0,.4);border-radius:5px;padding:9px;text-align:center;border:1px solid var(--bor2)">
-        <div style="font-size:7px;color:var(--mu);margin-bottom:2px;letter-spacing:1px">CUR WIN STREAK</div>
-        <div style="font-family:'Orbitron',monospace;font-size:18px;font-weight:900;color:var(--gr)" id="hCurW">0</div>
-      </div>
-      <div style="background:rgba(0,0,0,.4);border-radius:5px;padding:9px;text-align:center;border:1px solid var(--bor2)">
-        <div style="font-size:7px;color:var(--mu);margin-bottom:2px;letter-spacing:1px">CUR LOSS STREAK</div>
-        <div style="font-family:'Orbitron',monospace;font-size:18px;font-weight:900;color:var(--rd)" id="hCurL">0</div>
-      </div>
-    </div>
     <div class="hist-hdr"><span>PERIOD</span><span>PRED</span><span>ACTUAL</span><span style="text-align:right">RESULT</span></div>
-    <div id="histList"><div style="text-align:center;padding:16px;color:var(--mu);font-size:10px;letter-spacing:1px">NO PREDICTIONS YET...</div></div>
+    <div id="histList"><div style="text-align:center;padding:16px;color:var(--mu);font-size:9px">NO PREDICTIONS YET...</div></div>
   </div>
 </div>
 
@@ -426,7 +391,7 @@ input:checked+.sl2:before{transform:translateX(20px);background:var(--gr)}
   <div id="abLock" class="lock-pg">
     <div class="lock-icon">🤖</div>
     <div class="lock-title">AUTOBET ACCESS</div>
-    <div class="lock-sub">Enter key to unlock AutoBet panel</div>
+    <div class="lock-sub">Enter key to unlock</div>
     <div style="width:100%;max-width:300px;display:flex;flex-direction:column;gap:8px">
       <input class="inp" id="abKeyIn" type="password" placeholder="Access key...">
       <button class="btn btn-gr" onclick="unlockAb()">🔓 UNLOCK</button>
@@ -434,41 +399,53 @@ input:checked+.sl2:before{transform:translateX(20px);background:var(--gr)}
   </div>
   <div id="abPanel" style="display:none">
     <div class="eng-btn stop" id="engBtn" onclick="toggleEng()">■ STOP ENGINE</div>
+
+    <!-- TOKEN for AutoBet -->
+    <div class="card">
+      <div class="chdr"><div class="chdr-bar"></div>GOAOKO TOKEN (FOR AUTOBET)</div>
+      <div style="font-size:9px;color:var(--mu);margin-bottom:7px">Get from Goaoko app → DevTools → Network → WinGoBet → Headers → Authorization</div>
+      <textarea class="inp" id="abTokenInput" rows="2" placeholder="Bearer eyJhbGci..."></textarea>
+      <button class="btn btn-gr" style="margin-top:7px;padding:9px;font-size:10px" onclick="saveAbToken()">💾 SAVE TOKEN</button>
+      <div class="token-status" id="abTokenStatus">⚠ No token — AutoBet disabled</div>
+    </div>
+
     <div class="card">
       <div class="chdr"><div class="chdr-bar"></div>ENGINE CONFIG</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px">
-        <div><span style="font-size:7px;color:var(--mu);font-weight:700;display:block;margin-bottom:3px;letter-spacing:1px">BASE BET (L1)</span>
+        <div><span style="font-size:7px;color:var(--mu);display:block;margin-bottom:3px;letter-spacing:1px">BASE BET (L1)</span>
           <input type="number" id="baseBet" class="inp" value="10" min="1" style="padding:8px;font-size:14px;text-align:center" onchange="buildMart()"></div>
-        <div><span style="font-size:7px;color:var(--mu);font-weight:700;display:block;margin-bottom:3px;letter-spacing:1px">MAX LEVELS</span>
+        <div><span style="font-size:7px;color:var(--mu);display:block;margin-bottom:3px;letter-spacing:1px">MAX LEVELS</span>
           <input type="number" id="maxLvl" class="inp" value="4" min="1" max="7" style="padding:8px;font-size:14px;text-align:center" onchange="buildMart()"></div>
       </div>
-      <div style="font-size:8px;color:var(--mu);text-align:center;letter-spacing:.5px" id="riskLbl">--</div>
+      <div style="font-size:8px;color:var(--mu);text-align:center" id="riskLbl">--</div>
       <div class="wbox">
         <div class="row2">
-          <span style="font-size:9px;color:var(--gd);font-weight:700;letter-spacing:1px">👀 WATCH MODE</span>
+          <span style="font-size:9px;color:var(--gd);font-weight:700">👀 WATCH MODE</span>
           <label class="sw"><input type="checkbox" id="wt" checked onchange="G.watch=this.checked"><span class="sl2"></span></label>
         </div>
         <div style="font-size:8px;color:var(--mu);margin-top:3px">Wait N losses before real bets</div>
         <div class="row2" style="margin-top:8px">
-          <span style="font-size:7px;color:var(--mu);font-weight:700;letter-spacing:.5px">LOSSES TO WAIT:</span>
+          <span style="font-size:7px;color:var(--mu)">LOSSES TO WAIT:</span>
           <input type="number" id="vlim" class="inp" value="3" min="1" style="width:65px;padding:6px;font-size:13px;text-align:center" onchange="G.vLim=+this.value">
         </div>
       </div>
     </div>
+
     <div class="card">
       <div class="chdr"><div class="chdr-bar"></div>MARTINGALE (x3)</div>
       <div class="mgrid" id="mgrid"></div>
     </div>
+
     <div class="card">
-      <div class="chdr"><div class="chdr-bar"></div>AUTOBET STATUS</div>
-      <div class="irow"><span class="ik">Last Period</span><span class="iv" id="lPer">--</span></div>
+      <div class="chdr"><div class="chdr-bar"></div>LIVE STATUS</div>
+      <div class="irow"><span class="ik">Period</span><span class="iv" id="lPer">--</span></div>
       <div class="irow"><span class="ik">Prediction</span><span class="iv" id="lPred">--</span></div>
-      <div class="irow"><span class="ik">Amount</span><span class="iv" id="lAmt">--</span></div>
+      <div class="irow"><span class="ik">Bet Amount</span><span class="iv" id="lAmt">--</span></div>
       <div class="irow"><span class="ik">Bet Status</span><span class="iv" id="lStat" style="color:var(--mu)">--</span></div>
       <div class="irow"><span class="ik">Result</span><span class="iv" id="lRes">--</span></div>
       <div class="irow"><span class="ik">Watch Progress</span><span class="iv" id="abVL" style="color:var(--gd)">0/3</span></div>
       <div class="irow"><span class="ik">In Martingale</span><span class="iv" id="abMart" style="color:var(--mu)">NO</span></div>
-      <button class="btn btn-rd" style="margin-top:10px;padding:9px;font-size:9px;letter-spacing:1px" onclick="resetStats()">⟳ RESET ALL STATS</button>
+      <button class="btn btn-rd" style="margin-top:10px;padding:9px;font-size:9px" onclick="resetStats()">⟳ RESET ALL</button>
     </div>
   </div>
 </div>
@@ -482,23 +459,19 @@ input:checked+.sl2:before{transform:translateX(20px);background:var(--gr)}
     <button class="btn btn-gr" style="max-width:200px" onclick="showOwnerLogin();gotoPage(0)">→ LOGIN</button>
   </div>
   <div id="ownerPanel" style="display:none">
-
-    <!-- Profile -->
     <div class="card">
       <div class="owner-avatar">👑</div>
       <div class="owner-name">SIVA OWNER</div>
-      <div class="owner-tag">CONTROL ROOM · SUTHAMARI6381</div>
+      <div class="owner-tag">GOAOKO PLATFORM · SUTHAMARI6381</div>
       <div class="irow"><span class="ik">Active Users</span><span class="iv" style="color:var(--gr)" id="owActiveCount">0</span></div>
       <div class="irow"><span class="ik">Blocked Users</span><span class="iv" style="color:var(--rd)" id="owBlockedCount">0</span></div>
       <div class="irow"><span class="ik">Total Added</span><span class="iv" id="owTotalCount">0</span></div>
-      <div class="irow"><span class="ik">Session Start</span><span class="iv" style="color:var(--cy)" id="owSession">--</span></div>
-      <button class="btn btn-rd" style="margin-top:10px;padding:9px;font-size:9px;letter-spacing:1px" onclick="ownerLogout()">🚪 LOGOUT</button>
+      <div class="irow"><span class="ik">Session</span><span class="iv" style="color:var(--cy)" id="owSession">--</span></div>
+      <button class="btn btn-rd" style="margin-top:10px;padding:9px;font-size:9px" onclick="ownerLogout()">🚪 LOGOUT</button>
     </div>
-
-    <!-- Add User -->
     <div class="card">
       <div class="chdr"><div class="chdr-bar"></div>ADD USER</div>
-      <input class="inp" id="addUid" placeholder="UID number (e.g. 1001)" type="number">
+      <input class="inp" id="addUid" placeholder="UID number (e.g. 4821)" type="number">
       <div class="days-row">
         <div class="daybadge sel" id="db7" onclick="selDay(7)">7d</div>
         <div class="daybadge" id="db14" onclick="selDay(14)">14d</div>
@@ -511,11 +484,9 @@ input:checked+.sl2:before{transform:translateX(20px);background:var(--gr)}
       </div>
       <button class="btn btn-gr" style="margin-top:10px" onclick="addUser()">+ ADD USER</button>
     </div>
-
-    <!-- Key Generator -->
     <div class="card">
       <div class="chdr"><div class="chdr-bar"></div>KEY GENERATOR</div>
-      <div style="font-size:9px;color:var(--mu);margin-bottom:8px;letter-spacing:.5px">Add user first, then generate their access key</div>
+      <div style="font-size:9px;color:var(--mu);margin-bottom:8px">Add user first, then generate key</div>
       <input class="inp" id="keyGenUid" placeholder="UID number..." type="number">
       <button class="btn btn-cy" style="margin-top:9px" onclick="generateKey()">🔑 GENERATE KEY</button>
       <div class="key-result" id="genKeyResult">
@@ -524,32 +495,25 @@ input:checked+.sl2:before{transform:translateX(20px);background:var(--gr)}
         <div class="key-copy" onclick="copyGenKey()">📋 COPY KEY</div>
       </div>
     </div>
-
-    <!-- Active Users -->
     <div class="card">
       <div class="chdr" style="justify-content:space-between">
         <span style="display:flex;align-items:center;gap:5px"><div class="chdr-bar"></div>ACTIVE USERS</span>
-        <span style="font-size:8px;color:var(--mu);letter-spacing:1px" id="owUserCountLbl">0 USERS</span>
+        <span style="font-size:8px;color:var(--mu)" id="owUserCountLbl">0</span>
       </div>
-      <div id="userList"><div style="text-align:center;padding:14px;color:var(--mu);font-size:9px;letter-spacing:1px">NO ACTIVE USERS...</div></div>
+      <div id="userList"><div style="text-align:center;padding:14px;color:var(--mu);font-size:9px">NO USERS YET...</div></div>
     </div>
-
-    <!-- Blocked -->
     <div class="card">
-      <div class="chdr"><div class="chdr-bar"></div>🚫 BLOCKED USERS</div>
-      <div id="blockedList"><div style="text-align:center;padding:12px;color:var(--mu);font-size:9px;letter-spacing:1px">NONE...</div></div>
+      <div class="chdr"><div class="chdr-bar"></div>🚫 BLOCKED</div>
+      <div id="blockedList"><div style="text-align:center;padding:12px;color:var(--mu);font-size:9px">NONE...</div></div>
     </div>
-
-    <!-- Expired -->
     <div class="card">
       <div class="chdr"><div class="chdr-bar"></div>EXPIRED / REMOVED</div>
-      <div id="expiredList"><div style="text-align:center;padding:12px;color:var(--mu);font-size:9px;letter-spacing:1px">NONE...</div></div>
+      <div id="expiredList"><div style="text-align:center;padding:12px;color:var(--mu);font-size:9px">NONE...</div></div>
     </div>
-
   </div>
 </div>
 
-</div><!-- end scrl -->
+</div><!-- scrl -->
 
 <!-- NAV -->
 <div class="nav" id="mainNav" style="display:none;grid-template-columns:repeat(4,1fr)">
@@ -560,71 +524,101 @@ input:checked+.sl2:before{transform:translateX(20px);background:var(--gr)}
   <button class="nit" id="n4" onclick="gotoPage(4)" style="display:none"><div class="nico">👑</div><div class="nlbl">OWNER</div></button>
 </div>
 
-</div><!-- end app -->
+</div><!-- app -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ═══════════════════════════════════════════════════
+   // 1. First, indha fetchHistory function-ah top-la podunga
+    async function fetchHistory() {
+        try {
+            const response = await fetch('https://api.ar-lottery01.com/api/Lottery/GetHistoryIssuePage?gameCode=WinGo_1M');
+            const data = await response.json();
+            if (data.code === 0 && data.data && data.data.list) {
+                return data.data.list;
+            }
+            return null;
+        } catch (e) {
+            console.error("Fetch Error:", e);
+            return null;
+        }
+    }
+// ═══════════════════════════════════════════════════════════════
 //  CONSTANTS
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 const OWNER_KEY  = 'suthamari6381';
-const OWNER_CMD  = '/siva';           // type this in key field to open owner login
+const OWNER_CMD  = '/siva';
 const AB_KEY     = 'siva6381';
-const FIXED_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJUb2tlblR5cGUiOiJBY2Nlc3NfVG9rZW4iLCJUZW5hbnRJZCI6IjEwMTUiLCJVc2VySWQiOiIxMDE1MDAxNDAwNzc5NSIsIkFnZW50Q29kZSI6IjEwMTUwMSIsIlRlbmFudEFjY291bnQiOiIxNDAwNzc5NSIsIkxvZ2luSVAiOiIyNDA5OjQwZjQ6MTBmNDpiY2RkOjgwMDA6OiIsIkxvZ2luVGltZSI6IjE3Nzg4MTM0NjQxNDgiLCJTeXNDdXJyZW5jeSI6IklOUiIsIlN5c0xhbmd1YWdlIjoiZW4iLCJEZXZpY2VUeXBlIjoiQW5kcm9pZCIsIkxvdHRlcnlMaW1pdEdyb3VwTnVtIjoiMCIsIlVzZXJUeXBlIjoiMCIsIm5iZiI6MTc3ODgzNjEyMywiZXhwIjoxNzc4ODM5NzIzLCJpc3MiOiJqd3RJc3N1ZXIiLCJhdWQiOiJsb3R0ZXJ5VGlja2V0In0.B7rWnncbS4iGuhAONGfOuMFWeq73jV40hypJBSYhHbk';
 const SESSION_START = new Date().toLocaleTimeString();
 
-// ═══════════════════════════════════════════════════
-//  UID — numbered, persistent
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+//  UID — 4-digit, persistent
+// ═══════════════════════════════════════════════════════════════
 function getOrCreateUID(){
-  let uid = localStorage.getItem('siva_uid_num');
-  if(!uid){
-    // 4-digit number starting from 1001
-    uid = String(1000 + Math.floor(Math.random()*8999 + 1));
-    localStorage.setItem('siva_uid_num', uid);
-  }
-  return uid;
+  let u=localStorage.getItem('siva_uid_v4');
+  if(!u){u=String(1000+Math.floor(Math.random()*8999));localStorage.setItem('siva_uid_v4',u);}
+  return u;
 }
-const USER_ID = getOrCreateUID();
+const USER_ID=getOrCreateUID();
 
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 //  STATE
-// ═══════════════════════════════════════════════════
-const G = {
-  token: FIXED_TOKEN,
-  active: true,
-  watch: true, vLim: 3,
-  baseBet: 10, maxLvl: 4,
-  MULT: [1,3,9,27,81,243,729],
-  curPeriod: null, lastResolved: null,
-  prediction: null, predType: null, betPlaced: false, betAmt: 0,
-  level: 1, vLoss: 0, inMart: false,
-  wins: 0, losses: 0, totalBets: 0, pnl: 0,
-  maxWinStreak: 0, maxLossStreak: 0, curWinStreak: 0, curLossStreak: 0,
-  timerID: null, loopID: null, busy: false,
-  historyLog: [], retries: 0,
-  ownerLoggedIn: false,
-  abUnlocked: false,
-  navActive: false,
-  users: {},
-  expiredUsers: [],
-  blockedUsers: []
+// ═══════════════════════════════════════════════════════════════
+const G={
+  token:'',          // User's Goaoko Bearer token (saved in localStorage)
+  active:true,watch:true,vLim:3,
+  baseBet:10,maxLvl:4,
+  MULT:[1,3,9,27,81,243,729],
+  curPeriod:null,lastResolved:null,
+  prediction:null,predType:null,betPlaced:false,betAmt:0,
+  level:1,vLoss:0,inMart:false,
+  wins:0,losses:0,totalBets:0,pnl:0,
+  winStreak:0,lossStreak:0,maxWinStreak:0,maxLossStreak:0,
+  timerID:null,loopID:null,busy:false,
+  historyLog:[],retries:0,
+  ownerLoggedIn:false,abUnlocked:false,navActive:false,
+  users:{},expiredUsers:[]
 };
 
-// ── STORAGE ──
-function loadUsers(){
-  try{
-    const u=localStorage.getItem('siva_users2');if(u)G.users=JSON.parse(u);
-    const e=localStorage.getItem('siva_expired2');if(e)G.expiredUsers=JSON.parse(e);
-  }catch(e){}
+// Load token from storage
+function loadToken(){
+  const t=localStorage.getItem('siva_goaoko_token');
+  if(t){G.token=t;updateTokenUI();}
 }
-function saveUsers(){
-  localStorage.setItem('siva_users2',JSON.stringify(G.users));
-  localStorage.setItem('siva_expired2',JSON.stringify(G.expiredUsers));
+function saveToken(){
+  let raw=document.getElementById('tokenInput').value.trim();
+  raw=raw.replace(/^Bearer\s+/i,'').trim();
+  if(raw.length<20){toast('TOKEN TOO SHORT!','err');return;}
+  G.token=raw;
+  localStorage.setItem('siva_goaoko_token',raw);
+  updateTokenUI();
+  toast('✅ TOKEN SAVED!','ok');
+  log('Token saved ✅','s');
+  document.getElementById('tokenInput').value='';
 }
-loadUsers();
+function saveAbToken(){
+  let raw=document.getElementById('abTokenInput').value.trim();
+  raw=raw.replace(/^Bearer\s+/i,'').trim();
+  if(raw.length<20){toast('TOKEN TOO SHORT!','err');return;}
+  G.token=raw;
+  localStorage.setItem('siva_goaoko_token',raw);
+  updateTokenUI();
+  toast('✅ TOKEN SAVED!','ok');
+  log('Token updated ✅','s');
+  document.getElementById('abTokenInput').value='';
+}
+function updateTokenUI(){
+  const hasToken=G.token.length>20;
+  const ts1=document.getElementById('tokenStatus');
+  const ts2=document.getElementById('abTokenStatus');
+  if(ts1){ts1.className='token-status '+(hasToken?'ok':'err');ts1.textContent=hasToken?'✅ Token set — AutoBet enabled':'⚠ No token — prediction only';}
+  if(ts2){ts2.className='token-status '+(hasToken?'ok':'err');ts2.textContent=hasToken?'✅ Token ready — AutoBet active':'⚠ No token — paste above';}
+}
 
-// ── AUTO EXPIRE CHECK ──
+// Storage
+function loadData(){try{const u=localStorage.getItem('siva_u4');if(u)G.users=JSON.parse(u);const e=localStorage.getItem('siva_e4');if(e)G.expiredUsers=JSON.parse(e);}catch(e){}}
+function saveData(){localStorage.setItem('siva_u4',JSON.stringify(G.users));localStorage.setItem('siva_e4',JSON.stringify(G.expiredUsers));}
+loadData();loadToken();
+
 function autoExpire(){
   const now=Date.now();
   Object.values(G.users).filter(u=>!u.blocked&&u.expiry<=now).forEach(u=>{
@@ -632,31 +626,26 @@ function autoExpire(){
     if(G.expiredUsers.length>60)G.expiredUsers.pop();
     delete G.users[u.uid];
   });
-  saveUsers();
+  saveData();
 }
 
-// ═══════════════════════════════════════════════════
-//  KEY SYSTEM
-// ═══════════════════════════════════════════════════
-function makeKey(uid, expiry){
-  const raw = uid + ':' + expiry + ':SIVAAI2024';
-  const h = btoa(raw).replace(/[^A-Z0-9]/gi,'').toUpperCase().substr(0,10);
-  return 'SK' + uid + '-' + h;
+// KEY SYSTEM
+function makeKey(uid,expiry){
+  const raw=uid+':'+expiry+':SIVAAI2024';
+  const h=btoa(raw).replace(/[^A-Z0-9]/gi,'').toUpperCase().substr(0,10);
+  return 'SK'+uid+'-'+h;
 }
-
-function verifyKey(uid, key){
+function verifyKey(uid,key){
   autoExpire();
-  const user = G.users[uid];
-  if(!user) return {valid:false, reason:'UID NOT FOUND. CONTACT OWNER.'};
-  if(user.blocked) return {valid:false, reason:'ACCESS BLOCKED! CONTACT OWNER.'};
-  if(user.key !== key) return {valid:false, reason:'INVALID KEY. CONTACT OWNER.'};
-  if(Date.now() > user.expiry) return {valid:false, reason:'KEY EXPIRED! RENEW VIA OWNER.'};
-  return {valid:true};
+  const u=G.users[uid];
+  if(!u)return{valid:false,reason:'UID NOT FOUND. CONTACT OWNER.'};
+  if(u.blocked)return{valid:false,reason:'ACCESS BLOCKED! CONTACT OWNER.'};
+  if(u.key!==key)return{valid:false,reason:'INVALID KEY. CONTACT OWNER.'};
+  if(Date.now()>u.expiry)return{valid:false,reason:'KEY EXPIRED! RENEW VIA OWNER.'};
+  return{valid:true};
 }
 
-// ═══════════════════════════════════════════════════
-//  NAV
-// ═══════════════════════════════════════════════════
+// NAV
 function gotoPage(n){
   if(!G.navActive&&n!==0)return;
   if(n===4&&!G.ownerLoggedIn)return;
@@ -666,78 +655,60 @@ function gotoPage(n){
   if(n===3)updateAbUI();
   if(n===4)updateOwnerUI();
 }
-function activateNav(startPage=1, isOwner=false){
+function activateNav(start=1,isOwner=false){
   const nav=document.getElementById('mainNav');
-  const ownerTab=document.getElementById('n4');
-  if(ownerTab)ownerTab.style.display=isOwner?'flex':'none';
+  const ot=document.getElementById('n4');
+  if(ot)ot.style.display=isOwner?'flex':'none';
   nav.style.gridTemplateColumns=isOwner?'repeat(5,1fr)':'repeat(4,1fr)';
-  nav.style.display='grid';
-  G.navActive=true;
-  document.querySelectorAll('.pg').forEach((p,i)=>p.classList.toggle('on',i===startPage));
-  document.querySelectorAll('.nit').forEach((b,i)=>b.classList.toggle('on',i===startPage));
+  nav.style.display='grid';G.navActive=true;
+  document.querySelectorAll('.pg').forEach((p,i)=>p.classList.toggle('on',i===start));
+  document.querySelectorAll('.nit').forEach((b,i)=>b.classList.toggle('on',i===start));
 }
 
-// ═══════════════════════════════════════════════════
-//  LOG & TOAST
-// ═══════════════════════════════════════════════════
+// LOG & TOAST
 function log(msg,t='i'){
   const a=document.getElementById('logEl');if(!a)return;
   const d=document.createElement('div');d.className='ll l'+t;
   d.textContent='['+new Date().toLocaleTimeString('en-US',{hour12:false})+'] '+msg;
   a.appendChild(d);a.scrollTop=a.scrollHeight;
-  if(a.children.length>300)a.removeChild(a.children[0]);
+  if(a.children.length>200)a.removeChild(a.children[0]);
 }
 function toast(msg,t='w'){
   const el=document.getElementById('toast');
   el.textContent=msg;el.className='toast show '+t;
   clearTimeout(el._t);el._t=setTimeout(()=>el.className='toast',3000);
 }
-function setBadge(cls,txt){
-  document.getElementById('badge').className='tbadge '+cls;
-  document.getElementById('badgeTxt').textContent=txt;
-}
+function setBadge(cls,txt){document.getElementById('badge').className='tbadge '+cls;document.getElementById('badgeTxt').textContent=txt;}
 function setStat(id,txt,col){const e=document.getElementById(id);if(e){e.textContent=txt;if(col)e.style.color=col;}}
 
-// ═══════════════════════════════════════════════════
-//  LOGIN SCREENS
-// ═══════════════════════════════════════════════════
-function showOwnerLogin(){
-  document.getElementById('loginMain').style.display='none';
-  document.getElementById('ownerLoginDiv').style.display='block';
-}
-function showMainLogin(){
-  document.getElementById('ownerLoginDiv').style.display='none';
-  document.getElementById('loginMain').style.display='block';
-}
+// LOGIN
+function showOwnerLogin(){document.getElementById('loginMain').style.display='none';document.getElementById('ownerLoginDiv').style.display='block';}
+function showMainLogin(){document.getElementById('ownerLoginDiv').style.display='none';document.getElementById('loginMain').style.display='block';}
 
 function verifyUserKey(){
-  const raw = document.getElementById('userKeyInput').value.trim();
-  // Secret owner command
-  if(raw === OWNER_CMD){ showOwnerLogin(); document.getElementById('userKeyInput').value=''; return; }
-  if(raw.length < 3){ showErr('ENTER YOUR ACCESS KEY'); return; }
-  const result = verifyKey(USER_ID, raw);
-  if(result.valid){
+  const raw=document.getElementById('userKeyInput').value.trim();
+  if(raw===OWNER_CMD){showOwnerLogin();document.getElementById('userKeyInput').value='';return;}
+  if(raw.length<3){showErr('ENTER YOUR ACCESS KEY');return;}
+  const r=verifyKey(USER_ID,raw);
+  if(r.valid){
     hideErr();
-    activateNav(1, false);
+    activateNav(1,false);
     buildMart();
-    log('Access granted · UID '+USER_ID,'s');
-    log('Engine starting...','s');
+    log('ACCESS GRANTED · UID #'+USER_ID,'s');
+    log('Goaoko WinGo 1Min engine starting...','s');
     setBadge('warn','CONNECTING');
     startLoop();
-  } else {
-    showErr(result.reason);
+    // Show token setup if no token
+    const ts=document.getElementById('tokenSetup');
+    if(ts)ts.style.display=G.token?'none':'block';
+  }else{
+    showErr(r.reason);
     document.getElementById('userKeyInput').value='';
   }
 }
-function showErr(msg){
-  const e=document.getElementById('loginErr');
-  e.textContent='⚠ '+msg;e.className='cyber-err show';
-}
-function hideErr(){ document.getElementById('loginErr').className='cyber-err'; }
-
-function copyUID(){
-  navigator.clipboard.writeText(USER_ID).then(()=>toast('✅ UID COPIED: '+USER_ID,'ok')).catch(()=>toast('UID: '+USER_ID,'w'));
-}
+function showErr(msg){const e=document.getElementById('loginErr');e.textContent='⚠ '+msg;e.className='cyber-err show';}
+function hideErr(){document.getElementById('loginErr').className='cyber-err';}
+function copyUID(){navigator.clipboard.writeText(USER_ID).then(()=>toast('✅ UID COPIED: '+USER_ID,'ok')).catch(()=>toast('UID: '+USER_ID,'w'));}
 
 function ownerLogin(){
   const k=document.getElementById('ownerKeyInput').value.trim();
@@ -746,42 +717,23 @@ function ownerLogin(){
     document.getElementById('ownerLocked').style.display='none';
     document.getElementById('ownerPanel').style.display='block';
     document.getElementById('owSession').textContent=SESSION_START;
-    showMainLogin();
-    activateNav(4, true);
-    toast('👑 OWNER LOGGED IN','ok');
-    updateOwnerUI();
-  }else{
-    toast('❌ WRONG KEY','err');
-    document.getElementById('ownerKeyInput').value='';
-  }
+    showMainLogin();activateNav(4,true);
+    toast('👑 OWNER LOGGED IN','ok');updateOwnerUI();
+  }else{toast('❌ WRONG KEY','err');document.getElementById('ownerKeyInput').value='';}
 }
 function ownerLogout(){
   G.ownerLoggedIn=false;
   document.getElementById('ownerLocked').style.display='flex';
   document.getElementById('ownerPanel').style.display='none';
-  const ownerTab=document.getElementById('n4');
-  if(ownerTab)ownerTab.style.display='none';
+  const ot=document.getElementById('n4');if(ot)ot.style.display='none';
   document.getElementById('mainNav').style.gridTemplateColumns='repeat(4,1fr)';
-  showMainLogin();gotoPage(0);
-  toast('LOGGED OUT','w');
+  showMainLogin();gotoPage(0);toast('LOGGED OUT','w');
 }
-
-// ═══════════════════════════════════════════════════
-//  AUTOBET UNLOCK
-// ═══════════════════════════════════════════════════
 function unlockAb(){
   const k=document.getElementById('abKeyIn').value.trim();
-  if(k===AB_KEY){
-    G.abUnlocked=true;
-    document.getElementById('abLock').style.display='none';
-    document.getElementById('abPanel').style.display='block';
-    buildMart();updateAbUI();toast('🔓 AUTOBET UNLOCKED','ok');
-  }else{toast('❌ WRONG KEY','err');document.getElementById('abKeyIn').value='';}
+  if(k===AB_KEY){G.abUnlocked=true;document.getElementById('abLock').style.display='none';document.getElementById('abPanel').style.display='block';buildMart();updateAbUI();updateTokenUI();toast('🔓 AUTOBET UNLOCKED','ok');}
+  else{toast('❌ WRONG KEY','err');document.getElementById('abKeyIn').value='';}
 }
-
-// ═══════════════════════════════════════════════════
-//  ENGINE TOGGLE
-// ═══════════════════════════════════════════════════
 function toggleEng(){
   G.active=!G.active;
   const b=document.getElementById('engBtn');
@@ -789,9 +741,7 @@ function toggleEng(){
   else{b.className='eng-btn start';b.textContent='▶ START ENGINE';log('Engine STOPPED','e');clearInterval(G.loopID);clearInterval(G.timerID);setBadge('err','STOPPED');}
 }
 
-// ═══════════════════════════════════════════════════
-//  MARTINGALE
-// ═══════════════════════════════════════════════════
+// MARTINGALE
 function buildMart(){
   G.baseBet=+document.getElementById('baseBet').value||10;
   G.maxLvl=Math.min(7,Math.max(1,+document.getElementById('maxLvl').value||4));
@@ -800,154 +750,271 @@ function buildMart(){
   for(let i=1;i<=G.maxLvl;i++){
     const amt=G.baseBet*G.MULT[i-1];risk+=amt;
     const d=document.createElement('div');
-    d.className='ml'+(i===G.level?' on':'');d.id='ml'+i;
+    const cls=i<G.level?'done':i===G.level?'on':'';
+    d.className='ml '+cls;d.id='ml'+i;
     d.innerHTML=`<span class="ml-l">L${i}</span><span class="ml-a">${amt}</span>`;
     g.appendChild(d);
   }
-  document.getElementById('riskLbl').textContent='MAX RISK: '+risk+' COINS · '+G.maxLvl+' LEVELS';
+  const e=document.getElementById('riskLbl');if(e)e.textContent='MAX RISK: '+risk+' · '+G.maxLvl+' LEVELS';
 }
 function refreshMart(){
-  for(let i=1;i<=G.maxLvl;i++){const e=document.getElementById('ml'+i);if(e)e.className='ml'+(i===G.level?' on':'');}
-  document.getElementById('sLvl').textContent='L'+G.level;
+  for(let i=1;i<=G.maxLvl;i++){
+    const e=document.getElementById('ml'+i);
+    if(e){const cls=i<G.level?'done':i===G.level?'on':'';e.className='ml '+cls;}
+  }
 }
 
-// ═══════════════════════════════════════════════════
-//  FETCH
-// ═══════════════════════════════════════════════════
-async function fetchHistory(){
-  const url='https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json?ts='+Date.now();
-  const h={'Accept':'application/json','Origin':'https://bdgwinseo.com','Referer':'https://bdgwinseo.com/'};
-  try{const r=await fetch(url,{headers:h,signal:AbortSignal.timeout(6000)});if(r.ok){const d=await r.json();const l=d?.data?.list;if(l?.length>0){log('✅ Direct OK','s');return l;}}}catch(e){}
-  try{const r=await fetch('https://api.allorigins.win/get?url='+encodeURIComponent(url),{signal:AbortSignal.timeout(9000)});if(r.ok){const w=await r.json();const d=JSON.parse(w.contents);const l=d?.data?.list;if(l?.length>0){log('✅ Proxy1 OK','s');return l;}}}catch(e){}
-  try{const r=await fetch('https://corsproxy.io/?'+encodeURIComponent(url),{signal:AbortSignal.timeout(9000)});if(r.ok){const d=await r.json();const l=d?.data?.list;if(l?.length>0){log('✅ Proxy2 OK','s');return l;}}}catch(e){}
-  log('❌ All fetch failed','e');return null;
+// ═══════════════════════════════════════════════════════════════
+//  FETCH HISTORY — Goaoko API
+// ═══════════════════════════════════════════════════════════════
+// STEP 1: Verum data edukkurathuku mattum indha function
+async function getGameData() {
+    const apiUrl = "https://api.ar-lottery01.com/api/Lottery/GetHistoryIssuePage?gameCode=WinGo_1M";
+    
+    // Ippo inga POST thevai illa, verum GET podhum
+    const response = await fetch(apiUrl); 
+    const data = await response.json();
+    return data.data.list; // Indha list-ah vachu dhaan namma predict panna porom
 }
 
-// ═══════════════════════════════════════════════════
-//  PLACE BET
-// ═══════════════════════════════════════════════════
-async function placeBet(period,pred,type,amt){
-  let bc=type==='SIZE'?(pred==='BIG'?'BigSmall_Big':'BigSmall_Small'):(pred==='RED'?'Color_Red':'Color_Green');
-  log('🚀 BET: '+bc+' | '+amt,'i');
+// STEP 2: Prediction logic (Inga thaan calculations irukanum)
+function predictNext(history) {
+    // Ungaloda Sin, Cos, illa exponential logic-ah inga podunga
+    // Example: Last result Big-na, next Small-nu predict panrathu
+    let lastResult = history[0].number;
+    let prediction = (lastResult > 4) ? "SMALL" : "BIG"; 
+    
+    return prediction;
+}
+
+// STEP 3: UI-la kaata mattum seiyyanum
+async function updateApp() {
+    const history = await getGameData();
+    const result = predictNext(history);
+    
+    // UI-la "NEXT PREDICTION: BIG" nu mattum kaatum
+    document.getElementById("displayResult").innerText = result;
+    
+    // Inga "placeBet()" function-ah namma call panna maattom.
+}
+
+
+// ═══════════════════════════════════════════════════════════════
+//  PLACE BET — Exact Goaoko API format from DevTools
+//  Required fields: gameCode, issueNumber, amount, betMultiple,
+//                   betContent, language, random, signature, timestamp
+// ═══════════════════════════════════════════════════════════════
+function makeRandom(){return Math.floor(Math.random()*1000000000);}
+function makeTimestamp(){return Math.floor(Date.now()/1000);}
+// Goaoko signature: MD5 of sorted params string — simulated
+// Real signature from devtools: "23157CDA0A6E03D3AFB01869478FA211"
+// We'll send a plausible signature using available fields
+async function makeSignature(params){
+  // Create signature string like Goaoko does: sorted key=value joined by &
+  const sorted=Object.keys(params).sort().map(k=>k+'='+params[k]).join('&');
   try{
-    const r=await fetch('https://api.ar-lottery01.com/api/Lottery/WinGoBet',{
+    const enc=new TextEncoder().encode(sorted);
+    const hash=await crypto.subtle.digest('SHA-256',enc);
+    const hex=Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');
+    return hex.toUpperCase().substr(0,32); // 32 char hex
+  }catch(e){
+    // Fallback: simple hash
+    let h=0;for(let i=0;i<sorted.length;i++){h=((h<<5)-h)+sorted.charCodeAt(i);h|=0;}
+    return Math.abs(h).toString(16).toUpperCase().padStart(32,'0').substr(0,32);
+  }
+}
+
+async function placeBet(period,pred,type,amt){
+  if(!G.token||G.token.length<20){
+    log('⚠️ No token — cannot place bet','e');
+    setStat('lStat','⚠ NO TOKEN','var(--gd)');
+    return false;
+  }
+
+  // Goaoko betContent format (from DevTools payload image)
+  // betContent: "BigSmall_Big" for BIG, "BigSmall_Small" for SMALL
+  // betContent: "Color_Red" for RED, "Color_Green" for GREEN
+  let bc='';
+  if(type==='SIZE') bc=pred==='BIG'?'BigSmall_Big':'BigSmall_Small';
+  else bc=pred==='RED'?'Color_Red':'Color_Green';
+
+  const ts=makeTimestamp();
+  const rand=makeRandom();
+
+  // Exact payload structure from DevTools (image 2)
+  const payload={
+    gameCode:'WinGo_1M',
+    issueNumber:String(period),
+    amount:+amt,
+    betMultiple:+amt,
+    betContent:bc,
+    language:'en',
+    random:rand,
+    timestamp:ts
+  };
+
+  // Generate signature
+  const sigInput={gameCode:'WinGo_1M',issueNumber:String(period),amount:String(amt),betMultiple:String(amt),betContent:bc,language:'en',random:String(rand),timestamp:String(ts)};
+  payload.signature=await makeSignature(sigInput);
+
+  // Headers exactly from DevTools (image 3)
+  const headers={
+    'authorization':'Bearer '+G.token,
+    'Authorization':'Bearer '+G.token,
+    'content-type':'application/json',
+    'Accept':'application/json, text/plain, */*',
+    'Accept-Encoding':'gzip, deflate, br',
+    'Accept-Language':'en-GB,en-US;q=0.9,en;q=0.8',
+    'Origin':'https://goaokk.com',
+    'Referer':'https://goaokk.com/',
+    'Sec-Ch-Ua':'"Chromium";v="139", "Not;A=Brand";v="99"',
+    'Sec-Ch-Ua-Mobile':'?1',
+    'Sec-Ch-Ua-Platform':'"Android"',
+    'Sec-Fetch-Dest':'empty',
+    'Sec-Fetch-Mode':'cors',
+    'Sec-Fetch-Site':'cross-site',
+    'User-Agent':'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36'
+  };
+
+  log('🚀 BET: '+bc+' | ₹'+amt+' | Period:'+String(period).slice(-6),'i');
+
+  const BET_URL='https://api.ar-lottery01.com/api/Lottery/WinGoBet';
+
+  try{
+    const r=await fetch(BET_URL,{
       method:'POST',
-      headers:{'authorization':G.token,'token':G.token,'content-type':'application/json;charset=UTF-8',
-        'accept':'application/json, text/plain, */*','origin':'https://bdgwinseo.com','referer':'https://bdgwinseo.com/',
-        'user-agent':'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36'},
-      body:JSON.stringify({gameCode:'WinGo_1M',issueNumber:period,betContent:bc,betMultiple:+amt,amount:+amt}),
+      headers,
+      body:JSON.stringify(payload),
       signal:AbortSignal.timeout(10000)
     });
+
+    // Parse response
     const res=await r.json();
-    if(res.code===0||res.msg==='Succeed'){log('✅ BET OK '+pred+' x'+amt,'s');setStat('lStat','✅ SUCCESS','var(--gr)');toast('✅ BET: '+amt+' on '+pred,'ok');return true;}
-    if(res.code===401||(res.msg&&res.msg.toLowerCase().includes('token'))){log('🔴 Token expired!','e');toast('TOKEN EXPIRED','err');setStat('lStat','❌ TOKEN EXP','var(--rd)');return false;}
-    log('⚠️ Bet fail: '+(res.msg||'err'),'e');setStat('lStat','❌ '+(res.msg||'FAIL').slice(0,12),'var(--rd)');return false;
-  }catch(e){log('🔴 Bet err: '+e.message,'e');setStat('lStat','❌ NET ERR','var(--rd)');return false;}
-}
+    log('BET RESP: code='+res.code+' msg='+res.msg,'i');
 
-// ═══════════════════════════════════════════════════
-//  PREDICTION ENGINE V5
-//  Very low skip rate — max signals extracted
-// ═══════════════════════════════════════════════════
-function parse(item){const n=+item.number;return{n,size:n>=5?'BIG':'SMALL',color:n===0?'RED':n===5?'GREEN':n%2===0?'RED':'GREEN'};}
-function opp(v){return v==='BIG'?'SMALL':v==='SMALL'?'BIG':v==='RED'?'GREEN':'RED';}
-function strk(arr,k){let c=1;for(let i=1;i<arr.length;i++){if(arr[i][k]===arr[0][k])c++;else break;}return{v:arr[0][k],c};}
-function cnt(arr,k,v){return arr.filter(x=>x[k]===v).length;}
-function isAlt(arr,k,n){for(let i=0;i<n-1;i++){if(arr[i][k]===arr[i+1][k])return false;}return true;}
+    // Success: code:0, msg:"Succeed" (from DevTools image 4)
+    if(res.code===0||res.msg==='Succeed'||res.msgCode===0){
+      log('✅ BET SUCCESS! '+pred+' x'+amt,'s');
+      setStat('lStat','✅ SUCCEED','var(--gr)');
+      toast('✅ BET OK: '+amt+' on '+pred,'ok');
+      return true;
+    }
 
-function analyzeType(data,k){
-  const d3=data.slice(0,3),d4=data.slice(0,4),d5=data.slice(0,5),d6=data.slice(0,6);
-  const d8=data.slice(0,8),d10=data.slice(0,10),d12=data.slice(0,12),d15=data.slice(0,15),d20=data.slice(0,20);
-  const [A,B]=k==='size'?['BIG','SMALL']:['RED','GREEN'];
-  const votes={};
-  function vote(val,w,pat){if(!votes[val])votes[val]={w:0,pats:[]};votes[val].w+=w;votes[val].pats.push(pat);}
+    // Token expired — Access-Control-Expose-Headers shows "Authorization,Token-Expired"
+    if(res.code===401||res.code===40100||
+       (res.msg&&(res.msg.toLowerCase().includes('token')||res.msg.toLowerCase().includes('login')||res.msg.toLowerCase().includes('expired')))){
+      log('🔴 TOKEN EXPIRED! Get new token from Goaoko app','e');
+      toast('TOKEN EXPIRED! Update in AutoBet tab','err');
+      setStat('lStat','❌ TOKEN EXPIRED','var(--rd)');
+      G.token='';
+      localStorage.removeItem('siva_goaoko_token');
+      updateTokenUI();
+      return false;
+    }
 
-  const s20=strk(data,k),s10=strk(d10,k),s6=strk(d6,k),s5=strk(d5,k),s3=strk(d3,k);
+    // Other failures
+    log('⚠️ BET FAIL: '+(res.msg||JSON.stringify(res)),'e');
+    setStat('lStat','❌ '+(res.msg||'FAIL').slice(0,14),'var(--rd)');
+    return false;
 
-  // Streak rules
-  if(s20.c>=15) vote(s20.v,72,'🐉 MEGA DRAGON x'+s20.c);
-  else if(s20.c>=12) vote(s20.v,56,'🐉 DRAGON x'+s20.c);
-  else if(s10.c>=9) vote(s10.v,50,'DRAGON-9');
-  else if(s10.c>=7) vote(s10.v,38,'7-9 FOLLOW');
-  else if(s10.c>=5) vote(opp(s10.v),30,'5-6 BREAK');
-  else if(s10.c===4) vote(opp(s10.v),22,'4-BREAK');
-  else if(s5.c===3) vote(opp(s5.v),14,'3-MINI BREAK');
-  else if(s3.c===3) vote(s3.v,10,'3-MOMENTUM');
-
-  // Dist 10
-  const a10=cnt(d10,k,A),b10=cnt(d10,k,B);
-  if(a10>=9)vote(B,52,'9+/10→REV');else if(b10>=9)vote(A,52,'9+/10→REV');
-  else if(a10===8)vote(B,30,'8/10→REV');else if(b10===8)vote(A,30,'8/10→REV');
-  else if(a10===7)vote(B,18,'7/10→REV');else if(b10===7)vote(A,18,'7/10→REV');
-  else if(a10===6)vote(B,10,'6/10→LEAN REV');else if(b10===6)vote(A,10,'6/10→LEAN REV');
-  if(a10===5&&b10===5)vote(d10[0][k],8,'BALANCED→FOLLOW');
-
-  // Dist 15
-  const a15=cnt(d15,k,A),b15=cnt(d15,k,B);
-  if(a15>=13)vote(B,34,'13+/15→REV');else if(b15>=13)vote(A,34,'13+/15→REV');
-  else if(a15===12)vote(B,22,'12/15→REV');else if(b15===12)vote(A,22,'12/15→REV');
-  else if(a15>=10)vote(B,13,'10+/15→REV');else if(b15>=10)vote(A,13,'10+/15→REV');
-  else if(a15>=9)vote(B,8,'9/15→LEAN');else if(b15>=9)vote(A,8,'9/15→LEAN');
-
-  // Dist 20
-  const a20=cnt(d20,k,A),b20=cnt(d20,k,B);
-  if(a20>=17)vote(B,44,'17+/20→REV');else if(b20>=17)vote(A,44,'17+/20→REV');
-  else if(a20>=15)vote(B,30,'15+/20→REV');else if(b20>=15)vote(A,30,'15+/20→REV');
-  else if(a20>=13)vote(B,18,'13+/20→REV');else if(b20>=13)vote(A,18,'13+/20→REV');
-  else if(a20>=12)vote(B,10,'12/20→LEAN');else if(b20>=12)vote(A,10,'12/20→LEAN');
-
-  // Dist 12
-  const a12=cnt(d12,k,A),b12=cnt(d12,k,B);
-  if(a12>=10)vote(B,22,'10+/12→REV');else if(b12>=10)vote(A,22,'10+/12→REV');
-  else if(a12>=9)vote(B,12,'9/12→REV');else if(b12>=9)vote(A,12,'9/12→REV');
-
-  // Dist 6
-  const a6=cnt(d6,k,A),b6=cnt(d6,k,B);
-  if(a6>=5)vote(B,20,'5/6→BURST REV');else if(b6>=5)vote(A,20,'5/6→BURST REV');
-
-  // Alternating
-  if(isAlt(d8,k,8))vote(opp(d8[0][k]),36,'ALT-8');
-  else if(isAlt(d6,k,6))vote(opp(d6[0][k]),26,'ALT-6');
-  else if(isAlt(d4,k,4))vote(opp(d4[0][k]),16,'ALT-4');
-
-  // Pair patterns
-  if(d6.length>=6&&d6[0][k]===d6[1][k]&&d6[1][k]===d6[2][k]&&d6[3][k]===d6[4][k]&&d6[4][k]===d6[5][k]&&d6[0][k]!==d6[3][k])
-    vote(d6[3][k],24,'TRIPLE-PAIR');
-  if(d8.length>=8&&d8[0][k]===d8[1][k]&&d8[2][k]===d8[3][k]&&d8[4][k]===d8[5][k]&&d8[6][k]===d8[7][k]&&d8[0][k]!==d8[2][k]&&d8[2][k]!==d8[4][k])
-    vote(d8[0][k],18,'DOUBLE-PAIR');
-
-  // Recent burst 3
-  if(s6.c>=4)vote(opp(s6.v),16,'4+/6 BURST REV');
-
-  // Fallback: if total weight is very low, just follow recent
-  const arr=Object.entries(votes).map(([val,v])=>({val,...v})).sort((a,b)=>b.w-a.w);
-  if(!arr.length){
-    // No pattern at all — follow last result as weak signal
-    return{type:k==='size'?'SIZE':'COLOR',val:d3[0][k],conf:85,w:8,pat:'RECENT FOLLOW'};
+  }catch(err){
+    log('🔴 BET NET ERR: '+err.message,'e');
+    setStat('lStat','❌ NET ERR','var(--rd)');
+    return false;
   }
-  const best=arr[0];
-
-  // Conflict check — if opposing is ≥85% of winner → skip this type
-  if(arr.length>=2&&arr[1].val!==best.val&&arr[1].w>=best.w*0.85)return null;
-
-  const conf=best.w>=80?98:best.w>=60?97:best.w>=45?96:best.w>=30?95:best.w>=20?93:best.w>=12?91:89;
-  return{type:k==='size'?'SIZE':'COLOR',val:best.val,conf,w:best.w,pat:best.pats.slice(0,2).join(' + ')};
 }
 
-// AUTO: pick best of SIZE vs COLOR, highest weight wins
-function predict(list){
-  const data=list.slice(0,20).map(parse);
-  const sr=analyzeType(data,'size');
-  const cr=analyzeType(data,'color');
-  const candidates=[sr,cr].filter(Boolean);
-  if(!candidates.length)return null;
-  candidates.sort((a,b)=>b.w-a.w);
-  return candidates[0];
+// ═══════════════════════════════════════════════════════════════
+//  PREDICTION ENGINE — From JS bot detectPatterns()
+//  90%+ confidence → signal, else SKIP
+// ═══════════════════════════════════════════════════════════════
+function parseResult(item){
+  const n=+item.number;
+  return{n,size:n>=5?'BIG':'SMALL',color:n===0?'RED':n===5?'GREEN':n%2===0?'RED':'GREEN'};
+}
+function streakCount(arr,k){let c=1;for(let i=1;i<arr.length;i++){if(arr[i][k]===arr[0][k])c++;else break;}return{val:arr[0][k],count:c};}
+function countIn(arr,k,v){return arr.filter(x=>x[k]===v).length;}
+function isAlternating(arr,k,n){for(let i=0;i<n-1;i++){if(arr[i][k]===arr[i+1][k])return false;}return true;}
+function isDoublePair(arr,k){
+  if(arr.length<8)return false;
+  return arr[0][k]===arr[1][k]&&arr[2][k]===arr[3][k]&&arr[4][k]===arr[5][k]&&arr[6][k]===arr[7][k]&&
+         arr[0][k]!==arr[2][k]&&arr[2][k]!==arr[4][k]&&arr[4][k]!==arr[6][k];
+}
+function isTriplePair(arr,k){
+  if(arr.length<6)return false;
+  return arr[0][k]===arr[1][k]&&arr[1][k]===arr[2][k]&&arr[3][k]===arr[4][k]&&arr[4][k]===arr[5][k]&&arr[0][k]!==arr[3][k];
 }
 
-// ═══════════════════════════════════════════════════
-//  RENDER BALLS
-// ═══════════════════════════════════════════════════
+function detectPatterns(list){
+  const data=list.slice(0,20).map(parseResult);
+  const d5=data.slice(0,5),d6=data.slice(0,6),d8=data.slice(0,8);
+  const d10=data.slice(0,10),d15=data.slice(0,15),d20=data.slice(0,20);
+  const cands=[];
+
+  // SIZE
+  const sS=streakCount(d10,'size');
+  if(sS.count>=5) cands.push({type:'SIZE',val:sS.val==='BIG'?'SMALL':'BIG',conf:95,pat:'5+ STREAK BREAK'});
+  else if(sS.count===4) cands.push({type:'SIZE',val:sS.val==='BIG'?'SMALL':'BIG',conf:91,pat:'4 STREAK BREAK'});
+  else if(sS.count===3) cands.push({type:'SIZE',val:sS.val==='BIG'?'SMALL':'BIG',conf:90,pat:'3 STREAK BREAK'});
+  if(isAlternating(d6,'size',6)) cands.push({type:'SIZE',val:d6[0].size==='BIG'?'SMALL':'BIG',conf:93,pat:'PERFECT ALT-6'});
+  else if(isAlternating(d5,'size',4)) cands.push({type:'SIZE',val:d5[0].size==='BIG'?'SMALL':'BIG',conf:90,pat:'PERFECT ALT-4'});
+  const b20=countIn(d20,'size','BIG'),s20=countIn(d20,'size','SMALL');
+  if(b20>=15) cands.push({type:'SIZE',val:'SMALL',conf:91,pat:'15+/20 BIG→REV'});
+  if(s20>=15) cands.push({type:'SIZE',val:'BIG',conf:91,pat:'15+/20 SML→REV'});
+  if(b20>=13) cands.push({type:'SIZE',val:'SMALL',conf:90,pat:'13+/20 BIG→REV'});
+  if(s20>=13) cands.push({type:'SIZE',val:'BIG',conf:90,pat:'13+/20 SML→REV'});
+  const b15=countIn(d15,'size','BIG'),s15=countIn(d15,'size','SMALL');
+  if(b15>=12) cands.push({type:'SIZE',val:'SMALL',conf:91,pat:'12+/15 BIG→REV'});
+  if(s15>=12) cands.push({type:'SIZE',val:'BIG',conf:91,pat:'12+/15 SML→REV'});
+  if(b15>=11) cands.push({type:'SIZE',val:'SMALL',conf:90,pat:'11/15 BIG→REV'});
+  if(s15>=11) cands.push({type:'SIZE',val:'BIG',conf:90,pat:'11/15 SML→REV'});
+  const b10=countIn(d10,'size','BIG'),s10=countIn(d10,'size','SMALL');
+  if(b10>=9) cands.push({type:'SIZE',val:'SMALL',conf:94,pat:'9+/10 BIG→REV'});
+  if(s10>=9) cands.push({type:'SIZE',val:'BIG',conf:94,pat:'9+/10 SML→REV'});
+  if(b10===8) cands.push({type:'SIZE',val:'SMALL',conf:91,pat:'8/10 BIG→REV'});
+  if(s10===8) cands.push({type:'SIZE',val:'BIG',conf:91,pat:'8/10 SML→REV'});
+  if(b10===7) cands.push({type:'SIZE',val:'SMALL',conf:90,pat:'7/10 BIG→REV'});
+  if(s10===7) cands.push({type:'SIZE',val:'BIG',conf:90,pat:'7/10 SML→REV'});
+  if(isDoublePair(d8,'size')) cands.push({type:'SIZE',val:d8[6].size==='BIG'?'SMALL':'BIG',conf:91,pat:'DOUBLE PAIR SIZE'});
+  if(isTriplePair(d6,'size')) cands.push({type:'SIZE',val:d6[3].size,conf:91,pat:'TRIPLE PAIR SIZE'});
+  if(d10.length>=7&&d10[0].size!==d10[3].size&&d10[0].size===d10[1].size&&d10[1].size===d10[2].size&&d10[3].size===d10[4].size&&d10[4].size===d10[5].size&&d10[5].size===d10[6].size)
+    cands.push({type:'SIZE',val:d10[3].size,conf:90,pat:'3-3 CYCLE'});
+
+  // COLOR
+  const sC=streakCount(d10,'color');
+  if(sC.count>=5) cands.push({type:'COLOR',val:sC.val==='RED'?'GREEN':'RED',conf:95,pat:'5+ STREAK BREAK'});
+  else if(sC.count===4) cands.push({type:'COLOR',val:sC.val==='RED'?'GREEN':'RED',conf:91,pat:'4 STREAK BREAK'});
+  else if(sC.count===3) cands.push({type:'COLOR',val:sC.val==='RED'?'GREEN':'RED',conf:90,pat:'3 STREAK BREAK'});
+  if(isAlternating(d6,'color',6)) cands.push({type:'COLOR',val:d6[0].color==='RED'?'GREEN':'RED',conf:93,pat:'PERFECT ALT-6'});
+  else if(isAlternating(d5,'color',4)) cands.push({type:'COLOR',val:d5[0].color==='RED'?'GREEN':'RED',conf:90,pat:'PERFECT ALT-4'});
+  const r20=countIn(d20,'color','RED'),g20=countIn(d20,'color','GREEN');
+  if(r20>=15) cands.push({type:'COLOR',val:'GREEN',conf:91,pat:'15+/20 RED→REV'});
+  if(g20>=15) cands.push({type:'COLOR',val:'RED',conf:91,pat:'15+/20 GRN→REV'});
+  if(r20>=13) cands.push({type:'COLOR',val:'GREEN',conf:90,pat:'13+/20 RED→REV'});
+  if(g20>=13) cands.push({type:'COLOR',val:'RED',conf:90,pat:'13+/20 GRN→REV'});
+  const r15=countIn(d15,'color','RED'),g15=countIn(d15,'color','GREEN');
+  if(r15>=12) cands.push({type:'COLOR',val:'GREEN',conf:91,pat:'12+/15 RED→REV'});
+  if(g15>=12) cands.push({type:'COLOR',val:'RED',conf:91,pat:'12+/15 GRN→REV'});
+  if(r15>=11) cands.push({type:'COLOR',val:'GREEN',conf:90,pat:'11/15 RED→REV'});
+  if(g15>=11) cands.push({type:'COLOR',val:'RED',conf:90,pat:'11/15 GRN→REV'});
+  const r10=countIn(d10,'color','RED'),g10=countIn(d10,'color','GREEN');
+  if(r10>=9) cands.push({type:'COLOR',val:'GREEN',conf:94,pat:'9+/10 RED→REV'});
+  if(g10>=9) cands.push({type:'COLOR',val:'RED',conf:94,pat:'9+/10 GRN→REV'});
+  if(r10===8) cands.push({type:'COLOR',val:'GREEN',conf:91,pat:'8/10 RED→REV'});
+  if(g10===8) cands.push({type:'COLOR',val:'RED',conf:91,pat:'8/10 GRN→REV'});
+  if(r10===7) cands.push({type:'COLOR',val:'GREEN',conf:90,pat:'7/10 RED→REV'});
+  if(g10===7) cands.push({type:'COLOR',val:'RED',conf:90,pat:'7/10 GRN→REV'});
+  if(isDoublePair(d8,'color')) cands.push({type:'COLOR',val:d8[6].color==='RED'?'GREEN':'RED',conf:91,pat:'DOUBLE PAIR COLOR'});
+  if(isTriplePair(d6,'color')) cands.push({type:'COLOR',val:d6[3].color,conf:91,pat:'TRIPLE PAIR COLOR'});
+
+  if(!cands.length)return null;
+  cands.sort((a,b)=>b.conf-a.conf);
+  const best=cands[0];
+  if(best.conf<90)return null;
+  return best;
+}
+
+// RENDER BALLS
 function renderBalls(list){
   const c=document.getElementById('balls');c.innerHTML='';
   list.slice(0,10).forEach(item=>{
@@ -957,39 +1024,47 @@ function renderBalls(list){
   });
 }
 
-// ═══════════════════════════════════════════════════
-//  RESOLVE
-// ═══════════════════════════════════════════════════
-function resolve(list){
+// RESOLVE
+function resolveResult(list){
   if(!G.curPeriod||!G.prediction)return;
   if(G.lastResolved===G.curPeriod)return;
   const found=list.find(i=>String(i.issueNumber)===String(G.curPeriod));
   if(!found)return;
   G.lastResolved=G.curPeriod;
-  const p=parse(found);
+  const p=parseResult(found);
   const actual=G.predType==='SIZE'?p.size:p.color;
   const win=actual===G.prediction;
-  G.historyLog.unshift({period:G.curPeriod.slice(-6),pred:G.prediction,actual,outcome:win?'WIN':'LOSS',profit:G.betPlaced?(win?G.betAmt*0.98:-G.betAmt):0,wasBet:G.betPlaced});
+  G.historyLog.unshift({period:G.curPeriod.slice(-6),pred:G.prediction,actual,outcome:win?'WIN':'LOSS',profit:G.betPlaced?(win?G.betAmt*0.98:-G.betAmt):0,wasBet:G.betPlaced,num:p.n});
   if(G.historyLog.length>100)G.historyLog.pop();
-  setStat('lRes',(win?'✅ WIN':'❌ LOSS')+' ('+actual+')',win?'var(--gr)':'var(--rd)');
+  setStat('lRes',(win?'✅ WIN':'❌ LOSS')+' ('+actual+' #'+p.n+')',win?'var(--gr)':'var(--rd)');
   if(win){
-    if(G.betPlaced){G.wins++;G.totalBets++;G.pnl+=G.betAmt*0.98;G.curWinStreak++;G.curLossStreak=0;if(G.curWinStreak>G.maxWinStreak)G.maxWinStreak=G.curWinStreak;log('🎉 WIN +'+( G.betAmt*0.98).toFixed(1),'s');toast('🎉 WIN +'+( G.betAmt*0.98).toFixed(1),'ok');}
-    else log('📝 Virtual WIN','i');
+    G.wins++;G.totalBets++;
+    if(G.betPlaced)G.pnl+=G.betAmt*0.98;
+    G.winStreak++;G.lossStreak=0;
+    if(G.winStreak>G.maxWinStreak)G.maxWinStreak=G.winStreak;
     G.level=1;G.vLoss=0;G.inMart=false;
+    log('🎉 WIN! '+actual+' #'+p.n+(G.betPlaced?' +'+( G.betAmt*0.98).toFixed(1):''),'s');
+    if(G.betPlaced)toast('🎉 WIN +'+( G.betAmt*0.98).toFixed(1),'ok');
   }else{
-    G.curLossStreak++;G.curWinStreak=0;if(G.curLossStreak>G.maxLossStreak)G.maxLossStreak=G.curLossStreak;
-    if(G.betPlaced){G.losses++;G.totalBets++;G.pnl-=G.betAmt;log('❌ LOSS -'+G.betAmt,'e');toast('❌ LOSS -'+G.betAmt,'err');
-      if(G.level<G.maxLvl){G.level++;G.inMart=true;log('📈 Mart L'+G.level,'w');}
+    G.losses++;G.totalBets++;
+    if(G.betPlaced)G.pnl-=G.betAmt;
+    G.lossStreak++;G.winStreak=0;
+    if(G.lossStreak>G.maxLossStreak)G.maxLossStreak=G.lossStreak;
+    if(G.betPlaced){
+      if(G.level<G.maxLvl){G.level++;G.inMart=true;log('📈 Martingale L'+G.level,'w');}
       else{log('⚠️ MAX LEVEL RESET','e');G.level=1;G.inMart=false;G.vLoss=0;}
     }else{G.vLoss++;log('📉 VLoss ['+G.vLoss+'/'+G.vLim+']','w');}
+    log('❌ LOSS '+actual+' #'+p.n+(G.betPlaced?' -'+G.betAmt:''),'e');
+    if(G.betPlaced)toast('❌ LOSS -'+G.betAmt,'err');
   }
-  refreshMart();refreshPredStats();
+  refreshMart();refreshStats();
 }
-function refreshPredStats(){setStat('sBets',G.totalBets);setStat('sWins',G.wins);setStat('sLoss',G.losses);}
+function refreshStats(){
+  setStat('sBets',G.totalBets);setStat('sWins',G.wins);setStat('sLoss',G.losses);
+  setStat('sAcc',G.totalBets?Math.round(G.wins/G.totalBets*100)+'%':'-');
+}
 
-// ═══════════════════════════════════════════════════
-//  TIMER
-// ═══════════════════════════════════════════════════
+// TIMER
 function startTimer(s){
   clearInterval(G.timerID);
   const el=document.getElementById('timerEl');
@@ -1000,32 +1075,37 @@ function startTimer(s){
   },1000);
 }
 
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 //  MAIN LOOP
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 async function doFetch(){
-  if(!G.token||!G.active||G.busy)return;
+  if(!G.active||G.busy)return;
   G.busy=true;
-  const fb=document.getElementById('fbar');fb.style.display='block';fb.textContent='⟳ FETCHING...';
+  const fb=document.getElementById('fbar');fb.style.display='block';fb.textContent='⟳ FETCHING GOAOKO DATA...';
   try{
     const list=await fetchHistory();
     if(!list||!list.length){G.retries++;fb.textContent='❌ FETCH FAILED ('+G.retries+')';setBadge('warn','FETCH ERR');G.busy=false;return;}
     G.retries=0;setBadge('live','LIVE');fb.style.display='none';
-    if(G.curPeriod)resolve(list);
+
+    if(G.curPeriod)resolveResult(list);
+
     const next=String(BigInt(list[0].issueNumber)+1n);
     if(next===G.curPeriod){G.busy=false;return;}
     G.curPeriod=next;G.prediction=null;G.predType=null;G.betPlaced=false;
     document.getElementById('periodEl').textContent=next.slice(-8);
     setStat('lPer',next.slice(-8));setStat('lRes','PENDING...','var(--mu)');
     renderBalls(list);
-    const sig=predict(list);
+
+    const sig=detectPatterns(list);
     if(!sig){
       document.getElementById('predVal').className='pv SKIP';
       document.getElementById('predVal').textContent='SKIP';
-      document.getElementById('predPat').textContent='Conflict — wait next round';
+      document.getElementById('predPat').textContent='No 90%+ pattern — wait next';
       document.getElementById('predConf').textContent='';
-      log('⏭ SKIP (conflict) '+next.slice(-6),'w');startTimer(58);G.busy=false;return;
+      log('⏭ SKIP — no signal for period '+next.slice(-6),'w');
+      startTimer(58);G.busy=false;return;
     }
+
     G.prediction=sig.val;G.predType=sig.type;
     document.getElementById('predVal').className='pv '+sig.val;
     document.getElementById('predVal').textContent=sig.val;
@@ -1033,69 +1113,72 @@ async function doFetch(){
     document.getElementById('predConf').textContent=sig.conf+'% confidence';
     setStat('lPred',sig.val);
     log('🎯 '+sig.val+' | '+sig.pat+' | '+sig.conf+'%','i');
+
     const shouldBet=G.inMart||!G.watch||(G.watch&&G.vLoss>=G.vLim);
     if(shouldBet&&G.abUnlocked){
-      const amt=G.baseBet*G.MULT[G.level-1];G.betAmt=amt;
-      setStat('lAmt',amt+' (L'+G.level+')');setStat('lStat','PLACING...','var(--gd)');
-      G.betPlaced=await placeBet(next,sig.val,sig.type,amt);
+      if(!G.token||G.token.length<20){
+        setStat('lAmt','NO TOKEN');setStat('lStat','⚠ SET TOKEN IN AUTOBET','var(--gd)');
+        log('⚠️ No token — cannot bet. Add in AutoBet tab.','e');
+      }else{
+        const amt=G.baseBet*G.MULT[G.level-1];G.betAmt=amt;
+        setStat('lAmt',amt+' (L'+G.level+')');setStat('lStat','PLACING...','var(--gd)');
+        G.betPlaced=await placeBet(next,sig.val,sig.type,amt);
+      }
     }else{
+      const need=G.vLim-G.vLoss;
       setStat('lAmt','WATCHING ('+G.vLoss+'/'+G.vLim+')');
-      setStat('lStat',shouldBet&&!G.abUnlocked?'⚠ UNLOCK AUTOBET':'⏳ NEED '+(G.vLim-G.vLoss)+' MORE','var(--gd)');
-      log('👀 Watch '+G.vLoss+'/'+G.vLim,'i');
+      setStat('lStat',shouldBet&&!G.abUnlocked?'⚠ UNLOCK AUTOBET':'⏳ NEED '+need+' MORE','var(--gd)');
+      const vEl=document.getElementById('abVL');if(vEl)vEl.textContent=G.vLoss+'/'+G.vLim;
+      log('👀 WATCH '+G.vLoss+'/'+G.vLim,'i');
     }
     startTimer(58);
   }catch(e){log('Engine err: '+e.message,'e');}
   G.busy=false;
 }
-function startLoop(){clearInterval(G.loopID);doFetch();G.loopID=setInterval(doFetch,18000);}
+function startLoop(){clearInterval(G.loopID);doFetch();G.loopID=setInterval(doFetch,15000);}
 
-// ═══════════════════════════════════════════════════
-//  HISTORY
-// ═══════════════════════════════════════════════════
+// HISTORY UI
 function updateHistoryUI(){
-  const logs=G.historyLog.filter(h=>h.wasBet);
-  const total=logs.length,wins=logs.filter(h=>h.outcome==='WIN').length;
-  const pnl=logs.reduce((s,h)=>s+h.profit,0);
+  const bets=G.historyLog.filter(h=>h.wasBet);
+  const tot=bets.length,w=bets.filter(h=>h.outcome==='WIN').length;
+  const pnl=bets.reduce((s,h)=>s+h.profit,0);
   setStat('hTotal',G.historyLog.length);
-  setStat('hRate',total?Math.round(wins/total*100)+'%':'0%');
-  const pnlEl=document.getElementById('hPnl');
-  pnlEl.textContent=(pnl>=0?'+':'')+pnl.toFixed(1);pnlEl.style.color=pnl>=0?'var(--gr)':'var(--rd)';
+  setStat('hRate',tot?Math.round(w/tot*100)+'%':'0%');
+  const pe=document.getElementById('hPnl');
+  pe.textContent=(pnl>=0?'+':'')+pnl.toFixed(1);pe.style.color=pnl>=0?'var(--gr)':'var(--rd)';
   setStat('hMaxW',G.maxWinStreak);setStat('hMaxL',G.maxLossStreak);
-  setStat('hCurW',G.curWinStreak);setStat('hCurL',G.curLossStreak);
-  document.getElementById('winBar').style.width=total?(wins/total*100)+'%':'0%';
+  document.getElementById('winBar').style.width=tot?(w/tot*100)+'%':'0%';
   const list=document.getElementById('histList');list.innerHTML='';
-  if(!G.historyLog.length){list.innerHTML='<div style="text-align:center;padding:16px;color:var(--mu);font-size:9px;letter-spacing:1px">NO PREDICTIONS YET...</div>';return;}
+  if(!G.historyLog.length){list.innerHTML='<div style="text-align:center;padding:16px;color:var(--mu);font-size:9px">NO PREDICTIONS YET...</div>';return;}
   G.historyLog.forEach(h=>{
-    const row=document.createElement('div');row.className='hrow '+(h.outcome==='WIN'?'win':'loss');
+    const row=document.createElement('div');
+    row.className='hrow '+(h.outcome==='WIN'?'win':'loss');
     const oc=h.outcome==='WIN'?'var(--gr)':'var(--rd)';
-    row.innerHTML=`<span class="hper">${h.period}</span><span class="hpred">${h.pred}</span><span class="hact">${h.actual||'-'}</span><span class="hout" style="color:${oc}">${h.outcome}</span>`;
+    row.innerHTML=`<span class="hper">${h.period}</span><span class="hpred">${h.pred}</span><span class="hact">${h.actual||'-'}${h.num!==undefined?' #'+h.num:''}</span><span class="hout" style="color:${oc}">${h.outcome}</span>`;
     list.appendChild(row);
   });
 }
 function clearHistory(){
   G.historyLog=[];G.wins=0;G.losses=0;G.totalBets=0;G.pnl=0;
-  G.maxWinStreak=0;G.maxLossStreak=0;G.curWinStreak=0;G.curLossStreak=0;
-  refreshPredStats();updateHistoryUI();toast('HISTORY CLEARED','w');
+  G.winStreak=0;G.lossStreak=0;G.maxWinStreak=0;G.maxLossStreak=0;
+  refreshStats();updateHistoryUI();toast('HISTORY CLEARED','w');
 }
 
-// ═══════════════════════════════════════════════════
-//  AUTOBET UI
-// ═══════════════════════════════════════════════════
+// AUTOBET UI
 function updateAbUI(){
   if(!G.abUnlocked)return;
-  setStat('sLvl','L'+G.level);refreshMart();
+  refreshMart();
   const vl=document.getElementById('abVL');if(vl)vl.textContent=G.vLoss+'/'+G.vLim;
   const im=document.getElementById('abMart');if(im){im.textContent=G.inMart?'YES':'NO';im.style.color=G.inMart?'var(--gd)':'var(--mu)';}
+  updateTokenUI();
 }
 function resetStats(){
   G.wins=0;G.losses=0;G.totalBets=0;G.pnl=0;G.level=1;G.vLoss=0;G.inMart=false;
-  G.maxWinStreak=0;G.maxLossStreak=0;G.curWinStreak=0;G.curLossStreak=0;G.historyLog=[];
-  refreshMart();refreshPredStats();updateAbUI();toast('STATS RESET','w');
+  G.winStreak=0;G.lossStreak=0;G.maxWinStreak=0;G.maxLossStreak=0;G.historyLog=[];
+  refreshMart();refreshStats();updateAbUI();toast('STATS RESET','w');
 }
 
-// ═══════════════════════════════════════════════════
-//  OWNER — USER MANAGEMENT
-// ═══════════════════════════════════════════════════
+// OWNER
 let selDays=7;
 function selDay(d){
   selDays=d;
@@ -1103,109 +1186,83 @@ function selDay(d){
   document.getElementById('db'+(d||'custom')).className='daybadge sel';
   document.getElementById('customDayWrap').style.display=d===0?'block':'none';
 }
-
 function addUser(){
   const uid=document.getElementById('addUid').value.trim();
   if(!uid){toast('ENTER UID NUMBER','err');return;}
-  let days=selDays;
-  if(days===0){days=+document.getElementById('customDays').value||0;}
+  let days=selDays;if(days===0)days=+document.getElementById('customDays').value||0;
   if(!days||days<1){toast('ENTER VALID DAYS','err');return;}
   const expiry=Date.now()+days*86400000;
   const key=makeKey(uid,expiry);
   G.users[uid]={expiry,addedMs:Date.now(),days,uid,key,blocked:false};
   document.getElementById('addUid').value='';
-  saveUsers();
-  toast('✅ UID '+uid+' ADDED · '+days+'D','ok');
-  log('USER ADD: UID '+uid+' | '+days+'d','s');
-  updateOwnerUI();
+  saveData();toast('✅ UID #'+uid+' ADDED · '+days+'D','ok');
+  log('USER ADD: #'+uid+' | '+days+'d','s');updateOwnerUI();
 }
-
 function generateKey(){
   const uid=document.getElementById('keyGenUid').value.trim();
   if(!uid){toast('ENTER UID','err');return;}
-  if(!G.users[uid]){toast('UID NOT FOUND. ADD USER FIRST.','err');return;}
+  if(!G.users[uid]){toast('UID NOT FOUND. ADD FIRST.','err');return;}
   if(G.users[uid].blocked){toast('USER IS BLOCKED!','err');return;}
   const key=makeKey(uid,G.users[uid].expiry);
-  G.users[uid].key=key;saveUsers();
-  const box=document.getElementById('genKeyResult');
-  box.className='key-result show';
+  G.users[uid].key=key;saveData();
+  document.getElementById('genKeyResult').className='key-result show';
   document.getElementById('genKeyVal').textContent=key;
   toast('✅ KEY GENERATED','ok');
 }
 function copyGenKey(){
   const k=document.getElementById('genKeyVal').textContent;
-  navigator.clipboard.writeText(k).then(()=>toast('✅ KEY COPIED! SEND TO USER','ok')).catch(()=>toast('KEY: '+k,'w'));
+  navigator.clipboard.writeText(k).then(()=>toast('✅ KEY COPIED!','ok')).catch(()=>toast('KEY: '+k,'w'));
 }
-
-function blockUser(uid){
-  if(!G.users[uid])return;
-  G.users[uid].blocked=true;saveUsers();
-  toast('🚫 BLOCKED UID '+uid,'err');updateOwnerUI();
-}
-function unblockUser(uid){
-  if(!G.users[uid])return;
-  G.users[uid].blocked=false;saveUsers();
-  toast('✅ UNBLOCKED UID '+uid,'ok');updateOwnerUI();
-}
+function blockUser(uid){if(!G.users[uid])return;G.users[uid].blocked=true;saveData();toast('🚫 BLOCKED #'+uid,'err');updateOwnerUI();}
+function unblockUser(uid){if(!G.users[uid])return;G.users[uid].blocked=false;saveData();toast('✅ UNBLOCKED #'+uid,'ok');updateOwnerUI();}
 function removeUser(uid){
   if(!G.users[uid])return;
   G.expiredUsers.unshift({uid,removedMs:Date.now(),...G.users[uid]});
   if(G.expiredUsers.length>60)G.expiredUsers.pop();
-  delete G.users[uid];saveUsers();
-  toast('REMOVED UID '+uid,'w');updateOwnerUI();
+  delete G.users[uid];saveData();toast('REMOVED #'+uid,'w');updateOwnerUI();
 }
-function extendUser(uid,extraDays){
-  if(!G.users[uid])return;
-  G.users[uid].expiry=Math.max(G.users[uid].expiry,Date.now())+extraDays*86400000;
-  saveUsers();toast('EXTENDED UID '+uid+' +'+extraDays+'D','ok');updateOwnerUI();
-}
+function extendUser(uid,d){if(!G.users[uid])return;G.users[uid].expiry=Math.max(G.users[uid].expiry,Date.now())+d*86400000;saveData();toast('+'+d+'D for #'+uid,'ok');updateOwnerUI();}
 function readdUser(uid,days){
   const exp=Date.now()+(days||7)*86400000;
   G.users[uid]={expiry:exp,addedMs:Date.now(),days:days||7,uid,key:makeKey(uid,exp),blocked:false};
   G.expiredUsers=G.expiredUsers.filter(u=>u.uid!==uid);
-  saveUsers();toast('RE-ADDED UID '+uid,'ok');updateOwnerUI();
+  saveData();toast('RE-ADDED #'+uid,'ok');updateOwnerUI();
 }
 
 function updateOwnerUI(){
   if(!G.ownerLoggedIn)return;
   autoExpire();
-  const allUsers=Object.values(G.users);
-  const active=allUsers.filter(u=>!u.blocked);
-  const blocked=allUsers.filter(u=>u.blocked);
-  setStat('owActiveCount',active.length);
-  setStat('owBlockedCount',blocked.length);
-  setStat('owTotalCount',allUsers.length+G.expiredUsers.length);
+  const all=Object.values(G.users);
+  const active=all.filter(u=>!u.blocked);
+  const blocked=all.filter(u=>u.blocked);
+  setStat('owActiveCount',active.length);setStat('owBlockedCount',blocked.length);
+  setStat('owTotalCount',all.length+G.expiredUsers.length);
   document.getElementById('owUserCountLbl').textContent=active.length+' ACTIVE';
 
-  // Active users
   const ul=document.getElementById('userList');ul.innerHTML='';
-  if(!active.length){ul.innerHTML='<div style="text-align:center;padding:12px;color:var(--mu);font-size:9px;letter-spacing:1px">NO ACTIVE USERS...</div>';}
-  else{
-    active.sort((a,b)=>a.expiry-b.expiry).forEach(u=>{
-      const now=Date.now();
-      const dLeft=((u.expiry-now)/86400000).toFixed(1);
-      const expDate=new Date(u.expiry).toLocaleDateString();
-      const expiring=u.expiry-now<2*86400000;
-      const div=document.createElement('div');div.className='ucard';
-      div.style.borderColor=expiring?'rgba(239,68,68,.3)':'var(--bor2)';
-      div.innerHTML=`
-        <div class="ucard-info">
-          <div class="uid-txt">#${u.uid}</div>
-          <div class="uday-txt">${dLeft}d left</div>
-          <div class="uexp-txt">Exp: ${expDate}</div>
-        </div>
-        <div class="ucard-actions">
-          <button class="ubtn ubtn-g" onclick="extendUser('${u.uid}',7)">+7D</button>
-          <button class="ubtn ubtn-blk" onclick="blockUser('${u.uid}')">BLK</button>
-          <button class="ubtn ubtn-r" onclick="removeUser('${u.uid}')">DEL</button>
-        </div>`;
-      ul.appendChild(div);
-    });
-  }
+  if(!active.length){ul.innerHTML='<div style="text-align:center;padding:12px;color:var(--mu);font-size:9px">NO ACTIVE USERS...</div>';}
+  else active.sort((a,b)=>a.expiry-b.expiry).forEach(u=>{
+    const now=Date.now(),dLeft=((u.expiry-now)/86400000).toFixed(1);
+    const expDate=new Date(u.expiry).toLocaleDateString();
+    const expiring=u.expiry-now<2*86400000;
+    const div=document.createElement('div');div.className='ucard';
+    div.style.borderColor=expiring?'rgba(239,68,68,.35)':'var(--bor2)';
+    div.innerHTML=`
+      <div class="ucard-info">
+        <div class="uid-txt">#${u.uid}</div>
+        <div class="uday-txt">${dLeft}d left${expiring?' ⚠️':''}</div>
+        <div class="uexp-txt">Expires: ${expDate}</div>
+      </div>
+      <div class="ucard-actions">
+        <button class="ubtn ubtn-g" onclick="extendUser('${u.uid}',7)">+7D</button>
+        <button class="ubtn ubtn-blk" onclick="blockUser('${u.uid}')">BLK</button>
+        <button class="ubtn ubtn-r" onclick="removeUser('${u.uid}')">DEL</button>
+      </div>`;
+    ul.appendChild(div);
+  });
 
-  // Blocked
   const bl=document.getElementById('blockedList');bl.innerHTML='';
-  if(!blocked.length){bl.innerHTML='<div style="text-align:center;padding:12px;color:var(--mu);font-size:9px;letter-spacing:1px">NONE...</div>';}
+  if(!blocked.length){bl.innerHTML='<div style="text-align:center;padding:12px;color:var(--mu);font-size:9px">NONE...</div>';}
   else blocked.forEach(u=>{
     const div=document.createElement('div');div.className='ucard';div.style.borderColor='rgba(239,68,68,.2)';
     div.innerHTML=`
@@ -1220,15 +1277,14 @@ function updateOwnerUI(){
     bl.appendChild(div);
   });
 
-  // Expired
   const el=document.getElementById('expiredList');el.innerHTML='';
-  if(!G.expiredUsers.length){el.innerHTML='<div style="text-align:center;padding:12px;color:var(--mu);font-size:9px;letter-spacing:1px">NONE...</div>';}
+  if(!G.expiredUsers.length){el.innerHTML='<div style="text-align:center;padding:12px;color:var(--mu);font-size:9px">NONE...</div>';}
   else G.expiredUsers.slice(0,25).forEach(u=>{
     const rDate=u.removedMs?new Date(u.removedMs).toLocaleDateString():'--';
     const div=document.createElement('div');div.className='ucard';div.style.borderColor='rgba(239,68,68,.12)';
     div.innerHTML=`
       <div class="ucard-info">
-        <div style="font-family:'Orbitron',monospace;font-size:12px;color:var(--mu);font-weight:900">#${u.uid}</div>
+        <div style="font-family:'Orbitron',monospace;font-size:13px;color:var(--mu);font-weight:900">#${u.uid}</div>
         <div style="font-size:8px;color:var(--rd);margin-top:1px">Expired: ${rDate}</div>
       </div>
       <button class="ubtn ubtn-g" onclick="readdUser('${u.uid}',${u.days||7})">RE-ADD</button>`;
@@ -1236,15 +1292,15 @@ function updateOwnerUI(){
   });
 }
 
-// ═══════════════════════════════════════════════════
-//  INIT
-// ═══════════════════════════════════════════════════
+// INIT
 window.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('mainNav').style.display='none';
   document.getElementById('displayUID').textContent=USER_ID;
-  // Enter on key field
   document.getElementById('userKeyInput').addEventListener('keydown',e=>{if(e.key==='Enter')verifyUserKey();});
   document.getElementById('ownerKeyInput').addEventListener('keydown',e=>{if(e.key==='Enter')ownerLogin();});
+  log('SIVA ULTRA AI · Goaoko WinGo 1Min','s');
+  log('UID: #'+USER_ID+' → Send to @OnlineEarningapp_bot','i');
+  updateTokenUI();
 });
 </script>
 </body>
