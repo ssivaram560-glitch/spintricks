@@ -1305,7 +1305,7 @@ async function doFetch(){
     document.getElementById('periodEl').textContent=next.slice(-8);
     setStat('lPer',next.slice(-8));setStat('lRes','PENDING...','var(--mu)');
     renderBalls(list);
-    const sig=detectSignal(list);
+    const sig=decidePrediction(list);
     if(!sig){
       document.getElementById('predVal').className='pv SKIP';document.getElementById('predVal').textContent='SKIP';
       document.getElementById('predPat').textContent='No 90%+ pattern';document.getElementById('predConf').textContent='';
