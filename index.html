@@ -1328,7 +1328,20 @@ async function doFetch(){
     startTimer(58);
   }catch(e){log('Engine err: '+e.message,'e');}G.busy=false;
 }
-function startLoop(){clearInterval(G.loopID);doFetch();G.loopID=setInterval(doFetch,15000);}
+function startLoop(){
+
+  async function loop(){
+
+    if(!G.active) return;
+
+    await doFetch();
+
+    setTimeout(loop,15000);
+
+  }
+
+  loop();
+}
 
 // HISTORY UI
 function updateHistoryUI(){
@@ -1417,7 +1430,15 @@ function updateOwnerUI(){
     el.appendChild(div);
   });
 }
+document.addEventListener("visibilitychange",()=>{
 
+  if(!document.hidden && G.active){
+
+    doFetch();
+
+  }
+
+});
 // INIT
 window.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('mainNav').style.display='none';
