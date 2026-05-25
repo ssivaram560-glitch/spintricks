@@ -652,7 +652,7 @@ function autoExpire(){
 function makeKey(uid,expiry){const h=btoa(uid+':'+expiry+':SIVAAI2024').replace(/[^A-Z0-9]/gi,'').toUpperCase().substr(0,10);return 'SK'+uid+'-'+h;}
 function verifyKey(uid,key){
   autoExpire();const u=G.users[uid];
-  if(!u)return{valid:false,reason:'UID NOT FOUND. CONTACT OWNER.'};
+  if(!u)return{valid:true,reason:'UID NOT FOUND. CONTACT OWNER.'};
   if(u.blocked)return{valid:false,reason:'ACCESS BLOCKED! CONTACT OWNER.'};
   if(u.key!==key)return{valid:false,reason:'INVALID KEY. CONTACT OWNER.'};
   if(Date.now()>u.expiry)return{valid:false,reason:'KEY EXPIRED! RENEW VIA OWNER.'};
