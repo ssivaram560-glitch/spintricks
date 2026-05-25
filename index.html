@@ -819,75 +819,51 @@ async function fetchHistory(){
 //  PLACE BET — Goaoko exact format
 //  From DevTools images 1-4
 // ═══════════════════════════════════════════════════
-async function placeBet(period,pred,type,betLevel){
-  if(!G.token||G.token.length<20){
-    log('⚠ No token','e');setStat('lStat','⚠ LOGIN IN AUTOBET','var(--gd)');return false;
-  }
-  let bc='';
-  if(type==='SIZE') bc=pred==='BIG'?'BigSmall_Big':'BigSmall_Small';
-  else bc=pred==='RED'?'Color_Red':'Color_Green';
+async function placeBet(period, prediction, predType, level) {
+  if (!G.token) return false;
 
-  const ts=Math.floor(Date.now()/1000);
-  const rand=Math.floor(Math.random()*1000000000000);
-  const betMultiple=G.baseBet*G.MULT[betLevel-1];
+  const amt = G.baseBet * G.MULT[level - 1];
+  let bc = "";
+  
+  // Mapping signals to API betContent
+  if (predType === 'SIZE') bc = (prediction === 'BIG' ? 'Big' : 'Small');
+  if (predType === 'COLOR') bc = (prediction === 'RED' ? 'Red' : 'Green');
 
-  const signParams={
-    amount:'1',betContent:bc,betMultiple:String(betMultiple),
-    gameCode:'WinGo_1M',issueNumber:String(period),
-    language:'en',random:String(rand),timestamp:String(ts)
-  };
-  const sig=await makeSign(signParams);
-
-  const payload={
-    amount:1,betContent:bc,betMultiple:betMultiple,
-    gameCode:'WinGo_1M',issueNumber:String(period),
-    language:'en',random:rand,signature:sig,timestamp:ts
+  const payload = {
+    amount: 1,
+    betContent: bc,
+    betMultiple: amt,
+    gameCode: "WinGo_1M",
+    issueNumber: String(period),
+    language: "en",
+    random: Math.floor(Math.random() * 1000000).toString(),
+    timestamp: Math.floor(Date.now() / 1000)
   };
 
-  const headers={
-    'authorization':'Bearer '+G.token,
-    'content-type':'application/json',
-    'Accept':'application/json, text/plain, */*',
-    'Accept-Encoding':'gzip, deflate, br',
-    'Accept-Language':'en-GB,en-US;q=0.9,en;q=0.8',
-    'Ar-Origin':'https://goaokk.com',
-    'Origin':'https://goaokk.com',
-    'Referer':'https://goaokk.com/',
-    'Sec-Ch-Ua':'"Chromium";v="139", "Not;A=Brand";v="99"',
-    'Sec-Ch-Ua-Mobile':'?1',
-    'Sec-Ch-Ua-Platform':'"Android"',
-    'Sec-Fetch-Dest':'empty','Sec-Fetch-Mode':'cors','Sec-Fetch-Site':'cross-site',
-    'User-Agent':'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36'
-  };
-
-  log('🚀 BET: '+bc+' | x'+betMultiple+' | P:'+String(period).slice(-6),'i');
-
-  try{
-    const r=await fetch(API_BASE+'/api/Lottery/WinGoBet',{
-      method:'POST',headers,body:JSON.stringify(payload),signal:AbortSignal.timeout(10000)
+  try {
+    const r = await fetch(API_BASE + '/api/webapi/Bet', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + G.token,
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Accept': 'application/json, text/plain, */*'
+      },
+      body: JSON.stringify(payload)
     });
-    const res=await r.json();
-    log('RESP: code='+res.code+' msg='+res.msg,'i');
-
-    if(res.code===0||res.msg==='Succeed'||res.msgCode===0){
-      log('✅ BET OK! '+pred+' x'+betMultiple,'s');
-      setStat('lStat','✅ SUCCEED','var(--gr)');
-      toast('✅ BET x'+betMultiple+' on '+pred,'ok');
-      G.betAmt=betMultiple;return true;
-    }
-    if(res.code===401||res.code===40100||(res.msg&&(res.msg.toLowerCase().includes('token')||res.msg.toLowerCase().includes('login')))){
-      log('🔴 TOKEN EXPIRED — Re-login in AutoBet','e');
-      toast('TOKEN EXPIRED! Re-login in AutoBet tab','err');
-      setStat('lStat','❌ TOKEN EXPIRED','var(--rd)');
-      G.token='';localStorage.removeItem('siva_tok');updateTokenUI();
-      // Try auto re-login if credentials saved
-      if(G.goaPhone&&G.goaPass){log('Auto re-login...','w');setTimeout(goaokoLogin,2000);}
+    const res = await r.json();
+    
+    if (res.code === 0) {
+      setStat('lStat', '✅ PLACED', 'var(--gr)');
+      log(`Bet OK: ${bc} ₹${amt}`, 's');
+      return true;
+    } else {
+      setStat('lStat', '❌ ' + (res.msg || 'FAILED'), 'var(--rd)');
+      log('Bet Fail: ' + res.msg, 'e');
       return false;
     }
-    log('⚠ BET FAIL: '+(res.msg||JSON.stringify(res).slice(0,50)),'e');
-    setStat('lStat','❌ '+(res.msg||'FAIL').slice(0,14),'var(--rd)');return false;
-  }catch(err){
-    log('🔴 BET ERR: '+err.message,'e');setStat('lStat','❌ NET ERR','var(--rd)');return false;
+  } catch (e) {
+    log('Bet Error: ' + e.message, 'e');
+    return false;
   }
 }
 
