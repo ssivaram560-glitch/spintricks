@@ -1391,208 +1391,58 @@ function startTimer(s){
 }
 
 // MAIN LOOP
-// ═══════════════════════════════════════════════════════════════════════════════
-//  FETCH HISTORY + PREDICTION + AUTOBET INTEGRATION
-//  ⭐ FIX: Pass G.level to decidePrediction()
-//  ⭐ FIX: Save G.lastBetId after placeBet()
-//  ⭐ NEW: checkBetResult() after 65 seconds
-// ═══════════════════════════════════════════════════════════════════════════════
-
-async function doFetch() {
-  try {
-    setStat('lStat', 'FETCHING...', 'var(--gd)');
-    
-    // FETCH HISTORY
-    const list = await fetchHistory();
-    if (!list || !list.length) {
-      setStat('lStat', '❌ NO HISTORY', 'var(--rd)');
-      log('❌ fetchHistory returned empty', 'e');
-      return;
+async function doFetch(){
+  if(!G.active||G.busy)return;G.busy=true;
+  const fb=document.getElementById('fbar');fb.style.display='block';fb.textContent='⟳ FETCHING...';
+  try{
+    const list=await fetchHistory();
+    if(!list||!list.length){G.retries++;fb.textContent='❌ FETCH FAILED ('+G.retries+')';setBadge('warn','FETCH ERR');G.busy=false;return;}
+    G.retries=0;setBadge('live','LIVE');fb.style.display='none';
+    if(G.curPeriod)resolveResult(list);
+    const next=String(BigInt(list[0].issueNumber)+1n);
+    if(next===G.curPeriod){G.busy=false;return;}
+    G.curPeriod=next;G.prediction=null;G.predType=null;G.betPlaced=false;
+    document.getElementById('periodEl').textContent=next.slice(-8);
+    setStat('lPer',next.slice(-8));setStat('lRes','PENDING...','var(--mu)');
+    renderBalls(list);
+    const sig=decidePrediction(list,G.level);
+    if(!sig){
+      document.getElementById('predVal').className='pv SKIP';document.getElementById('predVal').textContent='SKIP';
+      document.getElementById('predPat').textContent='No 90%+ pattern';document.getElementById('predConf').textContent='';
+      log('⏭ SKIP '+next.slice(-6),'w');startTimer(58);G.busy=false;return;
     }
-    
-    log('📊 History: ' + list.length + ' items', 'i');
-    
-    // PARSE FIRST ITEM
-    const first = list[0];
-    setStat('lNum', first.issueNumber);
-    setStat('lRes', parseItem(first).size + '/' + parseItem(first).color);
-    
-    // ═════════════════════════════════════════════════════════════════════════════
-    //  🔥 DECISION ENGINE - PASS G.LEVEL!
-    // ═════════════════════════════════════════════════════════════════════════════
-    
-    const sig = decidePrediction(list, G.level);  // ← FIX: PASS G.LEVEL!
-    
-    if (!sig) {
-      setStat('lPred', '⏭ SKIP');
-      setStat('lStat', '⏭ NO 95%+ SIGNAL', 'var(--yl)');
-      log('⏭ SKIP - waiting for 95%+ signal', 'w');
-      
-      // Watch mode: count as loss for stats
-      if (G.isWatchMode) {
-        G.vLoss++;
-        refreshStats();
-      }
-      
-      return;
+    G.prediction=sig.val;G.predType=sig.type;
+    document.getElementById('predVal').className='pv '+sig.val;document.getElementById('predVal').textContent=sig.val;
+    document.getElementById('predPat').textContent=sig.pat+' ['+sig.type+']';document.getElementById('predConf').textContent=sig.conf+'% confidence';
+    setStat('lPred',sig.val);log('🎯 '+sig.val+' | '+sig.pat+' | '+sig.conf+'%','i');
+    const shouldBet=G.inMart||!G.watch||(G.watch&&G.vLoss>=G.vLim);
+    if(shouldBet&&G.abUnlocked){
+      if(!G.token||G.token.length<20){setStat('lAmt','NO TOKEN');setStat('lStat','⚠ LOGIN IN AUTOBET','var(--gd)');log('⚠ No token','e');}
+      else{setStat('lAmt','x'+G.baseBet*G.MULT[G.level-1]+' (L'+G.level+')');setStat('lStat','PLACING...','var(--gd)');G.betPlaced=await placeBet(next,sig.val,sig.type,G.level);}
+    }else{
+      const need=G.vLim-G.vLoss;setStat('lAmt','WATCHING ('+G.vLoss+'/'+G.vLim+')');
+      setStat('lStat',shouldBet&&!G.abUnlocked?'⚠ UNLOCK AUTOBET':'⏳ NEED '+need+' MORE','var(--gd)');
+      const vEl=document.getElementById('abVL');if(vEl)vEl.textContent=G.vLoss+'/'+G.vLim;
+      log('👀 WATCH '+G.vLoss+'/'+G.vLim,'i');
     }
-    
-    // ═════════════════════════════════════════════════════════════════════════════
-    //  PREDICTION FOUND! Show signal
-    // ═════════════════════════════════════════════════════════════════════════════
-    
-    setStat('lPred', sig.val);
-    setStat('lConf', sig.conf + '%');
-    setStat('lPat', sig.pat);
-    log('🎯 Signal: ' + sig.val + ' (' + sig.conf + '%) - ' + sig.pat, 's');
-    
-    // ADD TO HISTORY
-    const his = {
-      num: first.issueNumber,
-      pred: sig.val,
-      conf: sig.conf,
-      pat: sig.pat,
-      type: sig.type,
-      ts: Date.now()
-    };
-    
-    if (!G.predHistory) G.predHistory = [];
-    G.predHistory.unshift(his);
-    if (G.predHistory.length > 100) G.predHistory.pop();
-    
-    refreshPredHis();
-    
-    // ═════════════════════════════════════════════════════════════════════════════
-    //  WATCH MODE: Just show prediction, no bet
-    // ═════════════════════════════════════════════════════════════════════════════
-    
-    if (G.isWatchMode) {
-      setStat('lStat', '👁 WATCH MODE', 'var(--bl)');
-      log('👁 Watch mode - no bet placed', 'i');
-      return;
-    }
-    
-    // ═════════════════════════════════════════════════════════════════════════════
-    //  AUTOBET MODE: PLACE BET NOW!
-    // ═════════════════════════════════════════════════════════════════════════════
-    
-    if (!G.abUnlocked) {
-      setStat('lStat', '🔒 LOCKED', 'var(--rd)');
-      log('🔒 AutoBet locked', 'w');
-      return;
-    }
-    
-    // Get next period
-    const nextPeriod = String(BigInt(first.issueNumber) + 1n);
-    const betAmount = G.baseBet * G.MULT[G.level - 1];
-    
-    setStat('lPer', nextPeriod.slice(-8));
-    setStat('lLvl', 'L' + G.level);
-    setStat('lAmt', betAmount);
-    setStat('lStat', 'PLACING BET...', 'var(--gd)');
-    
-    log('🎲 Placing bet: Period=' + nextPeriod + ', Amount=' + betAmount + ', Level=' + G.level, 'i');
-    
-    // PLACE BET
-    const betOk = await placeBet(nextPeriod, sig.val, sig.type, G.level);
-    
-    if (!betOk) {
-      setStat('lStat', '❌ BET FAILED', 'var(--rd)');
-      log('❌ placeBet failed', 'e');
-      return;
-    }
-    
-    // BET PLACED! Now wait for result
-    setStat('lStat', '✅ BET PLACED', 'var(--gr)');
-    log('✅ Bet placed successfully. ID=' + G.lastBetId, 's');
-    
-    // Wait 65 seconds for result
-    await new Promise(r => setTimeout(r, 65000));
-    
-    // ═════════════════════════════════════════════════════════════════════════════
-    //  CHECK BET RESULT
-    // ═════════════════════════════════════════════════════════════════════════════
-    
-    if (!G.lastBetId) {
-      log('❌ No bet ID to check', 'e');
-      return;
-    }
-    
-    setStat('lStat', 'CHECKING RESULT...', 'var(--gd)');
-    log('⏳ Checking result for bet ID: ' + G.lastBetId, 'i');
-    
-    try {
-      const r = await fetch(API_BASE + '/api/webapi/GetBetRecord?id=' + G.lastBetId, {
-        headers: {
-          'Authorization': 'Bearer ' + G.token,
-          'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36'
-        },
-        signal: AbortSignal.timeout(8000)
-      });
-      
-      const res = await r.json();
-      
-      if (res.code === 0 && res.data) {
-        const bet = res.data;
-        const isWin = bet.status === 'WIN' || bet.resultStatus === 1;
-        
-        if (isWin) {
-          // ✅ WIN!
-          setStat('lStat', '✅ WIN!', 'var(--gr)');
-          setStat('lRes', '✅ WIN');
-          log('🎉 BET WON! Result=' + bet.result + ', Winnings=' + bet.winAmount, 's');
-          
-          G.wins++;
-          G.totalBets++;
-          G.level = 1;  // Reset to L1
-          
-          his.result = 'WIN';
-          his.amount = bet.winAmount;
-          
-          toast('🎉 WIN! +₹' + bet.winAmount, 'ok');
-          
-        } else {
-          // ❌ LOSS!
-          setStat('lStat', '❌ LOSS', 'var(--rd)');
-          setStat('lRes', '❌ LOSS');
-          log('❌ BET LOST! Result=' + bet.result, 'e');
-          
-          G.losses++;
-          G.totalBets++;
-          
-          if (G.level < G.maxLvl) {
-            G.level++;  // Go to next level
-            log('📈 Moving to Level ' + G.level, 'i');
-          } else {
-            log('🚨 MAX LEVEL REACHED! Should have forced win!', 'e');
-            G.level = 1;
-          }
-          
-          his.result = 'LOSS';
-          his.amount = bet.betAmount;
-          
-          toast('❌ LOSS! -₹' + bet.betAmount, 'err');
-        }
-        
-        refreshStats();
-        refreshPredHis();
-        refreshMart();
-        
-      } else {
-        log('⏳ Result not ready yet (code=' + res.code + ')', 'w');
-        setStat('lStat', '⏳ RESULT PENDING', 'var(--yl)');
-      }
-      
-    } catch (err) {
-      log('❌ checkBetResult error: ' + err.message, 'e');
-      setStat('lStat', '❌ CHECK FAILED', 'var(--rd)');
-    }
-    
-  } catch (err) {
-    log('❌ doFetch error: ' + err.message, 'e');
-    setStat('lStat', '❌ ERROR', 'var(--rd)');
-  }
+    startTimer(58);
+  }catch(e){log('Engine err: '+e.message,'e');}G.busy=false;
 }
+function startLoop(){
+
+  async function loop(){
+
+    if(!G.active) return;
+
+    await doFetch();
+
+    setTimeout(loop,15000);
+
+  }
+
+  loop();
+}
+
 // HISTORY UI
 function updateHistoryUI(){
   const bets=G.historyLog.filter(h=>h.wasBet);
