@@ -819,347 +819,51 @@ async function fetchHistory(){
 //  PLACE BET — Goaoko exact format
 //  From DevTools images 1-4
 // ═══════════════════════════════════════════════════
-// ═══════════════════════════════════════════════════════════════════════════════
-//  PLACE BET - WITH BET ID SAVING
-//  ⭐ FIX: SAVE G.lastBetId after successful bet!
-//  This ID is needed to check result later!
-// ═══════════════════════════════════════════════════════════════════════════════
+async function placeBet(period, prediction, predType, level) {
+  if (!G.token) return false;
 
-async function placeBet(period, pred, type, level) {
+  const amt = G.baseBet * G.MULT[level - 1];
+  let bc = "";
+  
+  // Mapping signals to API betContent
+  if (predType === 'SIZE') bc = (prediction === 'BIG' ? 'Big' : 'Small');
+  if (predType === 'COLOR') bc = (prediction === 'RED' ? 'Red' : 'Green');
+
+  const payload = {
+    amount: 1,
+    betContent: bc,
+    betMultiple: amt,
+    gameCode: "WinGo_1M",
+    issueNumber: String(period),
+    language: "en",
+    random: Math.floor(Math.random() * 1000000).toString(),
+    timestamp: Math.floor(Date.now() / 1000)
+  };
+
   try {
-    if (!G.token || G.token.length < 20) {
-      log('❌ No token for bet', 'e');
-      return false;
-    }
-    
-    const betAmount = G.baseBet * G.MULT[level - 1];
-    
-    // Build bet choice code
-    let bc = '';
-    if (type === 'SIZE') {
-      bc = pred === 'BIG' ? '1' : '2';
-    } else if (type === 'COLOR') {
-      bc = pred === 'RED' ? '1' : '2';
-    } else {
-      bc = '1';
-    }
-    
-    const params = makeSign({
-      period,
-      betAmount,
-      betChoice: bc
-    });
-    
-    log('🎲 placeBet: period=' + period + ', amount=' + betAmount + ', choice=' + bc, 'i');
-    
     const r = await fetch(API_BASE + '/api/webapi/Bet', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + G.token,
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36'
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Accept': 'application/json, text/plain, */*'
       },
-      body: JSON.stringify(params),
-      signal: AbortSignal.timeout(10000)
+      body: JSON.stringify(payload)
     });
-    
     const res = await r.json();
     
-    // ═════════════════════════════════════════════════════════════════════════════
-    //  SUCCESS: SAVE BET ID!
-    // ═════════════════════════════════════════════════════════════════════════════
-    
-    if (res.code === 0 && res.data) {
-      // ✅ BET PLACED - SAVE THE ID!
-      if (res.data.id) {
-        G.lastBetId = res.data.id;  // ← CRITICAL! SAVE BET ID!
-        log('✅ BET PLACED! ID=' + G.lastBetId + ', Amount=₹' + betAmount, 's');
-        setStat('lStat', '✅ PLACED', 'var(--gr)');
-        return true;
-      } else {
-        log('⚠️ Bet placed but no ID in response', 'w');
-        return true;
-      }
-    }
-    
-    // ═════════════════════════════════════════════════════════════════════════════
-    //  ERRORS
-    // ═════════════════════════════════════════════════════════════════════════════
-    
-    if (res.code === 500) {
-      log('❌ Insufficient balance', 'e');
-      setStat('lStat', '❌ NO BALANCE', 'var(--rd)');
-      toast('❌ Insufficient balance!', 'err');
-      return false;
-    }
-    
-    if (res.code === 1010) {
-      log('❌ Invalid period', 'e');
-      setStat('lStat', '❌ INVALID PERIOD', 'var(--rd)');
-      return false;
-    }
-    
-    log('❌ placeBet failed: code=' + res.code + ', msg=' + res.msg, 'e');
-    setStat('lStat', '❌ FAILED (' + res.code + ')', 'var(--rd)');
-    return false;
-    
-  } catch (err) {
-    log('❌ placeBet error: ' + err.message, 'e');
-    setStat('lStat', '❌ ERROR', 'var(--rd)');
-    return false;
-  }
-}
-// ═══════════════════════════════════════════════════════════════════════════════
-//  AUTOBET ENGINE - START/STOP FUNCTIONS
-//  ⭐ startAutobet() = Main automation loop
-//  ⭐ stopAutobet() = Stop automation
-//  ⭐ Handles: Fetch → Predict → Bet → Wait → Check Result → Repeat
-// ═══════════════════════════════════════════════════════════════════════════════
-
-let AUTOBET_RUNNING = false;
-
-async function startAutobet() {
-  if (AUTOBET_RUNNING) {
-    log('⚠️ Autobet already running', 'w');
-    toast('⚠️ AutoBet already running!', 'err');
-    return;
-  }
-  
-  if (!G.token || G.token.length < 20) {
-    log('❌ No token! Login in GOAOKO LOGIN first', 'e');
-    setStat('lStat', '❌ NO TOKEN', 'var(--rd)');
-    toast('❌ No token! Login first!', 'err');
-    return;
-  }
-  
-  if (!G.abUnlocked) {
-    log('❌ AutoBet not unlocked', 'e');
-    toast('❌ AutoBet locked! Enter unlock key!', 'err');
-    return;
-  }
-  
-  // ═════════════════════════════════════════════════════════════════════════════
-  //  START AUTOBET
-  // ═════════════════════════════════════════════════════════════════════════════
-  
-  AUTOBET_RUNNING = true;
-  G.autobetStartTime = Date.now();
-  
-  log('🚀 AUTOBET STARTED!', 's');
-  setStat('lStat', '🚀 RUNNING', 'var(--gr)');
-  
-  // Update button
-  const btn = document.getElementById('engBtn');
-  if (btn) {
-    btn.className = 'eng-btn stop';
-    btn.textContent = '■ STOP ENGINE';
-  }
-  
-  // ═════════════════════════════════════════════════════════════════════════════
-  //  MAIN AUTOBET LOOP
-  // ═════════════════════════════════════════════════════════════════════════════
-  
-  let roundNum = 0;
-  
-  while (AUTOBET_RUNNING && G.abUnlocked) {
-    roundNum++;
-    log('═══ AUTOBET ROUND ' + roundNum + ' ═══', 'i');
-    
-    try {
-      // ───────────────────────────────────────────────────────────────────────
-      //  STEP 1: FETCH HISTORY
-      // ───────────────────────────────────────────────────────────────────────
-      
-      log('[' + roundNum + '] Fetching history...', 'i');
-      setStat('lStat', 'FETCHING...', 'var(--gd)');
-      
-      const list = await fetchHistory();
-      if (!list || !list.length) {
-        log('[' + roundNum + '] No history, retry...', 'w');
-        setStat('lStat', '⏳ NO HISTORY', 'var(--yl)');
-        await new Promise(r => setTimeout(r, 3000));
-        continue;
-      }
-      
-      const first = list[0];
-      setStat('lNum', first.issueNumber);
-      
-      // ───────────────────────────────────────────────────────────────────────
-      //  STEP 2: GET PREDICTION
-      // ───────────────────────────────────────────────────────────────────────
-      
-      log('[' + roundNum + '] Getting prediction (Level ' + G.level + ')...', 'i');
-      const pred = decidePrediction(list, G.level);
-      
-      if (!pred) {
-        log('[' + roundNum + '] No 95%+ signal, skip...', 'w');
-        setStat('lStat', '⏭ SKIP', 'var(--yl)');
-        setStat('lPred', '⏭ WAIT');
-        await new Promise(r => setTimeout(r, 3000));
-        continue;
-      }
-      
-      // ───────────────────────────────────────────────────────────────────────
-      //  STEP 3: PLACE BET
-      // ───────────────────────────────────────────────────────────────────────
-      
-      const nextPeriod = String(BigInt(first.issueNumber) + 1n);
-      const betAmount = G.baseBet * G.MULT[G.level - 1];
-      
-      setStat('lPer', nextPeriod.slice(-8));
-      setStat('lPred', pred.val);
-      setStat('lConf', pred.conf + '%');
-      setStat('lLvl', 'L' + G.level);
-      setStat('lAmt', '₹' + betAmount);
-      setStat('lStat', 'PLACING...', 'var(--gd)');
-      
-      log('[' + roundNum + '] 🎯 Signal: ' + pred.val + ' (' + pred.conf + '%) @ L' + G.level + ' = ₹' + betAmount, 's');
-      
-      const betOk = await placeBet(nextPeriod, pred.val, pred.type, G.level);
-      
-      if (!betOk) {
-        log('[' + roundNum + '] ❌ Bet failed, retry...', 'e');
-        setStat('lStat', '❌ BET FAILED', 'var(--rd)');
-        await new Promise(r => setTimeout(r, 3000));
-        continue;
-      }
-      
+    if (res.code === 0) {
       setStat('lStat', '✅ PLACED', 'var(--gr)');
-      
-      // ───────────────────────────────────────────────────────────────────────
-      //  STEP 4: WAIT 65 SECONDS FOR RESULT
-      // ───────────────────────────────────────────────────────────────────────
-      
-      log('[' + roundNum + '] ⏳ Waiting 65 seconds for result...', 'i');
-      setStat('lStat', '⏳ WAITING...', 'var(--yl)');
-      
-      for (let sec = 65; sec > 0; sec--) {
-        setStat('lStat', '⏳ ' + sec + 's', 'var(--yl)');
-        await new Promise(r => setTimeout(r, 1000));
-        if (!AUTOBET_RUNNING) break;
-      }
-      
-      if (!AUTOBET_RUNNING) break;
-      
-      // ───────────────────────────────────────────────────────────────────────
-      //  STEP 5: CHECK BET RESULT
-      // ───────────────────────────────────────────────────────────────────────
-      
-      if (!G.lastBetId) {
-        log('[' + roundNum + '] ❌ No bet ID to check', 'e');
-        setStat('lStat', '❌ NO BET ID', 'var(--rd)');
-        continue;
-      }
-      
-      log('[' + roundNum + '] Checking result for bet ID: ' + G.lastBetId, 'i');
-      setStat('lStat', 'CHECKING...', 'var(--gd)');
-      
-      const r = await fetch(API_BASE + '/api/webapi/GetBetRecord?id=' + G.lastBetId, {
-        headers: {
-          'Authorization': 'Bearer ' + G.token,
-          'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36'
-        },
-        signal: AbortSignal.timeout(8000)
-      });
-      
-      const res = await r.json();
-      
-      if (res.code === 0 && res.data) {
-        const bet = res.data;
-        const isWin = bet.status === 'WIN' || bet.resultStatus === 1;
-        
-        if (isWin) {
-          // ✅ WIN!
-          log('[' + roundNum + '] 🎉 WIN! Result=' + bet.result + ', Winnings=₹' + bet.winAmount, 's');
-          setStat('lStat', '✅ WIN!', 'var(--gr)');
-          setStat('lRes', '✅ WIN');
-          
-          G.wins++;
-          G.totalBets++;
-          G.level = 1;  // RESET TO L1
-          
-          toast('🎉 WIN! +₹' + bet.winAmount, 'ok');
-          
-        } else {
-          // ❌ LOSS!
-          log('[' + roundNum + '] ❌ LOSS! Result=' + bet.result, 'e');
-          setStat('lStat', '❌ LOSS', 'var(--rd)');
-          setStat('lRes', '❌ LOSS');
-          
-          G.losses++;
-          G.totalBets++;
-          
-          if (G.level < G.maxLvl) {
-            G.level++;  // GO TO NEXT LEVEL
-            log('[' + roundNum + '] 📈 Level ' + (G.level - 1) + ' loss → Moving to L' + G.level, 'w');
-          } else {
-            log('[' + roundNum + '] 🚨 REACHED MAX LEVEL! Resetting to L1', 'e');
-            G.level = 1;
-          }
-          
-          toast('❌ LOSS! -₹' + bet.betAmount, 'err');
-        }
-        
-        refreshStats();
-        refreshMart();
-        
-      } else {
-        log('[' + roundNum + '] ⏳ Result not ready (code=' + res.code + ')', 'w');
-        setStat('lStat', '⏳ RESULT PENDING', 'var(--yl)');
-      }
-      
-      // ───────────────────────────────────────────────────────────────────────
-      //  STEP 6: WAIT 3 SECONDS BEFORE NEXT ROUND
-      // ───────────────────────────────────────────────────────────────────────
-      
-      log('[' + roundNum + '] Waiting 3 seconds before next round...', 'i');
-      await new Promise(r => setTimeout(r, 3000));
-      
-    } catch (err) {
-      log('[' + roundNum + '] ❌ Error: ' + err.message, 'e');
-      setStat('lStat', '❌ ERROR', 'var(--rd)');
-      await new Promise(r => setTimeout(r, 5000));
+      log(`Bet OK: ${bc} ₹${amt}`, 's');
+      return true;
+    } else {
+      setStat('lStat', '❌ ' + (res.msg || 'FAILED'), 'var(--rd)');
+      log('Bet Fail: ' + res.msg, 'e');
+      return false;
     }
-  }
-  
-  // ═════════════════════════════════════════════════════════════════════════════
-  //  AUTOBET STOPPED
-  // ═════════════════════════════════════════════════════════════════════════════
-  
-  AUTOBET_RUNNING = false;
-  
-  const elapsed = Math.round((Date.now() - G.autobetStartTime) / 1000);
-  log('⏹ AUTOBET STOPPED (ran for ' + elapsed + 's, ' + roundNum + ' rounds)', 'w');
-  setStat('lStat', '⏹ STOPPED', 'var(--yl)');
-  
-  // Update button
-  const btn2 = document.getElementById('engBtn');
-  if (btn2) {
-    btn2.className = 'eng-btn start';
-    btn2.textContent = '▶ START ENGINE';
-  }
-  
-  toast('⏹ AutoBet stopped', 'info');
-}
-
-function stopAutobet() {
-  if (!AUTOBET_RUNNING) {
-    log('⚠️ AutoBet not running', 'w');
-    return;
-  }
-  
-  AUTOBET_RUNNING = false;
-  log('⏹ AUTOBET STOP REQUESTED', 'w');
-  setStat('lStat', '⏹ STOPPING...', 'var(--yl)');
-  
-  toast('⏹ Stopping AutoBet...', 'info');
-}
-
-function toggleEng() {
-  if (AUTOBET_RUNNING) {
-    stopAutobet();
-  } else {
-    startAutobet();
+  } catch (e) {
+    log('Bet Error: ' + e.message, 'e');
+    return false;
   }
 }
 
@@ -1921,18 +1625,7 @@ function resetStats(){
   G.winStreak=0;G.lossStreak=0;G.maxWinStreak=0;G.maxLossStreak=0;G.historyLog=[];
   refreshMart();refreshStats();updateAbUI();toast('STATS RESET','w');
 }
-function refreshPredHis(){
-  if(!G.predHistory)return;
-  const c=document.getElementById('histList');if(!c)return;
-  c.innerHTML='';
-  if(!G.predHistory.length){c.innerHTML='<div style="text-align:center;padding:10px;color:var(--mu);font-size:9px">NO SIGNALS YET...</div>';return;}
-  G.predHistory.slice(0,20).forEach(h=>{
-    const div=document.createElement('div');
-    div.className='hrow';
-    div.innerHTML=`<span class="hper">${h.num}</span><span class="hpred">${h.pred}</span><span class="hact">${h.conf}%</span><span style="text-align:right;color:var(--cy);font-size:8px">${h.pat}</span>`;
-    c.appendChild(div);
-  });
-}
+
 // OWNER
 let selDays=7;
 function selDay(d){selDays=d;['7','14','30','1','custom'].forEach(k=>{const el=document.getElementById('db'+k);if(el)el.className='daybadge';});document.getElementById('db'+(d||'custom')).className='daybadge sel';document.getElementById('customDayWrap').style.display=d===0?'block':'none';}
