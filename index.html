@@ -1578,70 +1578,7 @@ function decidePrediction(list, currentLevel) {
 //  🎯 MAIN DECISION ENGINE - 95%+ ONLY! NO SKIPS! LEVEL 1-4 GUARANTEED!
 // ═════════════════════════════════════════════════════════════════════════════
 
-function decidePrediction(list) {
-  if (!list || !list.length) return null;
-  
-  // PRIORITY 1: DRAGON (97%) - ALWAYS SAME!
-  const dragon = detectDragon(list);
-  if (dragon && dragon.conf >= 97) {
-    log('🐉 DRAGON DETECTED! ' + dragon.pat, 'i');
-    return dragon;
-  }
-  
-  // PRIORITY 2: EXTREME DOMINANCE (96%)
-  const extreme = detectExtremeDominance(list);
-  if (extreme && extreme.conf >= 96) {
-    log('📊 EXTREME ' + extreme.pat, 'i');
-    return extreme;
-  }
-  
-  // PRIORITY 3: EXTENDED ALTERNATION (95%)
-  const extAlt = detectExtendedAlternation(list);
-  if (extAlt && extAlt.conf >= 95) {
-    log('🔄 EXTENDED ALTERNATION ' + extAlt.pat, 'i');
-    return extAlt;
-  }
-  
-  // PRIORITY 4: VERY HIGH SATURATION (95%)
-  const vhSat = detectVeryHighSaturation(list);
-  if (vhSat && vhSat.conf >= 95) {
-    log('⚡ SATURATION ' + vhSat.pat, 'i');
-    return vhSat;
-  }
-  
-  // PRIORITY 5: DOUBLE PATTERN CONFIRMATION (95%)
-  const doubleConf = detectDoublePatternConfirmation(list);
-  if (doubleConf && doubleConf.conf >= 95) {
-    log('✅ DOUBLE CONFIRM ' + doubleConf.pat, 'i');
-    return doubleConf;
-  }
-  
-  // ═════════════════════════════════════════════════════════════════
-  //  🔥 FALLBACK: Use old detectSignal but FILTER 95%+ only
-  //  If above 5 rules fail, return HIGH confidence from old logic
-  // ═════════════════════════════════════════════════════════════════
-  
-  // For now: Return NULL and wait for stronger signal
-  // OR: Use super conservative approach
-  
-  const data = list.slice(0, 20).map(parseItem);
-  const big20 = countValue(data, 'size', 'BIG');
-  
-  // Ultra safe fallback: Only if VERY clear
-  if (big20 >= 17) {
-    log('💪 ULTRA-HIGH BIG', 'i');
-    return { type: 'SIZE', val: 'SMALL', conf: 95, pat: 'FALLBACK-REV' };
-  }
-  
-  if (big20 <= 3) {
-    log('💪 ULTRA-HIGH SMALL', 'i');
-    return { type: 'SIZE', val: 'BIG', conf: 95, pat: 'FALLBACK-REV' };
-  }
-  
-  // NO 95%+ SIGNAL FOUND - SKIP (wait for stronger pattern)
-  log('⏭ SKIP - No 95%+ signal (wait for dragon/extreme)', 'w');
-  return null;
-}
+
 
 // ═════════════════════════════════════════════════════════════════════════════
 //  💬 Logging function
@@ -1731,7 +1668,7 @@ async function doFetch(){
     document.getElementById('periodEl').textContent=next.slice(-8);
     setStat('lPer',next.slice(-8));setStat('lRes','PENDING...','var(--mu)');
     renderBalls(list);
-    const sig=decidePrediction(list);
+    const sig=decidePrediction(list,G.level);
     if(!sig){
       document.getElementById('predVal').className='pv SKIP';document.getElementById('predVal').textContent='SKIP';
       document.getElementById('predPat').textContent='No 90%+ pattern';document.getElementById('predConf').textContent='';
